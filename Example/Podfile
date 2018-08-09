@@ -1,0 +1,6 @@
+use_frameworks!
+target 'CodyFire_Tests' do
+  pod 'CodyFire', :path => '../'
+  
+  
+end
