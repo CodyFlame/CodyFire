@@ -38,7 +38,7 @@ public struct CodyFireEnvironment {
         }
         var fullURL = _apiURL.base
         if let path = _apiURL.path, path.count > 0 {
-            fullURL = "/" + path
+            fullURL = fullURL + "/" + path
         }
         return fullURL
     }
@@ -58,7 +58,7 @@ public struct CodyFireEnvironment {
         }
         var fullURL = _wsURL.base
         if let path = _wsURL.path, path.count > 0 {
-            fullURL = "/" + path
+            fullURL = fullURL + "/" + path
         }
         return fullURL
     }
