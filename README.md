@@ -30,59 +30,74 @@ And it's really awesome to use Codable for API request payload and response, isn
 #### How to send GET request
 
 ```swift
-APIRequestWithoutPayload<ResultModel>("endpoint").onSuccess { model in
+APIRequestWithoutPayload<ResultModel>("endpoint")
+    .onSuccess { model in
     //here's your decoded model!
     //no need to check http.statusCode, I already did it for you!
-    //of course you can choose which statusCode is equal to success (look at the `POST` example below)
+    //of course you can choose which statusCode is equal to success (look at the `POST` and `DELETE` examples below)
 }
 ```
 
 #### How to send POST request
 
 ```swift
-APIRequest<PayloadModel, ResultModel>("endpoint", payload: payloadModel).method(.post).desiredStatusCode(201).onSuccess { model in
+APIRequest<PayloadModel, ResultModel>("endpoint", payload: payloadModel)
+    .method(.post)
+    .desiredStatusCode(201)
+    .onSuccess { model in
     //here's your decoded model!
-    //no need to check http.statusCode, I already did it for you!
-    //of course you can choose which statusCode is equal to success (look at the `PUT` example below)
+    //success was determined by comparing desiredStatusCode with http.statusCode
 }
 ```
 
-
-### How to use
-
-#### 0️⃣ Preparing. Setup you API URLs in AppDelegate.
+#### How to send DELETE request
 
 ```swift
-import UIKit
+APIRequestWithoutAnything("endpoint")
+    .method(.delete)
+    .desiredStatusCode(204)
+    .onSuccess { _ in
+    //here's empty successful response!
+    //success was determined by comparing desiredStatusCode with http.statusCode
+}
+```
+
+Of course you'll be able to send PUT and PATCH requests, send multipart codable structs with upload progress callback, catch errors, even redefine error descriptions for every endpoint. Wondered? 😃 Let's read the whole readme below! 🍻
+
+### How to install
+
+```ruby
+pod 'CodyFire'
+```
+
+### How to setup
+
+As CodyFire automatically detect which environment you're on right now I suggest you to use this awesome feature 👏 
+
+```swift
 import CodyFire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
-    var window: UIWindow?
-    var navigationController = UINavigationController()
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-        setupCodyfire()
-        return true
-    }
-}
-
-extension AppDelegate {
-    func setupCodyfire() {
         let dev = CodyFireEnvironment(baseURL: "http://localhost:8080")
         let testFlight = CodyFireEnvironment(baseURL: "https://stage.myapi.com")
         let appStore = CodyFireEnvironment(baseURL: "https://api.myapi.com")
         CodyFire.shared.configureEnvironments(dev: dev, testFlight: testFlight, appStore: appStore)
+        //Also if you want to be able to switch environments manually just uncomment the line below (read more about that)
+        //CodyFire.shared.setupEnvByProjectScheme()
+        return true
     }
 }
 ```
 
-As you may see CodyFire will take care about automatic detection which environment you're on right now, isn't it a neat? ❤️
+Isn't it a neat? 😏
 
-#### 1️⃣ Define your API calls using controllers
+#### Declare you API controlelrs
 
-Create your API class named `API.swift` inside `API` folder
+What is that for? I promise that this is API code architecture from your dreams which is come true!
+
+##### Create a file `API.swift` inside `API` folder
 
 ```swift
 import CodyFire
