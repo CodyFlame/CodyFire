@@ -1,29 +1,13 @@
-# CodyFire ❤️
+# CodyFire
 
 [![Version](https://img.shields.io/cocoapods/v/CodyFire.svg?style=flat)](https://cocoapods.org/pods/CodyFire)
 
-## Intro
-
-This lib was developed after facing with a lot of messy API calls code
-Using it you will be able to make API calls code super clean in your iOS project
-
-## The problem
-
-That's how you're usially send API requests:
-- you have to write request code
-- put some payload into request (especially it's really not-trivial with multipart)
-- send request (ideally with checking network availability)
-- check request's response status code and if everything is ok then decode the result, otherwise catch and throw and error.
-
-In case if you haven't developed some wrapper this code may look really massive.
-And I believe that all of you, who now reading that text already have your own solution, some special classes and decorators to solve that problem, but believe you'll love my solution, because it's really awesome!
-
-## So what you suggest?
-
-Since Swift 4 we're able to use Codable structs/classes in our projects and they're really awesome.
-And it's really awesome to use Codable for API request payload and response, isn't it?
-
-## Stop talking! Show me what you have!
+The lib which will convert your massive API calls code into the awesome convenient and easy maintainable controllers!
+Use Codable struct for everything related to API requests, for such things like:
+- payload
+- multipart payload
+- url query
+- response
 
 ### Quick examples
 
