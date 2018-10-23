@@ -23,6 +23,10 @@ public struct CodyFireEnvironment {
         _wsURL = wsURL
     }
     
+    public init(baseURL: String, path: String? = nil) {
+        _apiURL = ServerURL(base: baseURL, path: path)
+    }
+    
     public var apiBaseURL: String {
         guard let _apiURL = _apiURL else {
             assert(false, "Unable to get CodyFireEnvironment.apiURL cause it's nil")

@@ -11,46 +11,21 @@ import Alamofire
 extension APIRequest {
     func sendMultipartEncoded() {
         guard let payload = payload as? MultipartPayload else { return } //TODO: throw
+        let dateEncodingStrategy = self.dateEncodingStrategy(for: payload)
         SessionManager.default.upload(multipartFormData: { multipart in
             let mirror = Mirror(reflecting: payload)
             mirror.children.forEach { children in
                 if let key = children.label {
-                    if let attachments = children.value as? [Attachment] {
-                        attachments.forEach { attachment in
-                            multipart.append(attachment.data, withName: key + "[]", fileName: attachment.fileName, mimeType: attachment.mimeType)
-                        }
-                    } else if let attachment = children.value as? Attachment {
-                        multipart.append(attachment.data, withName: key, fileName: attachment.fileName, mimeType: attachment.mimeType)
-                    } else if let dataArray = children.value as? [Data] {
-                        dataArray.forEach { data in
-                            multipart.append(data, withName: key + "[]")
-                        }
-                    } else if let data = children.value as? Data {
-                        multipart.append(data, withName: key)
-                    } else if let string = children.value as? String {
-                        guard let data = string.data(using: .utf8) else {
-                            return //TODO: throw unable to encode error
-                        }
-                        multipart.append(data, withName: key)
-                    } else if let strings = children.value as? [String] {
-                        strings.forEach { string in
-                            guard let data = string.data(using: .utf8) else {
-                                return //TODO: throw unable to encode error
-                            }
-                            multipart.append(data, withName: key)
-                        }
-                    } else if let array = children.value as? [Any] {
-                        array.forEach { object in
-                            guard let data = String(describing: object).data(using: .utf8) else {
-                                return //TODO: throw unable to encode error
-                            }
-                            multipart.append(data, withName: key)
-                        }
-                    } else {
-                        guard let data = String(describing: children.value).data(using: .utf8) else {
-                            return //TODO: throw unable to encode error
-                        }
-                        multipart.append(data, withName: key)
+                    switch children.value {
+                    case let v as [Attachment]: self.add(v, as: key + "[]", into: multipart)
+                    case let v as Attachment: self.add([v], as: key, into: multipart)
+                    case let v as [Data]: self.add(v, as: key + "[]", into: multipart)
+                    case let v as Data: self.add([v], as: key, into: multipart)
+                    case let v as [Date]: self.add(v, as: key + "[]", into: multipart, dateCodingStrategy: dateEncodingStrategy)
+                    case let v as Date: self.add([v], as: key, into: multipart, dateCodingStrategy: dateEncodingStrategy)
+                    case let v as [String]: self.add(v, as: key + "[]", into: multipart)
+                    case let v as String: self.add([v], as: key, into: multipart)
+                    default: self.add(any: children.value, as: key, into: multipart)
                     }
                 }
             }
@@ -67,6 +42,32 @@ extension APIRequest {
                 self.parseError(0, encodingError, nil, "Unable to execute request")
                 self.logError(statusCode: 0, error: encodingError, data: nil)
             }
+        }
+    }
+    
+    //MARK: Converting methods
+    
+    fileprivate func add(_ v: [Attachment], as key: String, into multipart: MultipartFormData) {
+        v.forEach { multipart.append($0.data, withName: key, fileName: $0.fileName, mimeType: $0.mimeType) }
+    }
+    
+    fileprivate func add(_ v: [Data], as key: String, into multipart: MultipartFormData) {
+        v.forEach { multipart.append($0, withName: key) }
+    }
+    
+    fileprivate func add(_ v: [Date], as key: String, into multipart: MultipartFormData, dateCodingStrategy: DateCodingStrategy) {
+        v.compactMap { dateCodingStrategy.convert($0).data(using: .utf8) }.forEach { add([$0], as: key, into: multipart) }
+    }
+    
+    fileprivate func add(_ v: [String], as key: String, into multipart: MultipartFormData) {
+        v.compactMap { $0.data(using: .utf8) }.forEach { add([$0], as: key, into: multipart) }
+    }
+    
+    fileprivate func add(any: Any, as key: String, into multipart: MultipartFormData) {
+        if let any = any as? [Any] {
+            any.forEach { add([String(describing: $0)], as: key, into: multipart) }
+        } else {
+            add([String(describing: any)], as: key, into: multipart)
         }
     }
 }

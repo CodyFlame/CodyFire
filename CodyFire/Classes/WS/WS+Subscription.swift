@@ -8,9 +8,10 @@
 import Foundation
 
 extension WS {
-    public func subscribe<T>(_ channel: String, data: T? = nil) where T: Codable {
+    public func subscribe<T: Codable>(_ channel: String, data: T?) {
         let encoder = JSONEncoder()
-        encoder.dateEncodingStrategy = CodyFire.shared.dateEncodingStrategy ?? JSONEncoder.DateEncodingStrategy.default
+        encoder.dateEncodingStrategy = CodyFire.shared.dateEncodingStrategy?.jsonDateEncodingStrategy
+                                                                      ?? DateCodingStrategy.default.jsonDateEncodingStrategy
         if let data = try? encoder.encode(data) {
             subscribe(channel, data: data)
         }

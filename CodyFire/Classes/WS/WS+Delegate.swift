@@ -38,7 +38,8 @@ extension WS {
     public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
         do {
             let decoder = JSONDecoder()
-            decoder.dateDecodingStrategy = CodyFire.shared.dateDecodingStrategy ?? JSONDecoder.DateDecodingStrategy.default
+            decoder.dateDecodingStrategy = CodyFire.shared.dateDecodingStrategy?.jsonDateDecodingStrategy
+                                                                          ?? DateCodingStrategy.default.jsonDateDecodingStrategy
             let message = try decoder.decode(DataMessage.self, from: data)
             switch message.type {
             case .subscribe: break

@@ -8,6 +8,12 @@
 import Foundation
 import Alamofire
 
+public protocol CustomDateEncodingStrategy {
+    var dateEncodingStrategy: DateCodingStrategy { get }
+}
+public protocol CustomDateDecodingStrategy {
+    var dateDecodingStrategy: DateCodingStrategy { get }
+}
 public protocol PayloadProtocol: Codable {}
 public protocol MultipartPayload: PayloadProtocol {}
 public protocol JSONPayload: PayloadProtocol {}
@@ -35,6 +41,7 @@ public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
     var endpoint: String = "/"
     var method: HTTPMethod = .get
     var payload: PayloadType?
+    var query: String?
     var headers: [String: String] = CodyFire.shared.fillHeaders?() ?? [:]
     var desiredStatusCode: Int = 200
     var successCallback: SuccessResponse?
@@ -48,8 +55,8 @@ public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
     var requestStartedCallback: RequestStartedCallback?
     var responseTimeout: TimeInterval = 15
     var additionalTimeout: TimeInterval = 0
-    var dateEncodingStrategy: JSONEncoder.DateEncodingStrategy?
-    var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?
+    var dateDecodingStrategy: DateCodingStrategy?
+    var dateEncodingStrategy: DateCodingStrategy?
     var logError = true
     
     var cancelled = false
@@ -105,9 +112,5 @@ public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
             log(.debug, "payload not recognized")
             //TODO: throw
         }
-    }
-    
-    var url: String {
-        return CodyFire.shared.apiURL + "/" + endpoint
     }
 }

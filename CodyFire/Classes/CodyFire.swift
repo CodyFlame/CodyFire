@@ -43,8 +43,8 @@ open class CodyFire {
     #endif
     public var logHandler: LogHandler?
     
-    public var dateEncodingStrategy: JSONEncoder.DateEncodingStrategy?
-    public var dateDecodingStrategy: JSONDecoder.DateDecodingStrategy?
+    public var dateDecodingStrategy: DateCodingStrategy?
+    public var dateEncodingStrategy: DateCodingStrategy?
     
     public let ws = WS()
     

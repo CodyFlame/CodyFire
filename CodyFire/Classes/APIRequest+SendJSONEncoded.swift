@@ -13,9 +13,7 @@ extension APIRequest {
         do {
             var params: [String: Any]?
             if let payload = payload {
-                params = try payload.dictionary(dateEncodingStrategy: dateEncodingStrategy
-                                                                                            ?? CodyFire.shared.dateEncodingStrategy
-                                                                                            ?? JSONEncoder.DateEncodingStrategy.default)
+                params = try payload.dictionary(dateEncodingStrategy: dateEncodingStrategy(for: payload).jsonDateEncodingStrategy)
             }
             
             var originalRequest = try URLRequest(url: url, method: method, headers: headers)

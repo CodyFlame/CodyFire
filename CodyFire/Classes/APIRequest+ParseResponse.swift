@@ -19,9 +19,9 @@ extension APIRequest {
             let diff = additionalTimeout - answer.timeline.totalDuration
             if response.statusCode == desiredStatusCode {
                 let decoder = JSONDecoder()
-                decoder.dateDecodingStrategy = dateDecodingStrategy
-                    ?? CodyFire.shared.dateDecodingStrategy
-                    ?? JSONDecoder.DateDecodingStrategy.default
+                decoder.dateDecodingStrategy = dateDecodingStrategy?.jsonDateDecodingStrategy
+                    ?? CodyFire.shared.dateDecodingStrategy?.jsonDateDecodingStrategy
+                    ?? DateCodingStrategy.default.jsonDateDecodingStrategy
                 var errorRaised = false
                 if let data = answer.data {
                     if ResultType.self is EmptyResponse.Type {

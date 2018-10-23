@@ -9,6 +9,19 @@ import Foundation
 import Alamofire
 
 extension APIRequest {
+    var url: String {
+        var url = CodyFire.shared.apiURL + "/" + endpoint
+        if let query = query {
+            if url.contains("?") {
+                url.append("&")
+            } else {
+                url.append("?")
+            }
+            url.append(query)
+        }
+        return url
+    }
+    
     @discardableResult
     public func method(_ method: HTTPMethod) -> APIRequest {
         self.method = method
@@ -22,10 +35,24 @@ extension APIRequest {
     }
     
     @discardableResult
+    public func query(_ params: Codable) -> APIRequest {
+        self.query = buildQuery(params)
+        return self
+    }
+    
+    @discardableResult
     public func headers(_ headers: [String: String]) -> APIRequest {
         for (key, value) in headers {
             self.headers[key] = value
         }
+        return self
+    }
+    
+    @discardableResult
+    public func basicAuth(email: String, password: String) -> APIRequest {
+        let credentialData = "\(email.lowercased()):\(password)".data(using: .utf8)
+        let base64Credentials = credentialData?.base64EncodedString() ?? ""
+        headers["Authorization"] = "Basic \(base64Credentials)"
         return self
     }
     
@@ -60,13 +87,13 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func dateEncodingStrategy(_ strategy: JSONEncoder.DateEncodingStrategy) -> APIRequest {
+    public func dateEncodingStrategy(_ strategy: DateCodingStrategy) -> APIRequest {
         dateEncodingStrategy = strategy
         return self
     }
     
     @discardableResult
-    public func dateDecodingStrategy(_ strategy: JSONDecoder.DateDecodingStrategy) -> APIRequest {
+    public func dateDecodingStrategy(_ strategy: DateCodingStrategy) -> APIRequest {
         dateDecodingStrategy = strategy
         return self
     }

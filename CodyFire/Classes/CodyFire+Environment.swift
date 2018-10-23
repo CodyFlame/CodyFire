@@ -29,6 +29,14 @@ extension CodyFire {
         }
     }
     
+    /// Auto apply env by reading environment variable from chosen project scheme
+    public func setupEnvByProjectScheme() {
+        if let envString = ProcessInfo.processInfo.environment["env"],
+            let env = EnvironmentMode(rawValue: envString) {
+            CodyFire.shared.environmentMode = env
+        }
+    }
+    
     public var apiURL: String {
         return env.apiURL
     }
