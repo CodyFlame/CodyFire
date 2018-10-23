@@ -25,6 +25,29 @@ And it's really awesome to use Codable for API request payload and response, isn
 
 ## Stop talking! Show me what you have!
 
+### Quick examples
+
+#### How to send GET request
+
+```swift
+APIRequestWithoutPayload<ResultModel>("endpoint").onSuccess { model in
+    //here's your decoded model!
+    //no need to check http.statusCode, I already did it for you!
+    //of course you can choose which statusCode is equal to success (look at the `POST` example below)
+}
+```
+
+#### How to send POST request
+
+```swift
+APIRequest<PayloadModel, ResultModel>("endpoint", payload: payloadModel).method(.post).desiredStatusCode(201).onSuccess { model in
+    //here's your decoded model!
+    //no need to check http.statusCode, I already did it for you!
+    //of course you can choose which statusCode is equal to success (look at the `PUT` example below)
+}
+```
+
+
 ### How to use
 
 #### 0️⃣ Preparing. Setup you API URLs in AppDelegate.
@@ -180,6 +203,26 @@ extension TaskController {
     }
     
     func create(_ request: CreateRequest) -> APIRequest<CreateRequest, Task> {
+        return APIRequest("post", payload: request).method(.post)
+    }
+}
+```
+
+###### Edit a task
+
+`API/Controllers/Task/Task+Create.swift`
+```swift
+import CodyFire
+
+extension TaskController {
+    struct EditRequest: JSONPayload {
+        var name: String
+        init (name: String) {
+            self.name = name
+        }
+    }
+    
+    func create(id: UUID, request: EditRequest) -> APIRequest<EditRequest, Task> {
         return APIRequest("post", payload: request).method(.post)
     }
 }
