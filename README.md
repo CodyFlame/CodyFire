@@ -4,11 +4,12 @@
 
 The lib which will convert your massive API calls code into the awesome convenient and easy maintainable controllers!
 
-Use Codable struct for everything related to API requests, for such things like:
+Use Codable models for everything related to API requests:
 - payload
 - multipart payload
 - url query
 - response
+Wondered? That's only little part of what you get from this lib! 🍻
 
 ### Quick examples
 
