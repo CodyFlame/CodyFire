@@ -3,6 +3,7 @@
 [![Version](https://img.shields.io/cocoapods/v/CodyFire.svg?style=flat)](https://cocoapods.org/pods/CodyFire)
 
 The lib which will convert your massive API calls code into the awesome convenient and easy maintainable controllers!
+
 Use Codable struct for everything related to API requests, for such things like:
 - payload
 - multipart payload
