@@ -17,7 +17,7 @@ extension APIRequest {
             log(.info, "Response: \(response.statusCode) on \(method.rawValue.uppercased()) to \(url)")
             log(.debug, "Response data: \(String(describing: answer.response)) on \(method.rawValue.uppercased()) to \(url)")
             let diff = additionalTimeout - answer.timeline.totalDuration
-            if response.statusCode == desiredStatusCode {
+            if response.statusCode == desiredStatusCode.rawValue {
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = dateDecodingStrategy?.jsonDateDecodingStrategy
                     ?? CodyFire.shared.dateDecodingStrategy?.jsonDateDecodingStrategy

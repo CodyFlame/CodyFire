@@ -43,7 +43,7 @@ public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
     var payload: PayloadType?
     var query: String?
     var headers: [String: String] = CodyFire.shared.fillHeaders?() ?? [:]
-    var desiredStatusCode: Int = 200
+    var desiredStatusCode: HTTPStatusCode = .ok
     var successCallback: SuccessResponse?
     var knownErrorCallback: KnownErrorResponse?
     var errorCallback: ErrorResponse?

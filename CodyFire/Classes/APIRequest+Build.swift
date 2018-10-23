@@ -57,7 +57,7 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func desiredStatusCode(_ statusCode: Int) -> APIRequest {
+    public func desiredStatusCode(_ statusCode: HTTPStatusCode) -> APIRequest {
         desiredStatusCode = statusCode
         return self
     }
