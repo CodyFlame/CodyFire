@@ -10,7 +10,7 @@ Use Codable models for everything related to API requests:
 - url query
 - response
 
-Wondered? That's only little part of what you get from this lib! 🍻
+Wondered? That's only little part of what you will get from this lib! 🍻
 
 ### Quick examples
 
