@@ -355,9 +355,163 @@ API.shared.post.create(payload).onProgress { progress in
 
 Easy right? 🎉
 
-## APIRequest methods
+## Details
 
-`//TO BE DONE`
+#### How to put `Authorization Bearer` token into every request?
+Fot that we have global headers wrapper, which is called for every request.
+
+Declare it e.g. somwhere in AppDelegate
+```swift
+CodyFire.shared.fillHeaders = {
+    guard let apiToken = LocalAuthStorage.savedToken else { return [:] }
+    return ["Authorization": "Bearer \(apiToken)"]
+}
+```
+
+#### How to set a global `unauthorized` handler?
+Again, somehere in AppDelegate declare it like this
+CodyFire.shared.unauthorizedHandler = {
+    //kick out user
+}
+
+#### How to switch environments through Xcode's run schemes?
+It's really useful feature and I suggest to use it in every iOS project!
+
+Create three schemes named: Development, TestFlight, AppStore like on the screenshot below
+<img width="365" alt="2018-10-24 5 30 30" src="https://user-images.githubusercontent.com/1272610/47400378-f359c380-d74d-11e8-8d00-a325d06ed7bb.png">
+
+TIP: Make sure that they're marked as `Shared` to have them in `git`
+
+Then in every scheme in `Arguments` tab add `Environment variable` named `env` with one of those values: dev, testFlight, appStore.
+
+Take a look at example below
+<img width="895" alt="2018-10-24 5 34 43" src="https://user-images.githubusercontent.com/1272610/47400503-85fa6280-d74e-11e8-8846-3216b241dd6e.png">
+
+Then somewhere in AppDelegate.didFinishLaunchingWithOptions add
+```swift
+CodyFire.shared.setupEnvByProjectScheme()
+```
+All done, now you're able to easily switch environments!
+
+#### How to execute request without onSuccess clojure?
+Sometimes useful for DELETE or PATCH requests
+```swift
+APIRequestWithoutAnything("endpoint").method(.delete).execute()
+```
+
+#### How to cancel request?
+```swift
+let request = APIRequest("").execute()
+request.cancel()
+```
+and you're able to handle cancellation
+```swift
+.onCancellation {
+    print("request was cancelled :(")
+}
+```
+
+#### What does known error mean?
+
+As you may see you're able to add `onError` block and also `onKnownError` block the difference between them that `onError` called only if `onKnownError` not set or if there're unknown error occured.
+
+Let's take a look closer what we have in `onError` block
+```swift
+.onError { code in
+    //there're only Int http error code like 404, 500, etc.
+}
+```
+`onKnownError` is more powerful as it contains nice error description and http error code as enum
+```swift
+.onKnownError { error in
+    switch error.code {
+    case .notFound: print("It's not found :(")
+    case .internalServerError: print("Oooops... Something really went wrong...")
+    default: print("Another known erorr happened: " + error.description)
+    }
+}
+```
+
+More than that!!! In your controller while declaring APIRequest you're able to add your own known errors!!! 🙀
+
+```swift
+APIRequest("login")
+    .method(.post)
+    .basicAuth(email: "sam@mail.com", password: "qwerty")
+    .addKnownError(.notFound, "User not found")
+```
+I believe that's really awesome and useful! Finally a lot of things may be declared in one place! 🎉
+
+#### How to set response timeout?
+```swift
+.responseTimeout(30) //request timeout set for 30 seconds
+```
+and of course you're able to catch timeout
+```swift
+.onTimeout {
+    //timeout happened :(
+}
+```
+
+#### How to add interactive additional timeout? (my favourite one 😄)
+If you want to make sure that your request will take 2 or more seconds (to not be too fast 😅) you can do that
+```swift
+.additionalTimeout(2)
+```
+e.g. in case if your request will be executed in 0.5 seconds, `onSuccess` handler will be fired only in 1.5s after that
+but in case if your request will take more than 2s then `onSuccess` handler will be fired immediatelly
+
+#### Handle if network isn't available (e.g. wifi/lte turned off)
+```swift
+.onNetworkUnavailable {
+    print("unfortunatelly there're no internet connection!")
+}
+```
+
+#### Run something right before request started (works only if network is available)
+```swift
+.onRequestStarted {
+    print("request started normally")
+}
+```
+
+#### How to avoid log error for request
+```siwft
+.avoidLogError()
+```
+
+#### How to set desired status code and is that means?
+Usually servers response with `200 OK` and CodyFire expect to receive `200 OK` to call `onSuccess` handler by default.
+
+You may need to specify another code, e.g. `201 CREATED` for some POST requests.
+```swift
+.desiredStatusCode(.created)
+```
+or you even can set your custom code
+```swift
+.desiredStatusCode(.custom(777))
+```
+
+#### How to set some headers for a request?
+
+```swift
+.headers(["myHeader":"myValue"])
+//or for basic auth
+.basicAuth(email: "", password: "")
+```
+
+#### What are supported HTTP methods?
+
+You may use: GET, POST, PUT, PATCH, DELETE, HEAD, TRACE, CONNECT, OPTIONS
+
+#### How to declare payload model for multipart request
+
+#### How to declare payload model for json request
+
+#### How to declare url query params model
+
+#### How to set date decoding/encoding strategy
+
 
 ## Author
 
