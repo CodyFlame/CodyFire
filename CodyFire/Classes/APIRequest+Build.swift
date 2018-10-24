@@ -63,12 +63,6 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func attach(_ attachment: Attachment) -> APIRequest {
-        attachments.append(attachment)
-        return self
-    }
-    
-    @discardableResult
     public func addKnownError(_ knownError: KnownNetworkError) -> APIRequest {
         customErrors.append(knownError)
         return self

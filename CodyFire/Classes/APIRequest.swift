@@ -36,7 +36,6 @@ public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
     public typealias NetworkUnavailableCallback = ()->()
     public typealias RequestStartedCallback = ()->()
     
-    var attachments: [Attachment] = []
     var customErrors: [KnownNetworkError] = []
     var endpoint: String = "/"
     var method: HTTPMethod = .get
