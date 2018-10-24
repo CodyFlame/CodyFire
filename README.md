@@ -378,6 +378,49 @@ CodyFire.shared.unauthorizedHandler = {
     //kick out user
 }
 
+#### Handle if network isn't available (e.g. wifi/lte turned off)
+```swift
+.onNetworkUnavailable {
+    print("unfortunatelly there're no internet connection!")
+}
+```
+
+#### Run something right before request started (works only if network is available)
+```swift
+.onRequestStarted {
+    print("request started normally")
+}
+```
+
+#### How to avoid log error for request
+```siwft
+.avoidLogError()
+```
+
+#### How to set desired status code and what's that means?
+Usually servers response with `200 OK` and CodyFire expect to receive `200 OK` to call `onSuccess` handler by default.
+
+You may need to specify another code, e.g. `201 CREATED` for some POST requests.
+```swift
+.desiredStatusCode(.created)
+```
+or you even can set your custom code
+```swift
+.desiredStatusCode(.custom(777))
+```
+
+#### How to set some headers for a request?
+
+```swift
+.headers(["myHeader":"myValue"])
+//or for basic auth
+.basicAuth(email: "", password: "")
+```
+
+#### What are supported HTTP methods?
+
+You may use: GET, POST, PUT, PATCH, DELETE, HEAD, TRACE, CONNECT, OPTIONS
+
 #### How to switch environments through Xcode's run schemes?
 It's really useful feature and I suggest to use it in every iOS project!
 
@@ -464,49 +507,6 @@ If you want to make sure that your request will take 2 or more seconds (to not b
 ```
 e.g. in case if your request will be executed in 0.5 seconds, `onSuccess` handler will be fired only in 1.5s after that
 but in case if your request will take more than 2s then `onSuccess` handler will be fired immediatelly
-
-#### Handle if network isn't available (e.g. wifi/lte turned off)
-```swift
-.onNetworkUnavailable {
-    print("unfortunatelly there're no internet connection!")
-}
-```
-
-#### Run something right before request started (works only if network is available)
-```swift
-.onRequestStarted {
-    print("request started normally")
-}
-```
-
-#### How to avoid log error for request
-```siwft
-.avoidLogError()
-```
-
-#### How to set desired status code and what's that means?
-Usually servers response with `200 OK` and CodyFire expect to receive `200 OK` to call `onSuccess` handler by default.
-
-You may need to specify another code, e.g. `201 CREATED` for some POST requests.
-```swift
-.desiredStatusCode(.created)
-```
-or you even can set your custom code
-```swift
-.desiredStatusCode(.custom(777))
-```
-
-#### How to set some headers for a request?
-
-```swift
-.headers(["myHeader":"myValue"])
-//or for basic auth
-.basicAuth(email: "", password: "")
-```
-
-#### What are supported HTTP methods?
-
-You may use: GET, POST, PUT, PATCH, DELETE, HEAD, TRACE, CONNECT, OPTIONS
 
 #### How to declare payload model for multipart request
 Your struct/class just should conform to `MultipartPayload` protocol
