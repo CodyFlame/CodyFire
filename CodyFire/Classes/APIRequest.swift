@@ -31,7 +31,6 @@ public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
     public typealias ErrorResponse = (Int)->()
     public typealias Progress = (Double)->()
     public typealias NotAuthorizedResponse = ()->()
-    public typealias ToSUpdatedResponse = ()->()
     public typealias TimeoutResponse = ()->()
     public typealias NetworkUnavailableCallback = ()->()
     public typealias RequestStartedCallback = ()->()
