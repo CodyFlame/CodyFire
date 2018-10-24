@@ -14,7 +14,11 @@
 
 <br>
 
-The lib which will convert your massive API calls code into the awesome convenient and easy maintainable controllers!
+This is Alamofire with blackjack, roulette and craps!
+
+This lib will convert you to convert your massive API code into an awesome convenient and easy maintainable calls in controllers!
+
+Based on Alamofire 4.5.
 
 Use Codable models for everything related to API requests:
 - payload
