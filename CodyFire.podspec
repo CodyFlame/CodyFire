@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CodyFire'
-  s.version          = '1.2.0'
+  s.version          = '1.2.1'
   s.summary          = '❤️ Powerful API wrapper based on Codable, Alamofire, and Starscream'
 
 # This description is used to generate tags and improve search results.
