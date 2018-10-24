@@ -1,6 +1,18 @@
-# CodyFire
+[![Mihael Isaev](https://user-images.githubusercontent.com/1272610/47399404-54cb6380-d749-11e8-92d0-bd7c844084f1.png)](http://mihaelisaev.com)
 
-[![Version](https://img.shields.io/cocoapods/v/CodyFire.svg?style=flat)](https://cocoapods.org/pods/CodyFire)
+<p align="center">
+    <a href="LICENSE">
+        <img src="https://img.shields.io/badge/license-MIT-brightgreen.svg" alt="MIT License">
+    </a>
+    <a href="https://swift.org">
+        <img src="https://img.shields.io/badge/swift-4.2-brightgreen.svg" alt="Swift 4.2">
+    </a>
+    <a href="https://cocoapods.org/pods/CodyFire">
+        <img src="https://img.shields.io/cocoapods/v/CodyFire.svg" alt="Cocoapod">
+    </a>
+</p>
+
+<br>
 
 The lib which will convert your massive API calls code into the awesome convenient and easy maintainable controllers!
 
