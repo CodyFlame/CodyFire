@@ -78,7 +78,7 @@ pod 'CodyFire'
 
 ## How to setup
 
-As CodyFire automatically detects which environment you're on I suggest you to use this awesome feature 👏 
+As CodyFire automatically detects which environment you're on and I suggest you to definitely use this awesome feature 👏 
 
 ```swift
 import CodyFire
