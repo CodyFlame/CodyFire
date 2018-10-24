@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct KnownNetworkError {
+public struct KnownNetworkError: Error {
     public var code: HTTPStatusCode
     public var description: String
     public init (code: HTTPStatusCode, description: String) {
