@@ -92,6 +92,32 @@ public enum HTTPStatusCode {
     case notExtended
     case networkAuthenticationRequired
     
+    //MARK: internal
+    case _unknown
+    case _undecodable
+    case _requestCancelled
+    case _badURL
+    case _timedOut
+    case _unsupportedURL
+    case _cannotFindHost
+    case _cannotConnectToHost
+    case _networkConnectionLost
+    case _dnsLookupFailed
+    case _httpTooManyRedirects
+    case _resourceUnavailable
+    case _notConnectedToInternet
+    case _redirectToNonExistentLocation
+    case _badServerResponse
+    case _userCancelledAuthentication
+    case _userAuthenticationRequired
+    case _zeroByteResource
+    case _cannotDecodeRawData
+    case _cannotDecodeContentData
+    case _cannotParseResponse
+    
+    //MARK: 524
+    case timedOut
+    
     case custom(Int)
     
     public var rawValue: Int {
@@ -166,6 +192,30 @@ public enum HTTPStatusCode {
         case .loopDetected: return 508
         case .notExtended: return 509
         case .networkAuthenticationRequired: return 510
+            
+        case .timedOut: return 524
+            
+        case ._unknown: return -1
+        case ._undecodable: return -2
+        case ._requestCancelled: return -999
+        case ._badURL: return -1000
+        case ._timedOut: return -1001
+        case ._unsupportedURL: return -1002
+        case ._cannotFindHost: return -1003
+        case ._cannotConnectToHost: return -1004
+        case ._networkConnectionLost: return -1005
+        case ._dnsLookupFailed: return -1006
+        case ._httpTooManyRedirects: return -1007
+        case ._resourceUnavailable: return -1008
+        case ._notConnectedToInternet: return -1009
+        case ._redirectToNonExistentLocation: return -1010
+        case ._badServerResponse: return -1011
+        case ._userCancelledAuthentication: return -1012
+        case ._userAuthenticationRequired: return -1013
+        case ._zeroByteResource: return -1014
+        case ._cannotDecodeRawData: return -1015
+        case ._cannotDecodeContentData: return -1016
+        case ._cannotParseResponse: return -1017
         
         case .custom(let code): return code
         }

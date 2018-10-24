@@ -75,8 +75,8 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func addKnownError(_ error: NetworkError, _ description: String) -> APIRequest {
-        customErrors.append(KnownNetworkError(error: error, description: description))
+    public func addKnownError(_ code: HTTPStatusCode, _ description: String) -> APIRequest {
+        customErrors.append(KnownNetworkError(code: code, description: description))
         return self
     }
     

@@ -8,10 +8,10 @@
 import Foundation
 
 public struct KnownNetworkError {
-    public var error: NetworkError
+    public var code: HTTPStatusCode
     public var description: String
-    public init (error: NetworkError, description: String) {
-        self.error = error
+    public init (code: HTTPStatusCode, description: String) {
+        self.code = code
         self.description = description
     }
 }
