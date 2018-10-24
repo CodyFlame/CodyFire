@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'CodyFire'
   s.version          = '1.2.2'
-  s.summary          = '❤️ Powerful API wrapper based on Codable, Alamofire, and Starscream'
+  s.summary          = '❤️ Powerful codable API requests builder and manager for iOS based on Alamofire'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!
 
-  s.description      = 'This is a powerful lib that provide you ability to send requests and receive responces with Codable protocol'
+  s.description      = 'This is a powerful lib that provide you ability to send requests and receive responses with Codable protocol'
 
   s.homepage         = 'https://github.com/MihaelIsaev/CodyFire'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
