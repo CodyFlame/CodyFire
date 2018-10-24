@@ -1,4 +1,4 @@
-[![Mihael Isaev](https://user-images.githubusercontent.com/1272610/47399404-54cb6380-d749-11e8-92d0-bd7c844084f1.png)](http://mihaelisaev.com)
+[![Mihael Isaev](https://user-images.githubusercontent.com/1272610/47399637-7aa53800-d74a-11e8-9faa-4babb8c33236.png)](http://mihaelisaev.com)
 
 <p align="center">
     <a href="LICENSE">
