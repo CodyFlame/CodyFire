@@ -83,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 Isn't it a neat? 😏
 
-### Declare you API controlelrs
+### Create your API controllers
 
 I promise that this is API code architecture from your dreams which are come true!
 
