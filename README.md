@@ -480,7 +480,7 @@ but in case if your request will take more than 2s then `onSuccess` handler will
 .avoidLogError()
 ```
 
-#### How to set desired status code and is that means?
+#### How to set desired status code and what's that means?
 Usually servers response with `200 OK` and CodyFire expect to receive `200 OK` to call `onSuccess` handler by default.
 
 You may need to specify another code, e.g. `201 CREATED` for some POST requests.
