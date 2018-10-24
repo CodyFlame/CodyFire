@@ -505,13 +505,109 @@ or you even can set your custom code
 You may use: GET, POST, PUT, PATCH, DELETE, HEAD, TRACE, CONNECT, OPTIONS
 
 #### How to declare payload model for multipart request
+Your struct/class just should conform to `MultipartPayload` protocol
+```swift
+struct SomePayload: MultipartPayload {
+    let name: String
+    let names: [String]
+    let date: Date
+    let dates: [Dates]
+    let number: Double
+    let numbers: [Int]
+    let attachment: Data
+    let attachments: [Data]
+    let fileAttachment: Attachment
+    let fileAttachments: [Attachment]
+}
+```
 
 #### How to declare payload model for json request
+Your struct/class just should conform to `JSONPayload` protocol
+```swift
+struct SomePayload: JSONPayload {
+    let name: String
+    let names: [String]
+    let date: Date
+    let dates: [Dates]
+    let number: Double
+    let numbers: [Int]
+}
+```
 
 #### How to declare url query params model
+Your struct/class just should conform to `Codable` protocol
+```swift
+struct SomePayload: Codable {
+    let name: String
+    let names: [String]
+    let date: Date
+    let dates: [Dates]
+    let number: Double
+    let numbers: [Int]
+}
+```
 
 #### How to set date decoding/encoding strategy
+Our `DateCodingStrategy` support
+ - secondsSince1970
+ - millisecondsSince1970
+ - formatted(customDateFormatter: DateFormatter)
+By default all the dates are in `yyyy-MM-dd'T'HH:mm:ss'Z'` format
 
+You have interesting options here:
+ - you can set global date decoder/encoder
+ ```swift
+ CodyFire.shared.dateEncodingStrategy = .secondsSince1970
+ let customDateFormatter = DateFormatter()
+ CodyFire.shared.dateDecodingStrategy = .formatted(customDateFormatter)
+ ```
+ - you can set date decoder/encoder for request in your controller
+ ```swift
+ APIRequest().dateDecodingStrategy(.millisecondsSince1970).dateEncodingStrategy(.secondsSince1970)
+ ```
+ - or you even can use different date encoder/decoder for each payload type (highest priority)
+ ```swift
+ struct SomePayload: JSONPayload, CustomDateEncodingStrategy, CustomDateDecodingStrategy {
+    var dateEncodingStrategy: DateCodingStrategy
+    var dateDecodingStrategy: DateCodingStrategy
+ }
+ ```
+ 
+#### How to enable/disable logging
+e.g. in AppDelegate you may set logging mode
+```swift
+CodyFire.shared.logLevel = .debug
+CodyFire.shared.logLevel = .error
+CodyFire.shared.logLevel = .info
+CodyFire.shared.logLevel = .off
+```
+and also you can set log handler
+```swift
+CodyFire.shared.logHandler = { level, text in
+    print("manually printing codyfire error: " + text)
+}
+```
+by default for the AppStore the log level if `.off`
+
+#### How you're detecting current environment?
+It's easy
+
+```swift
+#if DEBUG
+//DEV environment
+#else
+if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" {
+//TESTFLIGHT environment
+} else {
+//APPSTORE environment
+}
+#endif
+```
+
+## Contribution
+Please feel free to send pull requests and ask your questions in issues
+
+Hope this lib will be really useful in your projects! Tell you friends about it! Please press STAR ⭐️ button!!!
 
 ## Author
 
