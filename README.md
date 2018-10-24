@@ -14,9 +14,9 @@
 
 <br>
 
-This is Alamofire with blackjack, roulette and craps!
+This is a kind of Alamofire with blackjack, roulette and craps!
 
-This lib will convert you to convert your massive API code into an awesome convenient and easy maintainable calls in controllers!
+This lib will convert your massive API code into an awesome convenient and easy maintainable calls in controllers!
 
 Based on Alamofire 4.7.3.
 
