@@ -97,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 ```
 
-Isn't it a neat? 😏
+Isn't it cool? 😏
 
 ### Create your API controllers
 
@@ -311,6 +311,7 @@ API.shared.task.delete(id: taskId).onKnownError { error in
 ### Multipart example
 
 ```swift
+//declare a PostController
 class PostController()
 extension PostController {
     struct CreateRequest: MultipartPayload {
@@ -327,6 +328,7 @@ extension PostController {
     }
     
     struct PostResponse: Codable {
+        let id: UUID
         let text: String
         let tags: [String]
         let linksToImages: [String]
@@ -338,7 +340,7 @@ extension PostController {
     }
 }
 
-//then somewhere send create post request!
+//then somewhere send creation request!
 
 let videoData = FileManager.default.contents(atPath: "/path/to/video.mp4")!
 let imageAttachment = Attachment(data: UIImage(named: "cat")!.jpeg(.high)!, 
