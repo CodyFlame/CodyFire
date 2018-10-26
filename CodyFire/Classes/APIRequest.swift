@@ -18,9 +18,9 @@ public protocol PayloadProtocol: Codable {}
 public protocol MultipartPayload: PayloadProtocol {}
 public protocol JSONPayload: PayloadProtocol {}
 
-public struct EmptyResponse: Codable {}
+public struct Nothing: Codable {}
 
-public typealias APIRequestWithoutResult = APIRequest<EmptyResponse>
+public typealias APIRequestWithoutResult = APIRequest<Nothing>
 
 public class APIRequest<ResultType: Codable> {
     public typealias SuccessResponse = (ResultType)->()
