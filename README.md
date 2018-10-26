@@ -23,8 +23,9 @@ Based on Alamofire 4.7.3.
 Use Codable models for everything related to API requests:
 - payload
 - multipart payload
-- url query
 - response
+- url query
+- headers
 
 Wondered? That's only little part of what you will get from this lib! 🍻
 
@@ -78,7 +79,7 @@ pod 'CodyFire'
 
 ## How to setup
 
-As CodyFire automatically detects which environment you're on and I suggest you to definitely use this awesome feature 👏 
+As CodyFire automatically detects which environment you're on and I suggest you to definitely use this awesome feature 👏
 
 ```swift
 import CodyFire
@@ -114,7 +115,7 @@ class API {
     public class var shared : API {
         return _APISharedInstance
     }
-    
+
     let auth = AuthController()
     let task = TaskController()
 }
@@ -147,11 +148,11 @@ extension AuthController {
             self.password = password
         }
     }
-    
+
     struct LoginResponse: Codable {
         var token: String
     }
-  
+
     func login(_ request: LoginRequest) -> APIRequest<LoginRequest, LoginResponse> {
         return APIRequest("login", payload: request).method(.post)
             .addKnownError(.notFound, "User not found")
@@ -169,7 +170,7 @@ extension AuthController {
     struct LoginResponse: Codable {
         var token: String
     }
-    
+
     func login(email: String, password: String) -> APIRequestWithoutPayload<LoginResponse> {
         return APIRequest("login").method(.post).basicAuth(email: email, password: password)
             .addKnownError(.notFound, "User not found")
@@ -190,7 +191,7 @@ extension TaskController {
         var id: UUID
         var name: String
     }
-    
+
     struct ListQuery: Codable {
         var offset, limit: Int
         init (offset: Int, limit: Int) {
@@ -198,11 +199,11 @@ extension TaskController {
             self.limit = limit
         }
     }
-    
+
     func get(_ query: ListQuery? = nil) -> APIRequestWithoutPayload<[Task]> {
         return APIRequest("task").query(query)
     }
-    
+
     func get(id: UUID) -> APIRequestWithoutPayload<Task> {
         return APIRequest("task/" + id.uuidString)
     }
@@ -222,7 +223,7 @@ extension TaskController {
             self.name = name
         }
     }
-    
+
     func create(_ request: CreateRequest) -> APIRequest<CreateRequest, Task> {
         return APIRequest("post", payload: request).method(.post).desiredStatusCode(.created)
     }
@@ -242,7 +243,7 @@ extension TaskController {
             self.name = name
         }
     }
-    
+
     func create(id: UUID, request: EditRequest) -> APIRequest<EditRequest, Task> {
         return APIRequest("post/" + id.uuidString, payload: request).method(.patch)
     }
@@ -326,7 +327,7 @@ extension PostController {
             self.video = video
         }
     }
-    
+
     struct PostResponse: Codable {
         let id: UUID
         let text: String
@@ -334,7 +335,7 @@ extension PostController {
         let linksToImages: [String]
         let linkToVideo: String
     }
-    
+
     func create(_ request: CreateRequest) -> APIRequest<CreateRequest, PostResponse> {
         return APIRequest("post", payload: request).method(.post)
     }
@@ -343,10 +344,10 @@ extension PostController {
 //then somewhere send creation request!
 
 let videoData = FileManager.default.contents(atPath: "/path/to/video.mp4")!
-let imageAttachment = Attachment(data: UIImage(named: "cat")!.jpeg(.high)!, 
+let imageAttachment = Attachment(data: UIImage(named: "cat")!.jpeg(.high)!,
                                  fileName: "cat.jpg",
                                  mimeType: .jpg)
-let payload = PostController.CreateRequest(text: "CodyFire is awesome", 
+let payload = PostController.CreateRequest(text: "CodyFire is awesome",
                                            tags: ["codyfire", "awesome"],
                                            images: [imageAttachment],
                                            video: videoData)
@@ -364,9 +365,22 @@ Easy right? 🎉
 ## Details
 
 #### How to put `Authorization Bearer` token into every request?
-Fot that we have global headers wrapper, which is called for every request.
+For that we have a global headers wrapper, which is called for every request.
 
-Declare it e.g. somwhere in AppDelegate
+You need to declare it e.g. somewhere in AppDelegate.
+
+There are two options
+1. Use Codable model for headers (recommended)
+```swift
+CodyFire.shared.fillCodableHeaders = {
+    struct Headers: Codable {
+        var Authorization: String? //NOTE: nil values will be excluded
+        var anythingElse: String
+    }
+    return Headers(Authorization: nil, anythingElse: "hello")
+}
+```
+2. Use [String: String] dictionary
 ```swift
 CodyFire.shared.fillHeaders = {
     guard let apiToken = LocalAuthStorage.savedToken else { return [:] }
@@ -578,7 +592,7 @@ You have interesting options here:
     var dateDecodingStrategy: DateCodingStrategy
  }
  ```
- 
+
 #### How to enable/disable logging
 e.g. in AppDelegate you may set logging mode
 ```swift

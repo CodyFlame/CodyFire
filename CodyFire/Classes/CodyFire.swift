@@ -11,6 +11,7 @@ private var _sharedInstance = CodyFire()
 
 public typealias UnauthorizedHandler = ()->()
 public typealias FillHeaders = ()->([String: String])
+public typealias FillCodableHeaders = ()->(Codable)
 
 open class CodyFire {
     public class var shared: CodyFire {
@@ -35,6 +36,7 @@ open class CodyFire {
     }
     
     public var fillHeaders: FillHeaders?
+    public var fillCodableHeaders: FillCodableHeaders?
     
     #if DEBUG
     public var logLevel: LogLevel = .debug

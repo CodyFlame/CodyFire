@@ -11,7 +11,7 @@ import Alamofire
 extension APIRequest {
     var url: String {
         var url = CodyFire.shared.apiURL + "/" + endpoint
-        if let query = query {
+        if let query = query, query.count > 0 {
             if url.contains("?") {
                 url.append("&")
             } else {

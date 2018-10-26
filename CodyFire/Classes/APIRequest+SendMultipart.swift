@@ -14,19 +14,48 @@ extension APIRequest {
         let dateEncodingStrategy = self.dateEncodingStrategy(for: payload)
         SessionManager.default.upload(multipartFormData: { multipart in
             let mirror = Mirror(reflecting: payload)
-            mirror.children.forEach { children in
-                if let key = children.label {
-                    switch children.value {
-                    case let v as [Attachment]: self.add(v, as: key + "[]", into: multipart)
-                    case let v as Attachment: self.add([v], as: key, into: multipart)
-                    case let v as [Data]: self.add(v, as: key + "[]", into: multipart)
-                    case let v as Data: self.add([v], as: key, into: multipart)
-                    case let v as [Date]: self.add(v, as: key + "[]", into: multipart, dateCodingStrategy: dateEncodingStrategy)
-                    case let v as Date: self.add([v], as: key, into: multipart, dateCodingStrategy: dateEncodingStrategy)
-                    case let v as [String]: self.add(v, as: key + "[]", into: multipart)
-                    case let v as String: self.add([v], as: key, into: multipart)
-                    default: self.add(any: children.value, as: key, into: multipart)
-                    }
+            for children in mirror.children {
+                guard let key = children.label else { continue }
+                switch children.value {
+                case let v as [Attachment]: self.add(v, as: key + "[]", into: multipart)
+                case let v as Attachment: self.add([v], as: key, into: multipart)
+                case let v as [Data]: self.add(v, as: key + "[]", into: multipart)
+                case let v as Data: self.add([v], as: key, into: multipart)
+                case let v as [Date]: self.add(v, as: key + "[]", into: multipart, dateCodingStrategy: dateEncodingStrategy)
+                case let v as Date: self.add([v], as: key, into: multipart, dateCodingStrategy: dateEncodingStrategy)
+                case let v as [String]: self.add(v, as: key + "[]", into: multipart)
+                case let v as String: self.add([v], as: key, into: multipart)
+                case let v as [UUID]: self.add(v, as: key + "[]", into: multipart)
+                case let v as UUID: self.add([v], as: key, into: multipart)
+                case let v as [UInt]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as UInt: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [UInt8]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as UInt8: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [UInt16]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as UInt16: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [UInt32]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as UInt32: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [UInt64]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as UInt64: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [Int]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as Int: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [Int8]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as Int8: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [Int16]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as Int16: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [Int32]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
+                case let v as Int32: self.add([v].map { Int64($0) }, as: key, into: multipart)
+                case let v as [Int64]: self.add(v, as: key + "[]", into: multipart)
+                case let v as Int64: self.add([v], as: key, into: multipart)
+                case let v as [Float]: self.add(v, as: key + "[]", into: multipart)
+                case let v as Float: self.add([v], as: key, into: multipart)
+                case let v as [Double]: self.add(v, as: key + "[]", into: multipart)
+                case let v as Double: self.add([v], as: key, into: multipart)
+                case let v as [Decimal]: self.add(v, as: key + "[]", into: multipart)
+                case let v as Decimal: self.add([v], as: key, into: multipart)
+                default:
+                    guard !String(describing: type(of: children.value)).contains("Optional") else { continue }
+                    print("⚠️ multipart key `\(key)` with `\(type(of: children.value))` type is not supported")
                 }
             }
         }, to: url, method: .post, headers: headers) { encodingResult in
@@ -63,11 +92,23 @@ extension APIRequest {
         v.compactMap { $0.data(using: .utf8) }.forEach { add([$0], as: key, into: multipart) }
     }
     
-    fileprivate func add(any: Any, as key: String, into multipart: MultipartFormData) {
-        if let any = any as? [Any] {
-            any.forEach { add([String(describing: $0)], as: key, into: multipart) }
-        } else {
-            add([String(describing: any)], as: key, into: multipart)
-        }
+    fileprivate func add(_ v: [UUID], as key: String, into multipart: MultipartFormData) {
+        add(v.map { $0.uuidString }, as: key, into: multipart)
+    }
+    
+    fileprivate func add(_ v: [Int64], as key: String, into multipart: MultipartFormData) {
+        add(v.map { String(describing: $0) }, as: key, into: multipart)
+    }
+    
+    fileprivate func add(_ v: [Float], as key: String, into multipart: MultipartFormData) {
+        add(v.map { String(describing: $0) }, as: key, into: multipart)
+    }
+    
+    fileprivate func add(_ v: [Double], as key: String, into multipart: MultipartFormData) {
+        add(v.map { String(describing: $0) }, as: key, into: multipart)
+    }
+    
+    fileprivate func add(_ v: [Decimal], as key: String, into multipart: MultipartFormData) {
+        add(v.map { String(describing: $0) }, as: key, into: multipart)
     }
 }
