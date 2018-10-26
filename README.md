@@ -57,7 +57,7 @@ APIRequest<ResponseModel>("endpoint", payload: payloadModel)
 ### How to send DELETE request
 
 ```swift
-APIRequestWithoutResult("endpoint")
+APIRequest<Nothing>("endpoint")
     .method(.delete)
     .desiredStatusCode(.noContent) //204 NO CONTENT
     .onSuccess { _ in
@@ -242,7 +242,7 @@ extension TaskController {
 ```swift
 import CodyFire
 extension TaskController {
-    static func delete(id: UUID) -> APIRequestWithoutResult {
+    static func delete(id: UUID) -> APIRequest<Nothing> {
         return APIRequest("post/" + id.uuidString).method(.delete).desiredStatusCode(.noContent)
     }
 }
@@ -444,7 +444,7 @@ All done, now you're able to easily switch environments!
 #### How to execute request without onSuccess clojure?
 Sometimes useful for DELETE or PATCH requests
 ```swift
-APIRequestWithoutAnything("endpoint").method(.delete).execute()
+APIRequest<Nothing>("endpoint").method(.delete).execute()
 ```
 
 #### How to cancel request?
