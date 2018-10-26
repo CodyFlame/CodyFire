@@ -34,7 +34,7 @@ Wondered? That's only little part of what you will get from this lib! 🍻
 ### How to send GET request
 
 ```swift
-APIRequestWithoutPayload<ResultModel>("endpoint")
+APIRequest<ResponseModel>("endpoint")
     .onSuccess { model in
     //here's your decoded model!
     //no need to check http.statusCode, I already did it for you! By default it's 200 OK
@@ -45,7 +45,7 @@ APIRequestWithoutPayload<ResultModel>("endpoint")
 ### How to send POST request
 
 ```swift
-APIRequest<PayloadModel, ResultModel>("endpoint", payload: payloadModel)
+APIRequest<ResponseModel>("endpoint", payload: payloadModel)
     .method(.post)
     .desiredStatusCode(.created) //201 CREATED
     .onSuccess { model in
@@ -57,7 +57,7 @@ APIRequest<PayloadModel, ResultModel>("endpoint", payload: payloadModel)
 ### How to send DELETE request
 
 ```swift
-APIRequestWithoutAnything("endpoint")
+APIRequestWithoutResult("endpoint")
     .method(.delete)
     .desiredStatusCode(.noContent) //204 NO CONTENT
     .onSuccess { _ in
@@ -112,12 +112,8 @@ import CodyFire
 private let _APISharedInstance = API()
 
 class API {
-    public class var shared : API {
-        return _APISharedInstance
-    }
-
-    let auth = AuthController()
-    let task = TaskController()
+    typealias auth = AuthController
+    typealias task = TaskController
 }
 ```
 
@@ -139,7 +135,6 @@ class TaskController {}
 `API/Controllers/Auth/Auth+Login.swift`
 ```swift
 import CodyFire
-
 extension AuthController {
   struct LoginRequest: JSONPayload {
         let email, password: String
@@ -153,7 +148,7 @@ extension AuthController {
         var token: String
     }
 
-    func login(_ request: LoginRequest) -> APIRequest<LoginRequest, LoginResponse> {
+    static func login(_ request: LoginRequest) -> APIRequest<LoginRequest, LoginResponse> {
         return APIRequest("login", payload: request).method(.post)
             .addKnownError(.notFound, "User not found")
     }
@@ -165,13 +160,12 @@ extension AuthController {
 `API/Controllers/Auth/Auth+Login.swift`
 ```swift
 import CodyFire
-
 extension AuthController {
     struct LoginResponse: Codable {
         var token: String
     }
 
-    func login(email: String, password: String) -> APIRequestWithoutPayload<LoginResponse> {
+    static func login(email: String, password: String) -> APIRequestWithoutPayload<LoginResponse> {
         return APIRequest("login").method(.post).basicAuth(email: email, password: password)
             .addKnownError(.notFound, "User not found")
     }
@@ -185,7 +179,6 @@ extension AuthController {
 `API/Controllers/Task/Task+Get.swift`
 ```swift
 import CodyFire
-
 extension TaskController {
     struct Task: Codable {
         var id: UUID
@@ -200,11 +193,11 @@ extension TaskController {
         }
     }
 
-    func get(_ query: ListQuery? = nil) -> APIRequestWithoutPayload<[Task]> {
+    static func get(_ query: ListQuery? = nil) -> APIRequestWithoutPayload<[Task]> {
         return APIRequest("task").query(query)
     }
 
-    func get(id: UUID) -> APIRequestWithoutPayload<Task> {
+    static func get(id: UUID) -> APIRequestWithoutPayload<Task> {
         return APIRequest("task/" + id.uuidString)
     }
 }
@@ -215,7 +208,6 @@ extension TaskController {
 `API/Controllers/Task/Task+Create.swift`
 ```swift
 import CodyFire
-
 extension TaskController {
     struct CreateRequest: JSONPayload {
         var name: String
@@ -224,7 +216,7 @@ extension TaskController {
         }
     }
 
-    func create(_ request: CreateRequest) -> APIRequest<CreateRequest, Task> {
+    static func create(_ request: CreateRequest) -> APIRequest<CreateRequest, Task> {
         return APIRequest("post", payload: request).method(.post).desiredStatusCode(.created)
     }
 }
@@ -235,7 +227,6 @@ extension TaskController {
 `API/Controllers/Task/Task+Edit.swift`
 ```swift
 import CodyFire
-
 extension TaskController {
     struct EditRequest: JSONPayload {
         var name: String
@@ -244,7 +235,7 @@ extension TaskController {
         }
     }
 
-    func create(id: UUID, request: EditRequest) -> APIRequest<EditRequest, Task> {
+    static func create(id: UUID, request: EditRequest) -> APIRequest<EditRequest, Task> {
         return APIRequest("post/" + id.uuidString, payload: request).method(.patch)
     }
 }
@@ -255,9 +246,8 @@ extension TaskController {
 `API/Controllers/Task/Task+Delete.swift`
 ```swift
 import CodyFire
-
 extension TaskController {
-    func delete(id: UUID) -> APIRequestWithoutAnything {
+    static func delete(id: UUID) -> APIRequestWithoutAnything {
         return APIRequest("post/" + id.uuidString).method(.delete).desiredStatusCode(.noContent)
     }
 }
@@ -268,7 +258,7 @@ extension TaskController {
 ###### Send login request
 
 ```swift
-API.shared.auth.login(email: "test@mail.com", password: "qwerty").onKnownError { error in
+API.auth.login(email: "test@mail.com", password: "qwerty").onKnownError { error in
     switch error.code {
     case .notFound: print("User not found")
     default: print(error.description)
@@ -281,7 +271,7 @@ API.shared.auth.login(email: "test@mail.com", password: "qwerty").onKnownError {
 ###### Get a list of tasks
 
 ```swift
-API.shared.task.get().onKnownError { error in
+API.task.get().onKnownError { error in
     print(error.description)
 }.onSuccess { tasks in
     print("received \(tasks.count) tasks")
@@ -291,7 +281,7 @@ API.shared.task.get().onKnownError { error in
 ###### Create a task
 
 ```swift
-API.shared.task.create(TaskController.CreateRequest(name: "Install CodyFire")).onKnownError { error in
+API.task.create(TaskController.CreateRequest(name: "Install CodyFire")).onKnownError { error in
     print(error.description)
 }.onSuccess { task in
     print("just created new task: \(task)")
@@ -302,7 +292,7 @@ API.shared.task.create(TaskController.CreateRequest(name: "Install CodyFire")).o
 
 ```swift
 let taskId = UUID()
-API.shared.task.delete(id: taskId).onKnownError { error in
+API.task.delete(id: taskId).onKnownError { error in
     print(error.description)
 }.onSuccess { _ in
     print("just removed task with id: \(taskId)")
@@ -336,7 +326,7 @@ extension PostController {
         let linkToVideo: String
     }
 
-    func create(_ request: CreateRequest) -> APIRequest<CreateRequest, PostResponse> {
+    static func create(_ request: CreateRequest) -> APIRequest<CreateRequest, PostResponse> {
         return APIRequest("post", payload: request).method(.post)
     }
 }
@@ -351,7 +341,7 @@ let payload = PostController.CreateRequest(text: "CodyFire is awesome",
                                            tags: ["codyfire", "awesome"],
                                            images: [imageAttachment],
                                            video: videoData)
-API.shared.post.create(payload).onProgress { progress in
+API.post.create(payload).onProgress { progress in
     print("tracking post uploading progress: \(progress)")
 }.onKnownError { error in
     print(error.description)
@@ -614,13 +604,13 @@ It's easy
 
 ```swift
 #if DEBUG
-//DEV environment
+    //DEV environment
 #else
-if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" {
-//TESTFLIGHT environment
-} else {
-//APPSTORE environment
-}
+    if Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" {
+        //TESTFLIGHT environment
+    } else {
+        //APPSTORE environment
+    }
 #endif
 ```
 
