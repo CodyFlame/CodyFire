@@ -144,9 +144,8 @@ extension AuthController {
         var token: String
     }
 
-    static func login(_ request: LoginRequest) -> APIRequest<LoginRequest, LoginResponse> {
-        return APIRequest("login", payload: request).method(.post)
-            .addKnownError(.notFound, "User not found")
+    static func login(_ request: LoginRequest) -> APIRequest<LoginResponse> {
+        return APIRequest("login", payload: request).method(.post).addKnownError(.notFound, "User not found")
     }
 }
 ```
@@ -161,7 +160,7 @@ extension AuthController {
         var token: String
     }
 
-    static func login(email: String, password: String) -> APIRequestWithoutPayload<LoginResponse> {
+    static func login(email: String, password: String) -> APIRequest<LoginResponse> {
         return APIRequest("login").method(.post).basicAuth(email: email, password: password)
             .addKnownError(.notFound, "User not found")
     }
@@ -189,11 +188,11 @@ extension TaskController {
         }
     }
 
-    static func get(_ query: ListQuery? = nil) -> APIRequestWithoutPayload<[Task]> {
+    static func get(_ query: ListQuery? = nil) -> APIRequest<[Task]> {
         return APIRequest("task").query(query)
     }
 
-    static func get(id: UUID) -> APIRequestWithoutPayload<Task> {
+    static func get(id: UUID) -> APIRequest<Task> {
         return APIRequest("task/" + id.uuidString)
     }
 }
@@ -212,7 +211,7 @@ extension TaskController {
         }
     }
 
-    static func create(_ request: CreateRequest) -> APIRequest<CreateRequest, Task> {
+    static func create(_ request: CreateRequest) -> APIRequest<Task> {
         return APIRequest("post", payload: request).method(.post).desiredStatusCode(.created)
     }
 }
@@ -231,7 +230,7 @@ extension TaskController {
         }
     }
 
-    static func create(id: UUID, request: EditRequest) -> APIRequest<EditRequest, Task> {
+    static func create(id: UUID, request: EditRequest) -> APIRequest<Task> {
         return APIRequest("post/" + id.uuidString, payload: request).method(.patch)
     }
 }
@@ -243,7 +242,7 @@ extension TaskController {
 ```swift
 import CodyFire
 extension TaskController {
-    static func delete(id: UUID) -> APIRequestWithoutAnything {
+    static func delete(id: UUID) -> APIRequestWithoutResult {
         return APIRequest("post/" + id.uuidString).method(.delete).desiredStatusCode(.noContent)
     }
 }
@@ -322,7 +321,7 @@ extension PostController {
         let linkToVideo: String
     }
 
-    static func create(_ request: CreateRequest) -> APIRequest<CreateRequest, PostResponse> {
+    static func create(_ request: CreateRequest) -> APIRequest<PostResponse> {
         return APIRequest("post", payload: request).method(.post)
     }
 }
