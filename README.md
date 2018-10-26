@@ -107,10 +107,6 @@ I promise that this is API code architecture from your dreams which are come tru
 #### Create an `API` folder and `API.swift` file inside it
 
 ```swift
-import CodyFire
-
-private let _APISharedInstance = API()
-
 class API {
     typealias auth = AuthController
     typealias task = TaskController
