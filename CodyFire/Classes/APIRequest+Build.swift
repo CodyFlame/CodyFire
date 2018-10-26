@@ -29,7 +29,7 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func payload(_ payload: PayloadType) -> APIRequest {
+    public func payload(_ payload: PayloadProtocol) -> APIRequest {
         self.payload = payload
         return self
     }

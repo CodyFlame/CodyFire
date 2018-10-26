@@ -18,14 +18,11 @@ public protocol PayloadProtocol: Codable {}
 public protocol MultipartPayload: PayloadProtocol {}
 public protocol JSONPayload: PayloadProtocol {}
 
-public struct EmptyPayload: PayloadProtocol {}
 public struct EmptyResponse: Codable {}
 
-public typealias APIRequestWithoutPayload<T: Codable> = APIRequest<EmptyPayload, T>
-public typealias APIRequestWithoutResult<T: PayloadProtocol> = APIRequest<T, EmptyResponse>
-public typealias APIRequestWithoutAnything = APIRequest<EmptyPayload, EmptyResponse>
+public typealias APIRequestWithoutResult = APIRequest<EmptyResponse>
 
-public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
+public class APIRequest<ResultType: Codable> {
     public typealias SuccessResponse = (ResultType)->()
     public typealias KnownErrorResponse = (KnownNetworkError)->()
     public typealias ErrorResponse = (Int)->()
@@ -38,9 +35,9 @@ public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
     var customErrors: [KnownNetworkError] = []
     var endpoint: String = "/"
     var method: HTTPMethod = .get
-    var payload: PayloadType?
+    var payload: PayloadProtocol?
     var query: String?
-    var headers: [String: String] = CodyFire.shared.globalHeaders ?? [:]
+    var headers: [String: String] = CodyFire.shared.globalHeaders
     var desiredStatusCode: HTTPStatusCode = .ok
     var successCallback: SuccessResponse?
     var knownErrorCallback: KnownErrorResponse?
@@ -61,7 +58,7 @@ public class APIRequest<PayloadType: PayloadProtocol, ResultType: Codable> {
     
     var dataRequest: DataRequest?
     
-    public init(_ endpoint: String, payload: PayloadType? = nil) {
+    public init(_ endpoint: String, payload: PayloadProtocol? = nil) {
         self.endpoint = endpoint
         self.payload = payload
     }
