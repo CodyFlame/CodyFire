@@ -24,16 +24,16 @@ extension APIRequest {
                     ?? DateCodingStrategy.default.jsonDateDecodingStrategy
                 var errorRaised = false
                 if let data = answer.data {
-                    if ResultType.self is EmptyResponse.Type {
+                    if ResultType.self is Nothing.Type {
                         if diff > 0 {
                             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
                                 Thread.sleep(forTimeInterval: diff)
                                 DispatchQueue.main.async {
-                                    self.successCallback?(EmptyResponse() as! ResultType)
+                                    self.successCallback?(Nothing() as! ResultType)
                                 }
                             }
                         } else {
-                            successCallback?(EmptyResponse() as! ResultType)
+                            successCallback?(Nothing() as! ResultType)
                         }
                     } else if ResultType.self is Data.Type {
                         if diff > 0 {
