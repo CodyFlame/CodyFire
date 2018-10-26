@@ -125,11 +125,11 @@ class API {
 
 `API/Controllers/Auth/Auth.swift`
 ```swift
-class AuthController() {}
+class AuthController {}
 ```
 `API/Controllers/Task/Task.swift`
 ```swift
-class TaskController() {}
+class TaskController {}
 ```
 
 #### Create an extension file for each controller's endpoint
