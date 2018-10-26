@@ -389,7 +389,7 @@ CodyFire.shared.fillHeaders = {
 ```
 
 #### How to set a global `unauthorized` handler?
-Again, somehere in AppDelegate declare it like this
+Again, somewhere in AppDelegate declare it like this
 CodyFire.shared.unauthorizedHandler = {
     //kick out user
 }
@@ -397,7 +397,7 @@ CodyFire.shared.unauthorizedHandler = {
 #### Handle if network isn't available (e.g. wifi/lte turned off)
 ```swift
 .onNetworkUnavailable {
-    print("unfortunatelly there're no internet connection!")
+    print("unfortunately there're no internet connection!")
 }
 ```
 
@@ -409,7 +409,7 @@ CodyFire.shared.unauthorizedHandler = {
 ```
 
 #### How to avoid log error for request
-```siwft
+```swift
 .avoidLogError()
 ```
 
@@ -476,7 +476,7 @@ and you're able to handle cancellation
 
 #### What does known error mean?
 
-As you may see you're able to add `onError` block and also `onKnownError` block the difference between them that `onError` called only if `onKnownError` not set or if there're unknown error occured.
+As you may see you're able to add `onError` block and also `onKnownError` block the difference between them that `onError` called only if `onKnownError` not set or if there're unknown error occurred.
 
 Let's take a look closer what we have in `onError` block
 ```swift
@@ -490,7 +490,7 @@ Let's take a look closer what we have in `onError` block
     switch error.code {
     case .notFound: print("It's not found :(")
     case .internalServerError: print("Oooops... Something really went wrong...")
-    default: print("Another known erorr happened: " + error.description)
+    default: print("Another known error happened: " + error.description)
     }
 }
 ```
