@@ -70,7 +70,7 @@ extension CodyFire {
     }
     
     fileprivate func parse(_ v: [String], as key: String) -> [Param] {
-        return v.compactMap { $0.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) }.map { Param(key: key, value: $0) }
+        return v.compactMap { $0 }.map { Param(key: key, value: $0) }
     }
     
     fileprivate func parse(_ v: [UUID], as key: String) -> [Param] {
