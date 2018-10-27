@@ -72,10 +72,25 @@ Of course you'll be able to send PUT and PATCH requests, send multipart codable 
 
 CodyFire is available through [CocoaPods](https://cocoapods.org).
 
-To install it, simply add the following line to your Podfile:
+To install it, simply add the following line in your Podfile:
 ```ruby
 pod 'CodyFire'
 ```
+
+**Or you're looking for reactive code support? I have it! 🍺**
+- for RxSwift https://github.com/MihaelIsaev/RxCodyFire
+```ruby
+pod 'RxCodyFire'
+# no need to install `CodyFire` cause it's in dependencies
+```
+using this pod you should always import just `RxCodyFire` and every APIRequest will have `.observable`
+
+- for ReactiveCocoa https://github.com/MihaelIsaev/ReactiveCodyFire
+```ruby
+pod 'ReactiveCodyFire'
+# no need to install `CodyFire` cause it's in dependencies
+```
+using this pod you should always import just `ReactiveCodyFire` and every APIRequest will have `.signalProducer`
 
 ## How to setup
 
