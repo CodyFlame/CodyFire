@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double CodyFireVersionNumber;
-FOUNDATION_EXPORT const unsigned char CodyFireVersionString[];
+FOUNDATION_EXPORT double AlamofireVersionNumber;
+FOUNDATION_EXPORT const unsigned char AlamofireVersionString[];
 
