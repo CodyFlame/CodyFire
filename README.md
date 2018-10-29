@@ -160,7 +160,7 @@ extension AuthController {
     }
 
     static func login(_ request: LoginRequest) -> APIRequest<LoginResponse> {
-        return APIRequest("login", payload: request).method(.post).addKnownError(.notFound, "User not found")
+        return APIRequest("login", payload: request).method(.post).addCustomError(.notFound, "User not found")
     }
 }
 ```
@@ -177,7 +177,7 @@ extension AuthController {
 
     static func login(email: String, password: String) -> APIRequest<LoginResponse> {
         return APIRequest("login").method(.post).basicAuth(email: email, password: password)
-            .addKnownError(.notFound, "User not found")
+            .addCustomError(.notFound, "User not found")
     }
 }
 ```
@@ -268,7 +268,7 @@ extension TaskController {
 ###### Send login request
 
 ```swift
-API.auth.login(email: "test@mail.com", password: "qwerty").onKnownError { error in
+API.auth.login(email: "test@mail.com", password: "qwerty").onError { error in
     switch error.code {
     case .notFound: print("User not found")
     default: print(error.description)
@@ -281,7 +281,7 @@ API.auth.login(email: "test@mail.com", password: "qwerty").onKnownError { error 
 ###### Get a list of tasks
 
 ```swift
-API.task.get().onKnownError { error in
+API.task.get().onError { error in
     print(error.description)
 }.onSuccess { tasks in
     print("received \(tasks.count) tasks")
@@ -291,7 +291,7 @@ API.task.get().onKnownError { error in
 ###### Create a task
 
 ```swift
-API.task.create(TaskController.CreateRequest(name: "Install CodyFire")).onKnownError { error in
+API.task.create(TaskController.CreateRequest(name: "Install CodyFire")).onError { error in
     print(error.description)
 }.onSuccess { task in
     print("just created new task: \(task)")
@@ -302,7 +302,7 @@ API.task.create(TaskController.CreateRequest(name: "Install CodyFire")).onKnownE
 
 ```swift
 let taskId = UUID()
-API.task.delete(id: taskId).onKnownError { error in
+API.task.delete(id: taskId).onError { error in
     print(error.description)
 }.onSuccess { _ in
     print("just removed task with id: \(taskId)")
@@ -353,7 +353,7 @@ let payload = PostController.CreateRequest(text: "CodyFire is awesome",
                                            video: videoData)
 API.post.create(payload).onProgress { progress in
     print("tracking post uploading progress: \(progress)")
-}.onKnownError { error in
+}.onError { error in
     print(error.description)
 }.onSuccess { createdPost in
     print("just created post: \(createdPost)")
@@ -474,34 +474,32 @@ and you're able to handle cancellation
 }
 ```
 
-#### What does known error mean?
+#### What does custom error means?
 
-As you may see you're able to add `onError` block and also `onKnownError` block the difference between them that `onError` called only if `onKnownError` not set or if there're unknown error occurred.
+You may define your own custom errors, globally or for each request.
+`onError` block contains `NetworkError` object with `StatusCode` enum and an error description, so that description you could change to whatever you want for any error code.
+By default there are already defined some good descriptions for common errors.
 
-Let's take a look closer what we have in `onError` block
+Let's take a look how we can use powerful `onError` block
 ```swift
-.onError { code in
-    //there're only Int http error code like 404, 500, etc.
-}
-```
-`onKnownError` is more powerful as it contains nice error description and http error code as enum
-```swift
-.onKnownError { error in
+.onError { error in
     switch error.code {
     case .notFound: print("It's not found :(")
     case .internalServerError: print("Oooops... Something really went wrong...")
-    default: print("Another known error happened: " + error.description)
+    case .custom(let code): print("My non-standard-custom error happened: " + error.description)
+    case .unknown(let code): print("Totally unknown error happened: " + error.description)
+    default: print("Another error happened: " + error.description)
     }
 }
 ```
 
-More than that!!! In your controller while declaring APIRequest you're able to add your own known errors!!! 🙀
+More than that!!! In your controller while declaring APIRequest you're able to add your own custom errors!!! 🙀
 
 ```swift
 APIRequest("login")
     .method(.post)
     .basicAuth(email: "sam@mail.com", password: "qwerty")
-    .addKnownError(.notFound, "User not found")
+    .addError(.notFound, "User not found")
 ```
 I believe that's really awesome and useful! Finally a lot of things may be declared in one place! 🎉
 
