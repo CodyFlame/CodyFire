@@ -63,19 +63,36 @@ extension APIRequest {
     }
     
     @discardableResult
+    @available(*, deprecated, renamed: "addCustomError")
+    public func addKnownError(_ customError: NetworkError) -> APIRequest {
+        return addCustomError(customError)
+    }
+    
+    @discardableResult
     public func addCustomError(_ customError: NetworkError) -> APIRequest {
         customErrors.append(customError)
         return self
     }
     
     @discardableResult
-    public func addCustomError(_ code: StatusCode, _ description: String) -> APIRequest {
-        customErrors.append(NetworkError(code: code, description: description))
-        return self
+    @available(*, deprecated, renamed: "addCustomError")
+    public func addKnownError(_ code: StatusCode, _ description: String) -> APIRequest {
+        return addCustomError(code, description)
     }
     
     @discardableResult
+    public func addCustomError(_ code: StatusCode, _ description: String) -> APIRequest {
+        return addCustomError(NetworkError(code: code, description: description))
+    }
+    
+    @discardableResult
+    @available(*, deprecated, renamed: "addCustomErrors")
     public func addKnownErrors(_ errors: [NetworkError]) -> APIRequest {
+        return addCustomErrors(errors)
+    }
+    
+    @discardableResult
+    public func addCustomErrors(_ errors: [NetworkError]) -> APIRequest {
         customErrors.append(contentsOf: errors)
         return self
     }
