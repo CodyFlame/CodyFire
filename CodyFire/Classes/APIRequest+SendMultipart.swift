@@ -68,8 +68,8 @@ extension APIRequest {
                     self.progressCallback?(progress.fractionCompleted)
                 }
             case .failure(let encodingError):
-                self.parseError(0, encodingError, nil, "Unable to execute request")
-                self.logError(statusCode: 0, error: encodingError, data: nil)
+                self.parseError(._encodingProblem, encodingError, nil, "Unable to encode multipart payload")
+                self.logError(statusCode: ._encodingProblem, error: encodingError, data: nil)
             }
         }
     }

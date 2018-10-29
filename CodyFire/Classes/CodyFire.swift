@@ -27,7 +27,7 @@ open class CodyFire {
     public var unauthorizedHandler: UnauthorizedHandler?
     public var reachability: NetworkHelperProtocol?
     
-    public func useDefaultReachability() throws {
+    public func useDefaultReachability() {
         reachability = NetworkHelper(env.apiURL)
     }
     
@@ -50,31 +50,46 @@ open class CodyFire {
     
     public let ws = WS()
     
-    public var knownErrors: [KnownNetworkError] = [
-        KnownNetworkError(code: .unauthorized, description: "You're not authorized"),
-        KnownNetworkError(code: .forbidden, description: "This action is prohibited"),
-        KnownNetworkError(code: .internalServerError, description: "Service temporary unavailable"),
-        KnownNetworkError(code: .serviceUnavailable, description: "Service temporary unavailable"),
-        KnownNetworkError(code: ._unknown, description: "Unknown error (-1)"),
-        KnownNetworkError(code: ._undecodable, description: "Unable to decode data (-2)"),
-        KnownNetworkError(code: ._requestCancelled, description: "Request was cancelled (-999)"),
-        KnownNetworkError(code: ._badURL, description: "Invalid URL (-1000)"),
-        KnownNetworkError(code: ._timedOut, description: "Unable to connect to the server (timeout)"),
-        KnownNetworkError(code: ._unsupportedURL, description: "Invalid URL (-1002)"),
-        KnownNetworkError(code: ._cannotFindHost, description: "Host not found (-1003)"),
-        KnownNetworkError(code: ._cannotConnectToHost, description: "Unable to connect to the server (-1004)"),
-        KnownNetworkError(code: ._networkConnectionLost, description: "Connection unepectedly lost (-1005)"),
-        KnownNetworkError(code: ._dnsLookupFailed, description: "Unable to find host (-1006)"),
-        KnownNetworkError(code: ._httpTooManyRedirects, description: "Unable to connect to the server (-1007)"),
-        KnownNetworkError(code: ._resourceUnavailable, description: "Unable to connect to the server (-1008)"),
-        KnownNetworkError(code: ._notConnectedToInternet, description: "Looks like you're not connected to the internet"),
-        KnownNetworkError(code: ._redirectToNonExistentLocation, description: "Unable to connect to the server (-1010)"),
-        KnownNetworkError(code: ._badServerResponse, description: "Unable to decode data (-1011)"),
-        KnownNetworkError(code: ._userCancelledAuthentication, description: "Unable to connect to the server (-1012)"),
-        KnownNetworkError(code: ._userAuthenticationRequired, description: "Unable to connect to the server (-1013)"),
-        KnownNetworkError(code: ._zeroByteResource, description: "Unable to decode data(-1014)"),
-        KnownNetworkError(code: ._cannotDecodeRawData, description: "Unable to decode data (-1015)"),
-        KnownNetworkError(code: ._cannotDecodeContentData, description: "Unable to decode data (-1016)"),
-        KnownNetworkError(code: ._cannotParseResponse, description: "Unable to decode data (-1017)")
+    var customErrors: [NetworkError] = [
+        NetworkError(code: .unauthorized, description: "You're not authorized"),
+        NetworkError(code: .forbidden, description: "This action is prohibited"),
+        NetworkError(code: .internalServerError, description: "Service temporary unavailable"),
+        NetworkError(code: .serviceUnavailable, description: "Service temporary unavailable"),
+        NetworkError(code: ._unknown, description: "Unknown error (-1)"),
+        NetworkError(code: ._undecodable, description: "Unable to decode data (-2)"),
+        NetworkError(code: ._requestCancelled, description: "Request was cancelled (-999)"),
+        NetworkError(code: ._badURL, description: "Invalid URL (-1000)"),
+        NetworkError(code: ._timedOut, description: "Unable to connect to the server (timeout)"),
+        NetworkError(code: ._unsupportedURL, description: "Invalid URL (-1002)"),
+        NetworkError(code: ._cannotFindHost, description: "Host not found (-1003)"),
+        NetworkError(code: ._cannotConnectToHost, description: "Unable to connect to the server (-1004)"),
+        NetworkError(code: ._networkConnectionLost, description: "Connection unepectedly lost (-1005)"),
+        NetworkError(code: ._dnsLookupFailed, description: "Unable to find host (-1006)"),
+        NetworkError(code: ._httpTooManyRedirects, description: "Unable to connect to the server (-1007)"),
+        NetworkError(code: ._resourceUnavailable, description: "Unable to connect to the server (-1008)"),
+        NetworkError(code: ._notConnectedToInternet, description: "Looks like you're not connected to the internet"),
+        NetworkError(code: ._redirectToNonExistentLocation, description: "Unable to connect to the server (-1010)"),
+        NetworkError(code: ._badServerResponse, description: "Unable to decode data (-1011)"),
+        NetworkError(code: ._userCancelledAuthentication, description: "Unable to connect to the server (-1012)"),
+        NetworkError(code: ._userAuthenticationRequired, description: "Unable to connect to the server (-1013)"),
+        NetworkError(code: ._zeroByteResource, description: "Unable to decode data(-1014)"),
+        NetworkError(code: ._cannotDecodeRawData, description: "Unable to decode data (-1015)"),
+        NetworkError(code: ._cannotDecodeContentData, description: "Unable to decode data (-1016)"),
+        NetworkError(code: ._cannotParseResponse, description: "Unable to decode data (-1017)")
     ]
+    
+    public func setCustomError(_ error: NetworkError) {
+        if let index = customErrors.index(where: { $0.code.rawValue == error.code.rawValue }) {
+            customErrors.remove(at: index)
+            customErrors.append(error)
+        }
+    }
+    
+    public func setCustomError(code: StatusCode, description: String) {
+        setCustomError(NetworkError(code: code, description: description))
+    }
+    
+    public func setCustomErrors(_ errors: [NetworkError]) {
+        errors.forEach { setCustomError($0) }
+    }
 }

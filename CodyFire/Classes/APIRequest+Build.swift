@@ -57,25 +57,25 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func desiredStatusCode(_ statusCode: HTTPStatusCode) -> APIRequest {
+    public func desiredStatusCode(_ statusCode: StatusCode) -> APIRequest {
         desiredStatusCode = statusCode
         return self
     }
     
     @discardableResult
-    public func addKnownError(_ knownError: KnownNetworkError) -> APIRequest {
-        customErrors.append(knownError)
+    public func addCustomError(_ customError: NetworkError) -> APIRequest {
+        customErrors.append(customError)
         return self
     }
     
     @discardableResult
-    public func addKnownError(_ code: HTTPStatusCode, _ description: String) -> APIRequest {
-        customErrors.append(KnownNetworkError(code: code, description: description))
+    public func addCustomError(_ code: StatusCode, _ description: String) -> APIRequest {
+        customErrors.append(NetworkError(code: code, description: description))
         return self
     }
     
     @discardableResult
-    public func addKnownErrors(_ errors: [KnownNetworkError]) -> APIRequest {
+    public func addKnownErrors(_ errors: [NetworkError]) -> APIRequest {
         customErrors.append(contentsOf: errors)
         return self
     }
@@ -118,8 +118,9 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func onKnownError(_ callback: @escaping KnownErrorResponse) -> APIRequest {
-        knownErrorCallback = callback
+    @available(*, deprecated, renamed: "onError")
+    public func onKnownError(_ callback: @escaping ErrorResponse) -> APIRequest {
+        errorCallback = callback
         return self
     }
     

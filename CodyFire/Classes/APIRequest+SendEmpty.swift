@@ -19,7 +19,7 @@ extension APIRequest {
                 self.parseResponse(answer)
             }
         } catch {
-            parseError(HTTPStatusCode._unknown.rawValue, error, nil, "Unable to initialize URLRequest: \(error)")
+            parseError(._unknown, error, nil, "Unable to initialize URLRequest: \(error)")
         }
     }
 }

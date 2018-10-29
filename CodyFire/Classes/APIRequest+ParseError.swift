@@ -8,21 +8,21 @@
 import Foundation
 
 extension APIRequest {
-    func parseError(_ statusCode: Int, _ error: Error?, _ data: Data?, _ serverString: String) {
-        if let knownError = customErrors.first(where: { $0.code.rawValue == statusCode }) {
-            if let knownErrorCallback = knownErrorCallback {
-                knownErrorCallback(knownError)
+    func parseError(_ statusCode: StatusCode, _ error: Error?, _ data: Data?, _ description: String) {
+        if let customError = customErrors.first(where: { $0.code.rawValue == statusCode.rawValue }) {
+            if let errorCallback = errorCallback {
+                errorCallback(customError)
             } else {
-                errorCallback?(statusCode)
+                errorCallback?(customError)
             }
-        } else if let knownError = CodyFire.shared.knownErrors.first(where: { $0.code.rawValue == statusCode }) {
-            if let knownErrorCallback = knownErrorCallback {
-                knownErrorCallback(knownError)
+        } else if let globalCustomError = CodyFire.shared.customErrors.first(where: { $0.code.rawValue == statusCode.rawValue }) {
+            if let errorCallback = errorCallback {
+                errorCallback(globalCustomError)
             } else {
-                errorCallback?(statusCode)
+                errorCallback?(globalCustomError)
             }
         } else {
-            errorCallback?(statusCode)
+            errorCallback?(NetworkError(code: statusCode, description: description + "(\(statusCode.rawValue))"))
         }
     }
 }

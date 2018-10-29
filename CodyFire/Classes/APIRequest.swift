@@ -22,25 +22,23 @@ public struct Nothing: Codable {}
 
 public typealias APIRequestWithoutResult = APIRequest<Nothing>
 
+public typealias ErrorResponse = (NetworkError)->()
+public typealias Progress = (Double)->()
+public typealias NotAuthorizedResponse = ()->()
+public typealias TimeoutResponse = ()->()
+public typealias NetworkUnavailableCallback = ()->()
+public typealias RequestStartedCallback = ()->()
+
 public class APIRequest<ResultType: Codable> {
     public typealias SuccessResponse = (ResultType)->()
-    public typealias KnownErrorResponse = (KnownNetworkError)->()
-    public typealias ErrorResponse = (Int)->()
-    public typealias Progress = (Double)->()
-    public typealias NotAuthorizedResponse = ()->()
-    public typealias TimeoutResponse = ()->()
-    public typealias NetworkUnavailableCallback = ()->()
-    public typealias RequestStartedCallback = ()->()
-    
-    var customErrors: [KnownNetworkError] = []
+    var customErrors: [NetworkError] = []
     var endpoint: String = "/"
     var method: HTTPMethod = .get
     var payload: PayloadProtocol?
     var query: String?
     var headers: [String: String] = CodyFire.shared.globalHeaders
-    var desiredStatusCode: HTTPStatusCode = .ok
+    var desiredStatusCode: StatusCode = .ok
     var successCallback: SuccessResponse?
-    var knownErrorCallback: KnownErrorResponse?
     var errorCallback: ErrorResponse?
     var notAuthorizedCallback: NotAuthorizedResponse?
     var progressCallback: Progress?
@@ -82,7 +80,7 @@ public class APIRequest<ResultType: Codable> {
             if let networkUnavailableCallback = self.networkUnavailableCallback {
                 networkUnavailableCallback()
             } else {
-                parseError(NSURLErrorNotConnectedToInternet, nil, nil, "Network unavailable")
+                parseError(._notConnectedToInternet, nil, nil, "Network unavailable")
             }
             return
         }

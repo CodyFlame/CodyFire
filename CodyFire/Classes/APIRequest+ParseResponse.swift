@@ -68,17 +68,17 @@ extension APIRequest {
                     errorRaised = true
                 }
                 if errorRaised {
-                    parseError(-2, answer.error, answer.data, "Something went wrong...")
-                    logError(statusCode: -2, error: answer.error, data: answer.data)
+                    parseError(._undecodable, answer.error, answer.data, "Something went wrong...")
+                    logError(statusCode: ._undecodable, error: answer.error, data: answer.data)
                 }
-            } else if [401].contains(response.statusCode) {
+            } else if [StatusCode.unauthorized.rawValue].contains(response.statusCode) {
                 CodyFire.shared.unauthorizedHandler?()
                 if let notAuthorizedCallback = notAuthorizedCallback {
                     notAuthorizedCallback()
                 } else {
-                    parseError(response.statusCode, answer.error, answer.data, "Not authorized")
+                    parseError(.unauthorized, answer.error, answer.data, "Not authorized")
                 }
-                logError(statusCode: response.statusCode, error: answer.error, data: answer.data)
+                logError(statusCode: .unauthorized, error: answer.error, data: answer.data)
             } else {
                 var errorMessageFromServer = "Something went wrong..."
                 if let m = answer.data?.parseJSON()?["message"] as? String {
@@ -88,16 +88,17 @@ extension APIRequest {
                         errorMessageFromServer = m
                     }
                 }
-                parseError(response.statusCode, answer.error, answer.data, errorMessageFromServer)
-                logError(statusCode: response.statusCode, error: answer.error, data: answer.data)
+                let statusCode = StatusCode.from(response.statusCode)
+                parseError(statusCode, answer.error, answer.data, errorMessageFromServer)
+                logError(statusCode: statusCode, error: answer.error, data: answer.data)
             }
         } else {
             if let timeoutCallback = timeoutCallback, let err = answer.error as NSError?, err.code == NSURLErrorTimedOut {
                 timeoutCallback()
             } else {
-                parseError(NSURLErrorTimedOut, answer.error, answer.data, "Connection timeout")
+                parseError(._timedOut, answer.error, answer.data, "Connection timeout")
             }
-            logError(statusCode: NSURLErrorTimedOut, error: answer.error, data: answer.data)
+            logError(statusCode: ._timedOut, error: answer.error, data: answer.data)
         }
     }
 }

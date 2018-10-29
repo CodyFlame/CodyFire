@@ -8,7 +8,7 @@
 import Foundation
 
 extension APIRequest {
-    func logError(statusCode: Int, error: Error?, data: Data?) {
+    func logError(statusCode: StatusCode, error: Error?, data: Data?) {
         var analyticsData: [String: Any] = ["statusCode": statusCode]
         if let error = error {
             analyticsData["error"] = error.localizedDescription
