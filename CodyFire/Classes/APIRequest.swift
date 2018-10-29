@@ -22,6 +22,7 @@ public struct Nothing: Codable {}
 
 public typealias APIRequestWithoutResult = APIRequest<Nothing>
 
+public typealias FlattenSuccessResponse = ()->()
 public typealias ErrorResponse = (NetworkError)->()
 public typealias Progress = (Double)->()
 public typealias NotAuthorizedResponse = ()->()
@@ -30,6 +31,8 @@ public typealias NetworkUnavailableCallback = ()->()
 public typealias RequestStartedCallback = ()->()
 
 public class APIRequest<ResultType: Codable> {
+    public let uid = UUID()
+    
     public typealias SuccessResponse = (ResultType)->()
     var customErrors: [NetworkError] = []
     var endpoint: String = "/"
@@ -39,9 +42,9 @@ public class APIRequest<ResultType: Codable> {
     var headers: [String: String] = CodyFire.shared.globalHeaders
     var desiredStatusCode: StatusCode = .ok
     var successCallback: SuccessResponse?
-    var errorCallback: ErrorResponse?
+    public var errorCallback: ErrorResponse?
     var notAuthorizedCallback: NotAuthorizedResponse?
-    var progressCallback: Progress?
+    public var progressCallback: Progress?
     var timeoutCallback: TimeoutResponse?
     var cancellationCallback: TimeoutResponse?
     var networkUnavailableCallback: NetworkUnavailableCallback?
@@ -51,6 +54,8 @@ public class APIRequest<ResultType: Codable> {
     var dateDecodingStrategy: DateCodingStrategy?
     var dateEncodingStrategy: DateCodingStrategy?
     var logError = true
+    
+    public var flattenSuccessHandler: FlattenSuccessResponse?
     
     var cancelled = false
     

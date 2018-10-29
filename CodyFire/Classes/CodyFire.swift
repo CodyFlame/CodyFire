@@ -92,4 +92,12 @@ open class CodyFire {
     public func setCustomErrors(_ errors: [NetworkError]) {
         errors.forEach { setCustomError($0) }
     }
+    
+    public func setCustomErrors(_ errors: [(StatusCode, String)]) {
+        errors.forEach { setCustomError(code: $0.0, description: $0.1) }
+    }
+    
+    public func setCustomErrors(_ errors: (StatusCode, String)...) {
+        errors.forEach { setCustomError(code: $0.0, description: $0.1) }
+    }
 }

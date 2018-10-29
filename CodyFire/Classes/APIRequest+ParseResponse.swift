@@ -30,10 +30,12 @@ extension APIRequest {
                                 Thread.sleep(forTimeInterval: diff)
                                 DispatchQueue.main.async {
                                     self.successCallback?(Nothing() as! ResultType)
+                                    self.flattenSuccessHandler?()
                                 }
                             }
                         } else {
                             successCallback?(Nothing() as! ResultType)
+                            self.flattenSuccessHandler?()
                         }
                     } else if ResultType.self is Data.Type {
                         if diff > 0 {
@@ -41,10 +43,12 @@ extension APIRequest {
                                 Thread.sleep(forTimeInterval: diff)
                                 DispatchQueue.main.async {
                                     self.successCallback?(data as! ResultType)
+                                    self.flattenSuccessHandler?()
                                 }
                             }
                         } else {
                             successCallback?(data as! ResultType)
+                            self.flattenSuccessHandler?()
                         }
                     } else {
                         do {
@@ -54,10 +58,12 @@ extension APIRequest {
                                     Thread.sleep(forTimeInterval: diff)
                                     DispatchQueue.main.async {
                                         self.successCallback?(decodedResult)
+                                        self.flattenSuccessHandler?()
                                     }
                                 }
                             } else {
                                 successCallback?(decodedResult)
+                                self.flattenSuccessHandler?()
                             }
                         } catch {
                             errorRaised = true
