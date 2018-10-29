@@ -94,7 +94,7 @@ using this pod you should always import just `ReactiveCodyFire` and every APIReq
 
 ## How to setup
 
-As CodyFire automatically detects which environment you're on and I suggest you to definitely use this awesome feature 👏
+CodyFire automatically detects which environment you're, so I suggest you to definitely use this awesome feature 👏
 
 ```swift
 import CodyFire
