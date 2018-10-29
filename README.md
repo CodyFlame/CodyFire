@@ -66,6 +66,31 @@ APIRequest<Nothing>("endpoint")
 }
 ```
 
+### How to send several requests?
+Now you're able to run up to 10 requests one-by-one!
+```swift
+API.employee.all()
+    .and(API.office.all())
+    .and(API.car.all())
+    .and(API.event.all())
+    .and(API.post.all())
+    .onError { error in
+        print(error.description)
+    }.onSuccess { employees, offices, cars, events, posts in
+   // do what you want with received results!!! 🍻
+}
+```
+Or you can run them without carrying about results, just with completion handler.
+In that case you can run unlimited amount of requests and even concurrently.
+```swift
+[API.employee.all(), API.office.all(), API.car.all()].flatten().onError {
+    print(error.description)
+}.onSuccess {
+    print("flatten finished!")
+}
+```
+to run them concurrently just add `.concurrent(by: 3)` to run by 3 at the same time
+
 Of course you'll be able to send PUT and PATCH requests, send multipart codable structs with upload progress callback, catch errors, even redefine error descriptions for every endpoint. Wondered? 😃 Let's read the whole readme below! 🍻
 
 ## How to install
@@ -621,6 +646,39 @@ It's easy
     }
 #endif
 ```
+
+### Chained requests
+Run up to 10 requests one-by-one!
+```swift
+API.employee.all()
+    .and(API.office.all())
+    .and(API.car.all())
+    .and(API.event.all())
+    .and(API.post.all())
+    .onError { error in
+        print(error.description)
+    }.onSuccess { employees, offices, cars, events, posts in
+   // do what you want with received results!!! 🍻
+}
+```
+`onRequestStarted, onNetworkUnavailable, onCancellation, onNotAuthorized, onTimeout also available!`
+`//TBD: onProgress`
+
+I believe it is awesome! Especially for whom who not familiar or don't like reactive programming 🙂 
+
+### Flatten
+
+If you want to run several requests one-by-one or at the same time but with just completion handler you can do that with `.flatten()`
+```swift
+[API.employee.all(), API.office.all(), API.car.all()].flatten().onError {
+    print(error.description)
+}.onSuccess {
+    print("flatten finished!")
+}
+```
+to run them concurrently just add `.concurrent(by: 3)` to run by 3 at the same time
+to skip errors also add `.avoidCancelOnError()`
+to get progress add `.onProgress`
 
 ## Contribution
 Please feel free to send pull requests and ask your questions in issues
