@@ -23,8 +23,8 @@ public class ChainedG<A: Codable, B: Codable, C: Codable, D: Codable, E: Codable
         self.right = right
     }
     
-    public func and<I: Codable>(_ right: APIRequest<I>) -> ChainedH<A, B, C, D, E, F, G, H, I> {
-        return ChainedH(self, right)
+    public func and<I: Codable>(_ next: APIRequest<I>) -> ChainedH<A, B, C, D, E, F, G, H, I> {
+        return ChainedH(self, next)
     }
     
     public func onSuccess(_ handler: @escaping SuccessResponse) {

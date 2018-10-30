@@ -8,7 +8,7 @@
 import Foundation
 
 extension APIRequest {
-    public func and<B: Codable>(_ right: APIRequest<B>) -> ChainedA<ResultType, B> {
-        return ChainedA(self, right)
+    public func and<B: Codable>(_ next: APIRequest<B>) -> ChainedA<ResultType, B> {
+        return ChainedA(self, next)
     }
 }
