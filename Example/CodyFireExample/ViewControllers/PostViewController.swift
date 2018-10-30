@@ -22,7 +22,7 @@ class PostViewController: UIViewController {
         self.descriptionLabel.isHidden = true
         API.post.get(by: id).onRequestStarted {
             self.activityIndicator.startAnimating()
-        }.onKnownError { error in
+        }.onError { error in
             self.activityIndicator.stopAnimating()
             let alert = UIAlertController(title: "Known error handled", message: error.description, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))

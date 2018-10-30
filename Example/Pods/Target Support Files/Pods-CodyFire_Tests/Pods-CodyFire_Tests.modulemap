@@ -1,6 +1,0 @@
-framework module Pods_CodyFire_Tests {
-  umbrella header "Pods-CodyFire_Tests-umbrella.h"
-
-  export *
-  module * { export * }
-}

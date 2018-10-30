@@ -14,7 +14,7 @@ class PhotosViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        API.photo.get().onKnownError { error in
+        API.photo.get().onError { error in
             let alert = UIAlertController(title: "Known error handled", message: error.description, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))
             self.present(alert, animated: true)

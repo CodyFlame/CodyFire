@@ -31,13 +31,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CodyFire.shared.unauthorizedHandler = {
             print("🚷 User has been kicked out from the server")
         }
-        CodyFire.shared.knownErrors = [
-            KnownNetworkError(code: ._notConnectedToInternet, description: "🚧 Internet is unavailable! 😭"),
-            KnownNetworkError(code: .paymentRequired, description: "💰You should pay before doing that"),
-            KnownNetworkError(code: .forbidden, description: "⛔️ This action is prohibited!"),
-            KnownNetworkError(code: .internalServerError, description: "🛑 Server side failure"),
-            KnownNetworkError(code: .serviceUnavailable, description: "‼️ Server is down at the moment")
-        ]
+        CodyFire.shared.setCustomErrors([
+            NetworkError(code: ._notConnectedToInternet, description: "🚧 Internet is unavailable! 😭"),
+            NetworkError(code: .paymentRequired, description: "💰You should pay before doing that"),
+            NetworkError(code: .forbidden, description: "⛔️ This action is prohibited!"),
+            NetworkError(code: .internalServerError, description: "🛑 Server side failure"),
+            NetworkError(code: .serviceUnavailable, description: "‼️ Server is down at the moment")
+        ])
         return true
     }
 }

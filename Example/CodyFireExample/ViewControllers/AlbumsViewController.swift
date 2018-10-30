@@ -14,7 +14,7 @@ class AlbumsViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        API.album.get().onKnownError { error in
+        API.album.get().onError { error in
             let alert = UIAlertController(title: "Known error handled", message: error.description, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))
             self.present(alert, animated: true)

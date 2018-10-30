@@ -1,6 +1,0 @@
-framework module Pods_CodyFireExample {
-  umbrella header "Pods-CodyFireExample-umbrella.h"
-
-  export *
-  module * { export * }
-}
