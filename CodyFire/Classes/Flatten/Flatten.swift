@@ -14,8 +14,8 @@ public class Flatten {
         }
     }
     var stackSize: Int = 0
-    var stack: [Flattenable] = []
-    var inProgress: [Flattenable] = []
+    var stack: [FlattenableInternal] = []
+    var inProgress: [FlattenableInternal] = []
     
     var cancelOnError = true
     public func avoidCancelOnError() -> Flatten {
@@ -32,7 +32,7 @@ public class Flatten {
     
     var concurrency: UInt = 0
     
-    init (stack: [Flattenable]) {
+    init (stack: [FlattenableInternal]) {
         self.stack = stack
     }
     

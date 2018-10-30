@@ -9,6 +9,6 @@ import Foundation
 
 extension Array where Element == Flattenable {
     public func flatten() -> Flatten {
-        return Flatten(stack: self)
+        return Flatten(stack: self.compactMap { $0 as? FlattenableInternal })
     }
 }

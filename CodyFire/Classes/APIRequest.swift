@@ -31,7 +31,7 @@ public typealias NetworkUnavailableCallback = ()->()
 public typealias RequestStartedCallback = ()->()
 
 public class APIRequest<ResultType: Codable> {
-    public let uid = UUID()
+    let uid = UUID()
     
     public typealias SuccessResponse = (ResultType)->()
     var customErrors: [NetworkError] = []
@@ -42,9 +42,9 @@ public class APIRequest<ResultType: Codable> {
     var headers: [String: String] = CodyFire.shared.globalHeaders
     var desiredStatusCode: StatusCode = .ok
     var successCallback: SuccessResponse?
-    public var errorCallback: ErrorResponse?
+    var errorCallback: ErrorResponse?
     var notAuthorizedCallback: NotAuthorizedResponse?
-    public var progressCallback: Progress?
+    var progressCallback: Progress?
     var timeoutCallback: TimeoutResponse?
     var cancellationCallback: TimeoutResponse?
     var networkUnavailableCallback: NetworkUnavailableCallback?
@@ -55,7 +55,7 @@ public class APIRequest<ResultType: Codable> {
     var dateEncodingStrategy: DateCodingStrategy?
     var logError = true
     
-    public var flattenSuccessHandler: FlattenSuccessResponse?
+    var flattenSuccessHandler: FlattenSuccessResponse?
     
     var cancelled = false
     

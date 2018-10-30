@@ -7,7 +7,9 @@
 
 import Foundation
 
-public protocol Flattenable {
+public protocol Flattenable {}
+
+protocol FlattenableInternal {
     var uid: UUID { get }
     var errorCallback: ErrorResponse? { get set }
     var progressCallback: Progress? { get set }

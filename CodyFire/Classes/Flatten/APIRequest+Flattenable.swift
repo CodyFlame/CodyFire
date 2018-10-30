@@ -7,4 +7,4 @@
 
 import Foundation
 
-extension APIRequest: Flattenable {}
+extension APIRequest: Flattenable, FlattenableInternal {}
