@@ -67,7 +67,7 @@ APIRequest<Nothing>("endpoint")
 ```
 
 ### How to send several requests?
-Now you're able to run up to 10 requests one-by-one!
+You're able to run up to 10 requests one-by-one!
 ```swift
 API.employee.all()
     .and(API.office.all())
@@ -80,8 +80,7 @@ API.employee.all()
    // do what you want with received results!!! 🍻
 }
 ```
-Or you can run them without carrying about results, just with completion handler.
-In that case you can run unlimited amount of requests and even concurrently.
+Or you can run unlimited amount of requests one-by-one or at the same time, if you need just a completion handler.
 ```swift
 [API.employee.all(), API.office.all(), API.car.all()].flatten().onError {
     print(error.description)
