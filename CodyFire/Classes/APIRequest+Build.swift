@@ -10,6 +10,7 @@ import Alamofire
 
 extension APIRequest {
     var url: String {
+        let baseURL = customServerURL?.fullURL ?? CodyFire.shared.apiURL
         var url = CodyFire.shared.apiURL + "/" + endpoint
         if let query = query, query.count > 0 {
             if url.contains("?") {
@@ -45,6 +46,12 @@ extension APIRequest {
         for (key, value) in headers {
             self.headers[key] = value
         }
+        return self
+    }
+    
+    @discardableResult
+    public func serverURL(_ serverURL: ServerURL) -> APIRequest {
+        customServerURL = serverURL
         return self
     }
     

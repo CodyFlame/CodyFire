@@ -34,6 +34,7 @@ public class APIRequest<ResultType: Codable> {
     let uid = UUID()
     
     public typealias SuccessResponse = (ResultType)->()
+    var customServerURL: ServerURL?
     var customErrors: [NetworkError] = []
     var endpoint: String = "/"
     var method: HTTPMethod = .get
@@ -60,6 +61,12 @@ public class APIRequest<ResultType: Codable> {
     var cancelled = false
     
     var dataRequest: DataRequest?
+    
+    public init(_ server: ServerURL? = nil, _ endpoint: String, payload: PayloadProtocol? = nil) {
+        self.customServerURL = server
+        self.endpoint = endpoint
+        self.payload = payload
+    }
     
     public init(_ endpoint: String, payload: PayloadProtocol? = nil) {
         self.endpoint = endpoint
