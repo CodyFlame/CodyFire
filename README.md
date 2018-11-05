@@ -139,6 +139,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 Isn't it cool? 😏
 
+**Or you can set different Server URL for every APIRequest**
+```swift
+let server1 = ServerURL(base: "https://server1.com", path: "v1")
+let server2 = ServerURL(base: "https://server2.com", path: "v1")
+let server3 = ServerURL(base: "https://server3.com")
+```
+And then initialize your `APIRequest`s like this 🔥
+```swift
+APIRequest(server1, "endpoint", payload: payloadObject)
+APIRequest(server2, "endpoint", payload: payloadObject)
+APIRequest(server3, "endpoint", payload: payloadObject)
+```
+Or in some cases you even can do it like this 😏
+```swift
+APIRequest("endpoint", payload: payloadObject).serverURL(server1)
+```
+
 ### Create your API controllers
 
 I promise that this is API code architecture from your dreams which are come true!
