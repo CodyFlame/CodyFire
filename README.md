@@ -518,7 +518,7 @@ and you're able to handle cancellation
 #### What does custom error means?
 
 You may define your own custom errors, globally or for each request.
-`onError` block contains `NetworkError` object with `StatusCode` enum and an error description, so that description you could change to whatever you want for any error code.
+`onError` block contains `NetworkError` object with `StatusCode` enum, an error description, and a raw response `Data`. Error description you could change to whatever you want for any error code.
 By default there are already defined some good descriptions for common errors.
 
 Let's take a look how we can use powerful `onError` block
@@ -529,7 +529,11 @@ Let's take a look how we can use powerful `onError` block
     case .internalServerError: print("Oooops... Something really went wrong...")
     case .custom(let code): print("My non-standard-custom error happened: " + error.description)
     case .unknown(let code): print("Totally unknown error happened: " + error.description)
-    default: print("Another error happened: " + error.description)
+    default:
+        print("Another error happened: " + error.description)
+        if let raw = error.raw, let rawResponse = String(data: raw, encoding: .utf8) {
+            print("Raw response: " + rawResponse)
+        }
     }
 }
 ```
@@ -680,7 +684,7 @@ API.employee.all()
 `onRequestStarted, onNetworkUnavailable, onCancellation, onNotAuthorized, onTimeout also available!`
 `//TBD: onProgress`
 
-I believe it is awesome! Especially for whom who not familiar or don't like reactive programming 🙂 
+I believe it is awesome! Especially for whom who not familiar or don't like reactive programming 🙂
 
 ### Flatten
 

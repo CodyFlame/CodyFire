@@ -22,7 +22,7 @@ extension APIRequest {
                 errorCallback?(globalCustomError)
             }
         } else {
-            errorCallback?(NetworkError(code: statusCode, description: description + "(\(statusCode.rawValue))"))
+            errorCallback?(NetworkError(code: statusCode, description: description + "(\(statusCode.rawValue))", raw: data))
         }
     }
 }
