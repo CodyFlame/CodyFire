@@ -27,6 +27,8 @@ extension APIRequest {
                 case let v as String: self.add([v], as: key, into: multipart)
                 case let v as [UUID]: self.add(v, as: key + "[]", into: multipart)
                 case let v as UUID: self.add([v], as: key, into: multipart)
+                case let v as [Bool]: self.add(v.map { Int64($0 ? 1 : 0) }, as: key + "[]", into: multipart)
+                case let v as Bool: self.add([v].map { Int64($0 ? 1 : 0) }, as: key, into: multipart)
                 case let v as [UInt]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)
                 case let v as UInt: self.add([v].map { Int64($0) }, as: key, into: multipart)
                 case let v as [UInt8]: self.add(v.map { Int64($0) }, as: key + "[]", into: multipart)

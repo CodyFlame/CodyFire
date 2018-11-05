@@ -23,6 +23,8 @@ extension APIRequest {
             case let v as String: self.parse([v], as: key).forEach { params.append($0) }
             case let v as [UUID]: self.parse(v, as: key + "[]").forEach { params.append($0) }
             case let v as UUID: self.parse([v], as: key).forEach { params.append($0) }
+            case let v as [Bool]: self.parse(v.map { Int64($0 ? 1 : 0) }, as: key + "[]").forEach { params.append($0) }
+            case let v as Bool: self.parse([v].map { Int64($0 ? 1 : 0) }, as: key).forEach { params.append($0) }
             case let v as [UInt]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
             case let v as UInt: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
             case let v as [UInt8]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
