@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let testFlight = CodyFireEnvironment(baseURL: "https://jsonplaceholder.typicode.com")
         let appStore = CodyFireEnvironment(baseURL: "https://jsonplaceholder.typicode.com")
         CodyFire.shared.configureEnvironments(dev: dev, testFlight: testFlight, appStore: appStore)
-        CodyFire.shared.logLevel = .off
+        CodyFire.shared.logLevel = .debug
         CodyFire.shared.fillCodableHeaders = {
             return Headers(someKey1: "hellow", someKey2: nil)
         }

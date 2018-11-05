@@ -14,7 +14,11 @@ extension TodoController {
         return APIRequest("todos")
     }
     
+    struct Query: Codable {
+        var param: Bool
+    }
+    
     static func get2() -> APIRequest<[Todo]> {
-        return APIRequest(ServerURL(base: "https://jsonplaceholder.typicode.com"), "todos")
+        return APIRequest(ServerURL(base: "https://jsonplaceholder.typicode.com"), "todos").query(Query(param: true))
     }
 }
