@@ -13,4 +13,8 @@ extension TodoController {
     static func get() -> APIRequest<[Todo]> {
         return APIRequest("todos")
     }
+    
+    static func get2() -> APIRequest<[Todo]> {
+        return APIRequest(ServerURL(base: "https://jsonplaceholder.typicode.com"), "todos")
+    }
 }

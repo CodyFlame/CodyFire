@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (4.7.3)
-  - CodyFire (1.6.1):
+  - CodyFire (1.7.1):
     - Alamofire (~> 4.7.3)
     - Starscream (~> 3.0.2)
   - Starscream (3.0.6)
@@ -19,7 +19,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
-  CodyFire: 7c50fc63503c021d4be9ea52cf2d16395fa81ef5
+  CodyFire: 3e1e020bbedd62233840b89560c885b892cd2106
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
 
 PODFILE CHECKSUM: bf21d3380434fa8d862ce3804b147c57e22bfa7a
