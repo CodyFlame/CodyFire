@@ -7,15 +7,24 @@
 
 import Foundation
 
-public struct CodyFireEnvironment {
-    public struct ServerURL {
-        var base: String
-        var path: String?
-        public init (base: String, path: String? = nil) {
-            self.base = base
-            self.path = path
-        }
+public struct ServerURL {
+    public var base: String
+    public var path: String?
+    public init (base: String, path: String? = nil) {
+        self.base = base
+        self.path = path
     }
+    
+    public var fullURL: String {
+        var fullURL = base
+        if let path = path, path.count > 0 {
+            fullURL = fullURL + "/" + path
+        }
+        return fullURL
+    }
+}
+
+public struct CodyFireEnvironment {
     private var _apiURL: ServerURL?
     private var _wsURL: ServerURL?
     public init(apiURL: ServerURL? = nil, wsURL: ServerURL? = nil) {
@@ -40,11 +49,7 @@ public struct CodyFireEnvironment {
             assert(false, "Unable to get CodyFireEnvironment.apiURL cause it's nil")
             return ""
         }
-        var fullURL = _apiURL.base
-        if let path = _apiURL.path, path.count > 0 {
-            fullURL = fullURL + "/" + path
-        }
-        return fullURL
+        return _apiURL.fullURL
     }
     
     public var wsBaseURL: String {
@@ -60,10 +65,6 @@ public struct CodyFireEnvironment {
             assert(false, "Unable to get CodyFireEnvironment.wsURL cause it's nil")
             return ""
         }
-        var fullURL = _wsURL.base
-        if let path = _wsURL.path, path.count > 0 {
-            fullURL = fullURL + "/" + path
-        }
-        return fullURL
+        return _wsURL.fullURL
     }
 }
