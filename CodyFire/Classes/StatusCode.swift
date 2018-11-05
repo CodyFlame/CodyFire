@@ -128,3 +128,9 @@ public enum StatusCode {
     //MARK: Unknown
     case unknown(Int)
 }
+
+extension StatusCode: Equatable {
+    public static func == (lhs: StatusCode, rhs: StatusCode) -> Bool {
+        return lhs.rawValue == rhs.rawValue
+    }
+}
