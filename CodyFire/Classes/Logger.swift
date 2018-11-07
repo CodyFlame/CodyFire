@@ -12,7 +12,7 @@ public typealias LogHandler = (LogLevel, String)->()
 func log(_ level: LogLevel, _ message: String) {
     #if DEBUG
     if level.rawValue <= CodyFire.shared.logLevel.rawValue {
-        print(message)
+        print("🌸 [CodyFire]: " + message)
     }
     #endif
     CodyFire.shared.logHandler?(level, message)
