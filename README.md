@@ -474,7 +474,7 @@ or you even can set your custom code
 .basicAuth(email: "", password: "")
 ```
 
-#### What are supported HTTP methods?
+#### Supported HTTP methods
 
 You may use: GET, POST, PUT, PATCH, DELETE, HEAD, TRACE, CONNECT, OPTIONS
 
@@ -567,7 +567,7 @@ If you want to make sure that your request will take 2 or more seconds (to not b
 e.g. in case if your request will be executed in 0.5 seconds, `onSuccess` handler will be fired only in 1.5s after that
 but in case if your request will take more than 2s then `onSuccess` handler will be fired immediatelly
 
-#### How to declare payload model for multipart request
+#### How to declare payload model for `multipart` request
 Your struct/class just should conform to `MultipartPayload` protocol
 ```swift
 struct SomePayload: MultipartPayload {
@@ -584,10 +584,27 @@ struct SomePayload: MultipartPayload {
 }
 ```
 
-#### How to declare payload model for json request
+#### Supported payload types
+
+You may conform your struct/class to: `FormURLEncodedPayload`, `MultipartPayload`, and `JSONPayload`
+
+#### How to declare payload model for `json` request
 Your struct/class just should conform to `JSONPayload` protocol
 ```swift
 struct SomePayload: JSONPayload {
+    let name: String
+    let names: [String]
+    let date: Date
+    let dates: [Dates]
+    let number: Double
+    let numbers: [Int]
+}
+```
+
+#### How to declare payload model for `x-www-form-urlencoded` request
+Your struct/class just should conform to `FormURLEncodedPayload` protocol
+```swift
+struct SomePayload: FormURLEncodedPayload {
     let name: String
     let names: [String]
     let date: Date

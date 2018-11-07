@@ -15,8 +15,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     struct Headers: Codable {
-        var someKey1: String
-        var someKey2: String?
+        var platform: String?
+        var sdk: String?
+        var version: String?
+        var id: String?
+        
+        enum CodingKeys: String, CodingKey {
+            case platform = "X-Mobile-Platform"
+            case sdk = "X-Mobile-SDK"
+            case version = "X-Mobile-A"
+            case id = "X-Mobile-ID"
+        }
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -26,7 +35,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         CodyFire.shared.configureEnvironments(dev: dev, testFlight: testFlight, appStore: appStore)
         CodyFire.shared.logLevel = .debug
         CodyFire.shared.fillCodableHeaders = {
-            return Headers(someKey1: "hellow", someKey2: nil)
+            let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
+            let build = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
+            return Headers(platform: "i",
+                                   sdk: UIDevice.current.systemVersion,
+                                   version: "\(version) \(build)",
+                                   id: UIDevice.current.identifierForVendor?.uuidString)
         }
         CodyFire.shared.unauthorizedHandler = {
             print("🚷 User has been kicked out from the server")

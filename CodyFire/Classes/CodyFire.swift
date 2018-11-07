@@ -11,7 +11,7 @@ private var _sharedInstance = CodyFire()
 
 public typealias UnauthorizedHandler = ()->()
 public typealias FillHeaders = ()->([String: String])
-public typealias FillCodableHeaders = ()->(Codable)
+public typealias FillCodableHeaders = ()->(Encodable)
 
 open class CodyFire {
     public class var shared: CodyFire {

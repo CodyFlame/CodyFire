@@ -8,7 +8,7 @@
 import Foundation
 
 extension APIRequest {
-    func dateEncodingStrategy(for payload: Codable?) -> DateCodingStrategy {
+    func dateEncodingStrategy(for payload: Encodable?) -> DateCodingStrategy {
         var dateEncodingStrategy = self.dateEncodingStrategy
             ?? CodyFire.shared.dateEncodingStrategy
             ?? DateCodingStrategy.default
@@ -18,7 +18,7 @@ extension APIRequest {
         return dateEncodingStrategy
     }
     
-    func dateDecodingStrategy(for payload: Codable?) -> DateCodingStrategy {
+    func dateDecodingStrategy(for payload: Decodable?) -> DateCodingStrategy {
         var dateDecodingStrategy = self.dateDecodingStrategy
             ?? CodyFire.shared.dateDecodingStrategy
             ?? DateCodingStrategy.default

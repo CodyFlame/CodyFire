@@ -17,48 +17,53 @@ extension CodyFire {
             if let codableHeaders = codableHeaders as? CustomDateEncodingStrategy {
                 dateEncodingStrategy = codableHeaders.dateEncodingStrategy
             }
+            
             var params: [Param] = []
-            for children in Mirror(reflecting: codableHeaders).children {
-                guard let key = children.label else { continue }
-                switch children.value {
-                case let v as [Date]: self.parse(v, as: key + "[]", dateCodingStrategy: dateEncodingStrategy).forEach { params.append($0) }
-                case let v as Date: self.parse([v], as: key, dateCodingStrategy: dateEncodingStrategy).forEach { params.append($0) }
-                case let v as [String]: self.parse(v, as: key + "[]").forEach { params.append($0) }
-                case let v as String: self.parse([v], as: key).forEach { params.append($0) }
-                case let v as [UUID]: self.parse(v, as: key + "[]").forEach { params.append($0) }
-                case let v as UUID: self.parse([v], as: key).forEach { params.append($0) }
-                case let v as [Bool]: self.parse(v.map { Int64($0 ? 1 : 0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as Bool: self.parse([v].map { Int64($0 ? 1 : 0) }, as: key).forEach { params.append($0) }
-                case let v as [UInt]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as UInt: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [UInt8]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as UInt8: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [UInt16]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as UInt16: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [UInt32]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as UInt32: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [UInt64]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as UInt64: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [Int]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as Int: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [Int8]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as Int8: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [Int16]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as Int16: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [Int32]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
-                case let v as Int32: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
-                case let v as [Int64]: self.parse(v, as: key + "[]").forEach { params.append($0) }
-                case let v as Int64: self.parse([v], as: key).forEach { params.append($0) }
-                case let v as [Float]: self.parse(v, as: key + "[]").forEach { params.append($0) }
-                case let v as Float: self.parse([v], as: key).forEach { params.append($0) }
-                case let v as [Double]: self.parse(v, as: key + "[]").forEach { params.append($0) }
-                case let v as Double: self.parse([v], as: key).forEach { params.append($0) }
-                case let v as [Decimal]: self.parse(v, as: key + "[]").forEach { params.append($0) }
-                case let v as Decimal: self.parse([v], as: key).forEach { params.append($0) }
-                default:
-                    guard !String(describing: type(of: children.value)).contains("Optional") else { continue }
-                    print("⚠️ query key `\(key)` with \(type(of: children.value)) type is not supported")
+            do {
+                let dictionary = try DictionaryEncoder().encode(codableHeaders)
+                for (key, value) in dictionary {
+                    switch value {
+                    case let v as [Date]: self.parse(v, as: key + "[]", dateCodingStrategy: dateEncodingStrategy).forEach { params.append($0) }
+                    case let v as Date: self.parse([v], as: key, dateCodingStrategy: dateEncodingStrategy).forEach { params.append($0) }
+                    case let v as [String]: self.parse(v, as: key + "[]").forEach { params.append($0) }
+                    case let v as String: self.parse([v], as: key).forEach { params.append($0) }
+                    case let v as [UUID]: self.parse(v, as: key + "[]").forEach { params.append($0) }
+                    case let v as UUID: self.parse([v], as: key).forEach { params.append($0) }
+                    case let v as [Bool]: self.parse(v.map { Int64($0 ? 1 : 0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as Bool: self.parse([v].map { Int64($0 ? 1 : 0) }, as: key).forEach { params.append($0) }
+                    case let v as [UInt]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as UInt: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [UInt8]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as UInt8: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [UInt16]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as UInt16: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [UInt32]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as UInt32: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [UInt64]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as UInt64: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [Int]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as Int: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [Int8]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as Int8: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [Int16]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as Int16: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [Int32]: self.parse(v.map { Int64($0) }, as: key + "[]").forEach { params.append($0) }
+                    case let v as Int32: self.parse([v].map { Int64($0) }, as: key).forEach { params.append($0) }
+                    case let v as [Int64]: self.parse(v, as: key + "[]").forEach { params.append($0) }
+                    case let v as Int64: self.parse([v], as: key).forEach { params.append($0) }
+                    case let v as [Float]: self.parse(v, as: key + "[]").forEach { params.append($0) }
+                    case let v as Float: self.parse([v], as: key).forEach { params.append($0) }
+                    case let v as [Double]: self.parse(v, as: key + "[]").forEach { params.append($0) }
+                    case let v as Double: self.parse([v], as: key).forEach { params.append($0) }
+                    case let v as [Decimal]: self.parse(v, as: key + "[]").forEach { params.append($0) }
+                    case let v as Decimal: self.parse([v], as: key).forEach { params.append($0) }
+                    default:
+                        guard !String(describing: type(of: value)).contains("Optional") else { continue }
+                        log(.error, "⚠️ query key `\(key)` with \(type(of: value)) type is not supported")
+                    }
                 }
+            } catch {
+                log(.error, "🆘 preparing query codable object failed with error: \(error)")
             }
             params.forEach { headers[$0.key] = $0.value }
         }

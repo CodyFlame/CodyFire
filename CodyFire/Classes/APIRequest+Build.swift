@@ -37,7 +37,7 @@ extension APIRequest {
     
     @discardableResult
     public func query(_ params: Codable) -> APIRequest {
-        self.query = buildQuery(params)
+        self.query = buildURLEncodedString(from: params)
         return self
     }
     

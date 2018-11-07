@@ -14,11 +14,12 @@ public protocol CustomDateEncodingStrategy {
 public protocol CustomDateDecodingStrategy {
     var dateDecodingStrategy: DateCodingStrategy { get }
 }
-public protocol PayloadProtocol: Codable {}
+public protocol PayloadProtocol: Encodable {}
 public protocol MultipartPayload: PayloadProtocol {}
 public protocol JSONPayload: PayloadProtocol {}
+public protocol FormURLEncodedPayload: PayloadProtocol {}
 
-public struct Nothing: Codable {}
+public struct Nothing: Decodable {}
 
 public typealias APIRequestWithoutResult = APIRequest<Nothing>
 
@@ -30,7 +31,7 @@ public typealias TimeoutResponse = ()->()
 public typealias NetworkUnavailableCallback = ()->()
 public typealias RequestStartedCallback = ()->()
 
-public class APIRequest<ResultType: Codable> {
+public class APIRequest<ResultType: Decodable> {
     let uid = UUID()
     
     public typealias SuccessResponse = (ResultType)->()
@@ -113,6 +114,9 @@ public class APIRequest<ResultType: Codable> {
         } else if let _ = payload as? JSONPayload {
             log(.debug, "payload is JSONPayload")
             sendJSONEncoded()
+        } else if let _ = payload as? FormURLEncodedPayload {
+            log(.debug, "payload is FormURLEncodedPayload")
+            sendFormURLEncoded()
         } else {
             log(.debug, "payload not recognized")
             //TODO: throw

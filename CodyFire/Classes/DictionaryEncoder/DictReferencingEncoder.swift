@@ -44,11 +44,9 @@ internal class DictReferencingEncoder : _DictEncoder {
         
         switch self.reference {
         case .array(var array, let index):
-            print("array(var array")
             array.insert(value, at: index)
             
         case .dictionary(var dictionary, let key):
-            print("dictionary(var dictionary")
             dictionary[key] = value
         }
     }
