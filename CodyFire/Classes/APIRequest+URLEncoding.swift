@@ -59,12 +59,6 @@ extension APIRequest {
         } catch {
             log(.error, "🆘 preparing urlencoded codable object failed with error: \(error)")
         }
-        let mirror = Mirror(reflecting: params)
-        
-        for children in mirror.children {
-            guard let key = children.label else { continue }
-            
-        }
         return params.map { $0.key + "=" + $0.value }.joined(separator: "&")
     }
     

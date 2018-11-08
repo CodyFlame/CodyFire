@@ -15,7 +15,7 @@ class _DictKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContainerProtoco
     typealias Key = K
     
     let encoder: _DictEncoder
-    var container2: [String: Any] = [:]
+    var container: [String: Any] = [:]
     var codingPath: [CodingKey]
     
     weak var delegate: DictKeyedEncodingContainerDelegate?
@@ -30,101 +30,101 @@ class _DictKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContainerProtoco
     }
     
     func pushDelegate() {
-        delegate?.dictKeyedEncodingContainerCompleted(container2, forKey: rootKey)
+        delegate?.dictKeyedEncodingContainerCompleted(container, forKey: rootKey)
     }
     
     func encodeNil(forKey key: Key) throws {
-        container2[key.stringValue] = NSNull()
+        container[key.stringValue] = NSNull()
     }
     
     func encode(_ value: Bool, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: Int, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: Int8, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: Int16, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: Int32, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: Int64, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: UInt, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: UInt8, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: UInt16, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: UInt32, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: UInt64, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: String, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = value
+        container[key.stringValue] = value
     }
     
     func encode(_ value: Float, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = try encoder.box(value)
+        container[key.stringValue] = try encoder.box(value)
     }
     
     func encode(_ value: Double, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = try encoder.box(value)
+        container[key.stringValue] = try encoder.box(value)
     }
     
     func encode<T : Encodable>(_ value: T, forKey key: Key) throws {
         defer { encoder.codingPath.removeLast(); pushDelegate() }
         encoder.codingPath.append(key)
-        container2[key.stringValue] = try encoder.box(value)
+        container[key.stringValue] = try encoder.box(value)
     }
     
     func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> {
@@ -137,11 +137,11 @@ class _DictKeyedEncodingContainer<K : CodingKey> : KeyedEncodingContainerProtoco
     }
     
     func superEncoder() -> Encoder {
-        return DictReferencingEncoder(referencing: encoder, key: DictKey.super, convertedKey: DictKey.super, wrapping: container2)
+        return DictReferencingEncoder(referencing: encoder, key: DictKey.super, convertedKey: DictKey.super, wrapping: container)
     }
     
     func superEncoder(forKey key: Key) -> Encoder {
-        return DictReferencingEncoder(referencing: encoder, key: key, convertedKey: key, wrapping: container2)
+        return DictReferencingEncoder(referencing: encoder, key: key, convertedKey: key, wrapping: container)
     }
 }
 
@@ -150,7 +150,7 @@ extension _DictKeyedEncodingContainer: DictKeyedEncodingContainerDelegate {
     func dictKeyedEncodingContainerCompleted(_ dictionary: [String : Any], forKey key: CodingKey?) {
         guard let key = key else { return }
         defer { codingPath.removeLast(); pushDelegate() }
-        container2[key.stringValue] = dictionary
+        container[key.stringValue] = dictionary
         codingPath.append(key)
     }
 }
@@ -159,7 +159,7 @@ extension _DictKeyedEncodingContainer: DictUnkeyedEncodingContainerDelegate {
     func dictUnkeyedEncodingContainerCompleted(_ array: [Any], forKey key: CodingKey?) {
         guard let key = key else { return }
         defer { codingPath.removeLast(); pushDelegate() }
-        container2[key.stringValue] = array
+        container[key.stringValue] = array
         codingPath.append(key)
     }
 }
