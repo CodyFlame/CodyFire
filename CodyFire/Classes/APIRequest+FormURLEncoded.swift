@@ -12,7 +12,7 @@ extension APIRequest {
     func sendFormURLEncoded() {
         do {
             var originalRequest = try URLRequest(url: url, method: method, headers: headers)
-            originalRequest.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+            originalRequest.addValue("application/x-www-form-urlencoded; charset=utf-8", forHTTPHeaderField: "Content-Type")
             if let payload = payload {
                 originalRequest.httpBody = buildURLEncodedString(from: payload)?.data(using: .utf8)
             }
