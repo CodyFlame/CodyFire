@@ -29,11 +29,13 @@ extension APIRequest {
                             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
                                 Thread.sleep(forTimeInterval: diff)
                                 DispatchQueue.main.async {
+                                    CodyFire.shared.successResponseHandler?()
                                     self.successCallback?(Nothing() as! ResultType)
                                     self.flattenSuccessHandler?()
                                 }
                             }
                         } else {
+                            CodyFire.shared.successResponseHandler?()
                             successCallback?(Nothing() as! ResultType)
                             self.flattenSuccessHandler?()
                         }
@@ -42,11 +44,13 @@ extension APIRequest {
                             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
                                 Thread.sleep(forTimeInterval: diff)
                                 DispatchQueue.main.async {
+                                    CodyFire.shared.successResponseHandler?()
                                     self.successCallback?(data as! ResultType)
                                     self.flattenSuccessHandler?()
                                 }
                             }
                         } else {
+                            CodyFire.shared.successResponseHandler?()
                             successCallback?(data as! ResultType)
                             self.flattenSuccessHandler?()
                         }
@@ -57,11 +61,13 @@ extension APIRequest {
                                 DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
                                     Thread.sleep(forTimeInterval: diff)
                                     DispatchQueue.main.async {
+                                        CodyFire.shared.successResponseHandler?()
                                         self.successCallback?(decodedResult)
                                         self.flattenSuccessHandler?()
                                     }
                                 }
                             } else {
+                                CodyFire.shared.successResponseHandler?()
                                 successCallback?(decodedResult)
                                 self.flattenSuccessHandler?()
                             }

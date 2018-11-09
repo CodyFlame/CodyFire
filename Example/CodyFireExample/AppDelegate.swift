@@ -34,6 +34,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let appStore = CodyFireEnvironment(baseURL: "https://jsonplaceholder.typicode.com")
         CodyFire.shared.configureEnvironments(dev: dev, testFlight: testFlight, appStore: appStore)
         CodyFire.shared.logLevel = .debug
+        CodyFire.shared.successResponseHandler = {
+            print("global success")
+        }
         CodyFire.shared.fillCodableHeaders = {
             let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String
             let build = Bundle.main.object(forInfoDictionaryKey: kCFBundleVersionKey as String) as! String
