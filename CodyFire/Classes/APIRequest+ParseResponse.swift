@@ -29,13 +29,13 @@ extension APIRequest {
                             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
                                 Thread.sleep(forTimeInterval: diff)
                                 DispatchQueue.main.async {
-                                    CodyFire.shared.successResponseHandler?()
+                                    CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                                     self.successCallback?(Nothing() as! ResultType)
                                     self.flattenSuccessHandler?()
                                 }
                             }
                         } else {
-                            CodyFire.shared.successResponseHandler?()
+                            CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                             successCallback?(Nothing() as! ResultType)
                             self.flattenSuccessHandler?()
                         }
@@ -44,13 +44,13 @@ extension APIRequest {
                             DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
                                 Thread.sleep(forTimeInterval: diff)
                                 DispatchQueue.main.async {
-                                    CodyFire.shared.successResponseHandler?()
+                                    CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                                     self.successCallback?(data as! ResultType)
                                     self.flattenSuccessHandler?()
                                 }
                             }
                         } else {
-                            CodyFire.shared.successResponseHandler?()
+                            CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                             successCallback?(data as! ResultType)
                             self.flattenSuccessHandler?()
                         }
@@ -61,13 +61,13 @@ extension APIRequest {
                                 DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
                                     Thread.sleep(forTimeInterval: diff)
                                     DispatchQueue.main.async {
-                                        CodyFire.shared.successResponseHandler?()
+                                        CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                                         self.successCallback?(decodedResult)
                                         self.flattenSuccessHandler?()
                                     }
                                 }
                             } else {
-                                CodyFire.shared.successResponseHandler?()
+                                CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                                 successCallback?(decodedResult)
                                 self.flattenSuccessHandler?()
                             }

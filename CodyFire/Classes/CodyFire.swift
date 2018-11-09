@@ -25,7 +25,7 @@ open class CodyFire {
     var _appStoreEnv: CodyFireEnvironment?
     
     /// Called on each succeeded response
-    public var successResponseHandler: (()->())?
+    public var successResponseHandler: ((_ host: String, _ endpoint: String)->())?
     public var unauthorizedHandler: UnauthorizedHandler?
     public var reachability: NetworkHelperProtocol?
     

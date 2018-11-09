@@ -9,9 +9,12 @@ import Foundation
 import Alamofire
 
 extension APIRequest {
+    var host: String {
+        return customServerURL?.fullURL ?? CodyFire.shared.apiURL
+    }
+    
     var url: String {
-        let baseURL = customServerURL?.fullURL ?? CodyFire.shared.apiURL
-        var url = baseURL + "/" + endpoint
+        var url = host + "/" + endpoint
         if let query = query, query.count > 0 {
             if url.contains("?") {
                 url.append("&")
