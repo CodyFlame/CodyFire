@@ -34,8 +34,7 @@ Wondered? That's only little part of what you will get from this lib! 🍻
 ### How to send GET request
 
 ```swift
-APIRequest<ResponseModel>("endpoint")
-    .onSuccess { model in
+APIRequest<ResponseModel>("endpoint").onSuccess { model in
     //here's your decoded model!
     //no need to check http.statusCode, I already did it for you! By default it's 200 OK
     //of course you can choose which statusCode is equal to success (look at the `POST` and `DELETE` examples below)
