@@ -14,17 +14,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
+    enum SomeEnum: String, Codable {
+        case hello = "hey", world = "mir"
+    }
+    
     struct Headers: Codable {
         var platform: String?
         var sdk: String?
         var version: String?
         var id: String?
+        var type: SomeEnum
         
         enum CodingKeys: String, CodingKey {
             case platform = "X-Mobile-Platform"
             case sdk = "X-Mobile-SDK"
             case version = "X-Mobile-A"
             case id = "X-Mobile-ID"
+            case type = "X-Type"
         }
     }
 
@@ -43,7 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return Headers(platform: "i",
                                    sdk: UIDevice.current.systemVersion,
                                    version: "\(version) \(build)",
-                                   id: UIDevice.current.identifierForVendor?.uuidString)
+                                   id: UIDevice.current.identifierForVendor?.uuidString,
+                                   type: .world)
         }
         CodyFire.shared.unauthorizedHandler = {
             print("🚷 User has been kicked out from the server")
