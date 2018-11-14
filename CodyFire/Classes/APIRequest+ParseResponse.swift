@@ -25,55 +25,39 @@ extension APIRequest {
                 var errorRaised = false
                 if let data = answer.data {
                     if ResultType.self is Nothing.Type {
-                        if diff > 0 {
-                            DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
-                                Thread.sleep(forTimeInterval: diff)
-                                DispatchQueue.main.async {
-                                    CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
-                                    self.successCallback?(Nothing() as! ResultType)
-                                    self.flattenSuccessHandler?()
-                                }
-                            }
-                        } else {
+                        delayedResponse(diff) {
                             CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
-                            successCallback?(Nothing() as! ResultType)
+                            self.successCallback?(Nothing() as! ResultType)
                             self.flattenSuccessHandler?()
                         }
                     } else if ResultType.self is Data.Type {
-                        if diff > 0 {
-                            DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
-                                Thread.sleep(forTimeInterval: diff)
-                                DispatchQueue.main.async {
-                                    CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
-                                    self.successCallback?(data as! ResultType)
-                                    self.flattenSuccessHandler?()
-                                }
+                        delayedResponse(diff) {
+                            CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
+                            self.successCallback?(data as! ResultType)
+                            self.flattenSuccessHandler?()
+                        }
+                    } else if ResultType.self is String.Type {
+                        if let string = String(data: data, encoding: .utf8) {
+                            delayedResponse(diff) {
+                                CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
+                                self.successCallback?(string as! ResultType)
+                                self.flattenSuccessHandler?()
                             }
                         } else {
-                            CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
-                            successCallback?(data as! ResultType)
-                            self.flattenSuccessHandler?()
+                            errorRaised = true
+                            log(.error, "🆘 Unable to decode response as string")
                         }
                     } else {
                         do {
                             let decodedResult = try decoder.decode(ResultType.self, from: data)
-                            if diff > 0 {
-                                DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
-                                    Thread.sleep(forTimeInterval: diff)
-                                    DispatchQueue.main.async {
-                                        CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
-                                        self.successCallback?(decodedResult)
-                                        self.flattenSuccessHandler?()
-                                    }
-                                }
-                            } else {
+                            delayedResponse(diff) {
                                 CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
-                                successCallback?(decodedResult)
+                                self.successCallback?(decodedResult)
                                 self.flattenSuccessHandler?()
                             }
                         } catch {
                             errorRaised = true
-                            print("decoding error: \(error)")
+                            log(.error, "🆘 JSON decoding error: \(error)")
                         }
                     }
                 } else {
@@ -112,5 +96,16 @@ extension APIRequest {
             }
             logError(statusCode: ._timedOut, error: answer.error, data: answer.data)
         }
+    }
+}
+
+fileprivate func delayedResponse(_ diff: TimeInterval, callback: @escaping ()->()) {
+    guard diff > 0 else {
+        callback()
+        return
+    }
+    DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
+        Thread.sleep(forTimeInterval: diff)
+        DispatchQueue.main.async(execute: callback)
     }
 }
