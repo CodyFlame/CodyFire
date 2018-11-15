@@ -21,9 +21,10 @@ This lib will convert your massive API code into an awesome convenient and easy 
 Based on Alamofire 4.7.3.
 
 Use Codable models for everything related to API requests:
-- payload
+- json payload
+- url-encoded payload
 - multipart payload
-- response
+- plain and json response
 - url query
 - headers
 
