@@ -9,13 +9,15 @@ import Foundation
 
 extension APIRequest {
     func parseError(_ statusCode: StatusCode, _ error: Error?, _ data: Data?, _ description: String) {
-        if let customError = customErrors.first(where: { $0.code.rawValue == statusCode.rawValue }) {
+        if var customError = customErrors.first(where: { $0.code.rawValue == statusCode.rawValue }) {
+            customError.raw = data
             if let errorCallback = errorCallback {
                 errorCallback(customError)
             } else {
                 errorCallback?(customError)
             }
-        } else if let globalCustomError = CodyFire.shared.customErrors.first(where: { $0.code.rawValue == statusCode.rawValue }) {
+        } else if var globalCustomError = CodyFire.shared.customErrors.first(where: { $0.code.rawValue == statusCode.rawValue }) {
+            globalCustomError.raw = data
             if let errorCallback = errorCallback {
                 errorCallback(globalCustomError)
             } else {
