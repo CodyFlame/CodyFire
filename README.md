@@ -14,7 +14,7 @@
 
 <br>
 
-This lib is about network calls with blackjack, roulette and craps!
+This lib is about network requests with blackjack, roulette and craps!
 
 Using it you will be able to convert your massive API layer code into an awesome convenient controllers with easy and maintainable network requests!
 
