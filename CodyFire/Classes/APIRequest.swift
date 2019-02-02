@@ -63,14 +63,14 @@ public class APIRequest<ResultType: Decodable> {
     
     var dataRequest: DataRequest?
     
-    public init(_ server: ServerURL? = nil, _ endpoint: String, payload: PayloadProtocol? = nil) {
+    public init(_ server: ServerURL? = nil, _ endpoint: String..., payload: PayloadProtocol? = nil) {
         self.customServerURL = server
-        self.endpoint = endpoint
+        self.endpoint = endpoint.joined(separator: "/")
         self.payload = payload
     }
     
-    public init(_ endpoint: String, payload: PayloadProtocol? = nil) {
-        self.endpoint = endpoint
+    public init(_ endpoint: String..., payload: PayloadProtocol? = nil) {
+        self.endpoint = endpoint.joined(separator: "/")
         self.payload = payload
     }
     
