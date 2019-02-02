@@ -14,9 +14,9 @@
 
 <br>
 
-This is a kind of Alamofire with blackjack, roulette and craps!
+This lib is about network requests with blackjack, roulette and craps!
 
-This lib will convert your massive API code into an awesome convenient and easy maintainable calls in controllers!
+Using it you will be able to convert your massive API layer code into an awesome convenient controllers with easy and maintainable network requests!
 
 Based on Alamofire 4.7.3.
 
