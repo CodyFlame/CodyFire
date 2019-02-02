@@ -104,8 +104,5 @@ fileprivate func delayedResponse(_ diff: TimeInterval, callback: @escaping ()->(
         callback()
         return
     }
-    DispatchQueue.global(qos: DispatchQoS.QoSClass.userInteractive).async {
-        Thread.sleep(forTimeInterval: diff)
-        DispatchQueue.main.async(execute: callback)
-    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + diff, execute: callback)
 }
