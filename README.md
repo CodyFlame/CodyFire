@@ -98,20 +98,20 @@ CodyFire is available through [CocoaPods](https://cocoapods.org).
 
 To install it, simply add the following line in your Podfile:
 ```ruby
-pod 'CodyFire'
+pod 'CodyFire', '~> 1.9.3'
 ```
 
 **Or you're looking for reactive code support? I have it! 🍺**
 - for RxSwift https://github.com/MihaelIsaev/RxCodyFire
 ```ruby
-pod 'RxCodyFire'
+pod 'RxCodyFire', '~> 1.1.0'
 # no need to install `CodyFire` cause it's in dependencies
 ```
 using this pod you should always import just `RxCodyFire` and every APIRequest will have `.observable`
 
 - for ReactiveCocoa https://github.com/MihaelIsaev/ReactiveCodyFire
 ```ruby
-pod 'ReactiveCodyFire'
+pod 'ReactiveCodyFire', '~> 1.1.0'
 # no need to install `CodyFire` cause it's in dependencies
 ```
 using this pod you should always import just `ReactiveCodyFire` and every APIRequest will have `.signalProducer`
