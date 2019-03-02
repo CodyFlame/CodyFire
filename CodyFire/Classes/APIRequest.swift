@@ -19,7 +19,7 @@ public protocol MultipartPayload: PayloadProtocol {}
 public protocol JSONPayload: PayloadProtocol {}
 public protocol FormURLEncodedPayload: PayloadProtocol {}
 
-public struct Nothing: Decodable {}
+public struct Nothing: Codable {}
 
 public typealias APIRequestWithoutResult = APIRequest<Nothing>
 
