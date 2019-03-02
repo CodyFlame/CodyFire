@@ -18,6 +18,15 @@ func log(_ level: LogLevel, _ message: String) {
     CodyFire.shared.logHandler?(level, message)
 }
 
+func wslog(_ level: LogLevel, _ message: String) {
+    #if DEBUG
+    if level.rawValue <= CodyFire.shared.logLevel.rawValue {
+        print("🌸 [CodyFire]⚡️[WS]: " + message)
+    }
+    #endif
+    CodyFire.shared.logHandler?(level, message)
+}
+
 public enum LogLevel: Int {
     ///Don't log anything at all.
     case off

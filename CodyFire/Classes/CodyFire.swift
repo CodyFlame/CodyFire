@@ -50,7 +50,7 @@ open class CodyFire {
     public var dateDecodingStrategy: DateCodingStrategy?
     public var dateEncodingStrategy: DateCodingStrategy?
     
-    public let ws = WS()
+    public var ws: WS { return WS.shared }
     
     var customErrors: [NetworkError] = [
         NetworkError(code: .unauthorized, description: "You're not authorized"),

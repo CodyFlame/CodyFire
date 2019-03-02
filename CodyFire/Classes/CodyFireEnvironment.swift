@@ -32,8 +32,9 @@ public struct CodyFireEnvironment {
         _wsURL = wsURL
     }
     
-    public init(baseURL: String, path: String? = nil) {
+    public init(baseURL: String, path: String? = nil, wsPath: String? = nil) {
         _apiURL = ServerURL(base: baseURL, path: path)
+        _wsURL = ServerURL(base: baseURL, path: wsPath ?? path)
     }
     
     public var apiBaseURL: String {
