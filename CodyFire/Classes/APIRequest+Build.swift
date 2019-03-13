@@ -192,4 +192,18 @@ extension APIRequest {
         requestStartedCallback = callback
         return self
     }
+    
+    @discardableResult
+    public func forceSetMock(enabled value: Bool = true) -> APIRequest {
+        useMock = value
+        return self
+    }
+    
+    @discardableResult
+    public func onMock<MR: MockResponder>(_ responder: MR.Type) -> APIRequest where MR.ResultType == ResultType {
+        proceedMock = {
+            self.proceed(mock: responder)
+        }
+        return self
+    }
 }

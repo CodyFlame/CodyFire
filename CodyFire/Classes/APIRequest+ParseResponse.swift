@@ -97,12 +97,12 @@ extension APIRequest {
             logError(statusCode: ._timedOut, error: answer.error, data: answer.data)
         }
     }
-}
-
-fileprivate func delayedResponse(_ diff: TimeInterval, callback: @escaping ()->()) {
-    guard diff > 0 else {
-        callback()
-        return
+    
+    func delayedResponse(_ diff: TimeInterval, callback: @escaping ()->()) {
+        guard diff > 0 else {
+            callback()
+            return
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + diff, execute: callback)
     }
-    DispatchQueue.main.asyncAfter(deadline: .now() + diff, execute: callback)
 }

@@ -118,6 +118,7 @@ public enum StatusCode {
     case _cannotDecodeRawData
     case _cannotDecodeContentData
     case _cannotParseResponse
+    case _mockHandlerIsNotImplemented
     
     //MARK: 524
     case timedOut

@@ -30,6 +30,7 @@ public typealias NotAuthorizedResponse = ()->()
 public typealias TimeoutResponse = ()->()
 public typealias NetworkUnavailableCallback = ()->()
 public typealias RequestStartedCallback = ()->()
+public typealias ProceedMockCallback = ()->()
 
 public class APIRequest<ResultType: Decodable> {
     let uid = UUID()
@@ -51,11 +52,13 @@ public class APIRequest<ResultType: Decodable> {
     var cancellationCallback: TimeoutResponse?
     var networkUnavailableCallback: NetworkUnavailableCallback?
     var requestStartedCallback: RequestStartedCallback?
+    var proceedMock: ProceedMockCallback?
     var responseTimeout: TimeInterval = 15
     var additionalTimeout: TimeInterval = 0
     var dateDecodingStrategy: DateCodingStrategy?
     var dateEncodingStrategy: DateCodingStrategy?
     var logError = true
+    var useMock = CodyFire.shared.isInMockMode
     
     var flattenSuccessHandler: FlattenSuccessResponse?
     
@@ -100,6 +103,15 @@ public class APIRequest<ResultType: Decodable> {
     }
     
     public func start() {
+        if CodyFire.shared.isInMockMode && useMock {
+            guard let proceedMock = proceedMock else {
+                parseError(._mockHandlerIsNotImplemented, nil, nil, "Mock handler isn't implemented for `\(endpoint)`")
+                return
+            }
+            logRequestStarted()
+            proceedMock()
+            return
+        }
         if !CodyFire.shared.isNetworkAvailable {
             if let networkUnavailableCallback = self.networkUnavailableCallback {
                 networkUnavailableCallback()
@@ -108,14 +120,7 @@ public class APIRequest<ResultType: Decodable> {
             }
             return
         }
-        log(.info, "\(method.rawValue.uppercased()) to \(url)")
-        requestStartedCallback?()
-        if let payload = payload {
-            log(.debug, "payload: \(String(describing: payload))")
-        } else {
-            log(.debug, "payload: nil")
-        }
-        log(.debug, "headers: \(headers)")
+        logRequestStarted()
         if payload == nil {
             log(.debug, "payload is empty")
             sendEmpty()
@@ -132,5 +137,16 @@ public class APIRequest<ResultType: Decodable> {
             log(.debug, "payload not recognized")
             //TODO: throw
         }
+    }
+    
+    private func logRequestStarted() {
+        log(.info, "\(method.rawValue.uppercased()) to \(url)")
+        requestStartedCallback?()
+        if let payload = payload {
+            log(.debug, "payload: \(String(describing: payload))")
+        } else {
+            log(.debug, "payload: nil")
+        }
+        log(.debug, "headers: \(headers)")
     }
 }

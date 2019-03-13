@@ -37,6 +37,8 @@ open class CodyFire {
         return reachability?.isNetworkAvailable ?? true
     }
     
+    public var isInMockMode = false
+    
     public var fillHeaders: FillHeaders?
     public var fillCodableHeaders: FillCodableHeaders?
     
