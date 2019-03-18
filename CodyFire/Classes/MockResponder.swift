@@ -10,7 +10,7 @@ import Alamofire
 
 protocol MockRequestable {
     var endpoint: String { get }
-    var query: String? { get }
+    var query: QueryContainer { get }
     var method: HTTPMethod { get }
     var headers: [String: String] { get }
     var payload: PayloadProtocol? { get }
@@ -18,7 +18,7 @@ protocol MockRequestable {
 
 public struct MockRequest {
     public let endpoint: String
-    public let query: String?
+    public let query: QueryContainer
     public let method: HTTPMethod
     public let headers: [String: String]
     public let payload: PayloadProtocol?

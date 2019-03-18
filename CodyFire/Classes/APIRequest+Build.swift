@@ -15,13 +15,13 @@ extension APIRequest {
     
     var url: String {
         var url = host + "/" + endpoint
-        if let query = query, query.count > 0 {
+        if query.raw.count > 0 {
             if url.contains("?") {
                 url.append("&")
             } else {
                 url.append("?")
             }
-            url.append(query)
+            url.append(query.raw)
         }
         return url
     }
@@ -40,7 +40,8 @@ extension APIRequest {
     
     @discardableResult
     public func query(_ params: Codable) -> APIRequest {
-        self.query = buildURLEncodedString(from: params)
+        self.query.codable = params
+        self.query.raw = buildURLEncodedString(from: params) ?? ""
         return self
     }
     
