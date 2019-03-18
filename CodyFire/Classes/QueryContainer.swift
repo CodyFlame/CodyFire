@@ -7,39 +7,22 @@
 
 import Foundation
 
-public class QueryContainer {
+/// A Container for url query values
+public struct QueryContainer {
+    /// Returns raw string if it was set as raw string like: key1=val1&key2=val2
     public var raw: String = ""
+    /// Returns codable object if was set as codable
     public var codable: Codable?
     
-    func rawToDictionary() -> [String: Any] {
+    /// Returns dictionary representation based on raw string
+    public var dictionary: [String: Any] {
         guard raw.count > 0 else { return [:] }
         var dict: [String: Any] = [:]
         for part in raw.components(separatedBy: "&") {
-            var parts = part.components(separatedBy: "=")
+            let parts = part.components(separatedBy: "=")
             guard parts.count == 2, let k = parts.first, let v = parts.last else { continue }
             dict[k] = v
         }
         return dict
-    }
-    
-    func dictIntoJsonData(dict: [String: Any]) -> Data? {
-        return try? JSONSerialization.data(withJSONObject: dict, options: [])
-    }
-    
-    public func encode<T: Codable>() throws -> T {
-        return try encode()
-    }
-    
-    public func encode<T: Codable>(to type: T.Type) throws -> T {
-        let dict = rawToDictionary()
-        guard !dict.isEmpty else { throw CodyFireError("Query dictionary is empty") }
-        guard let data = dictIntoJsonData(dict: dict) else { throw CodyFireError("Unable to encode query dictionary into JSON") }
-        return try JSONDecoder().decode(type, from: data)
-    }
-}
-
-extension QueryContainer: CustomStringConvertible {
-    public var description: String {
-        return raw
     }
 }
