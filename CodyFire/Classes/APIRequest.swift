@@ -53,8 +53,8 @@ public class APIRequest<ResultType: Decodable> {
     var networkUnavailableCallback: NetworkUnavailableCallback?
     var requestStartedCallback: RequestStartedCallback?
     var proceedMock: ProceedMockCallback?
-    var responseTimeout: TimeInterval = 15
-    var additionalTimeout: TimeInterval = 0
+    var responseTimeout: TimeInterval = CodyFire.shared.responseTimeout
+    var additionalTimeout: TimeInterval = CodyFire.shared.additionalTimeout
     var dateDecodingStrategy: DateCodingStrategy?
     var dateEncodingStrategy: DateCodingStrategy?
     var logError = true
