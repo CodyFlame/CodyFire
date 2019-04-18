@@ -35,6 +35,7 @@ public class APIRequest<ResultType: Decodable> {
     let uid = UUID()
     
     public typealias SuccessResponse = (ResultType)->()
+    public typealias DataResponse = (Data)->()
     var customServerURL: ServerURL?
     var customErrors: [NetworkError] = []
     var endpoint: String = "/"
@@ -44,6 +45,7 @@ public class APIRequest<ResultType: Decodable> {
     var headers: [String: String] = CodyFire.shared.globalHeaders
     var desiredStatusCode: StatusCode = .ok
     var successCallback: SuccessResponse?
+    var dataCallback: DataResponse?
     var errorCallback: ErrorResponse?
     var notAuthorizedCallback: NotAuthorizedResponse?
     var progressCallback: Progress?

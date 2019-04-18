@@ -24,6 +24,7 @@ extension APIRequest {
                     ?? DateCodingStrategy.default.jsonDateDecodingStrategy
                 var errorRaised = false
                 if let data = answer.data {
+                    self.dataCallback?(data)
                     if ResultType.self is Nothing.Type {
                         delayedResponse(diff) {
                             CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
