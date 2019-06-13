@@ -68,8 +68,21 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func desiredStatusCode(_ statusCode: StatusCode) -> APIRequest {
-        desiredStatusCode = statusCode
+    @available(*, deprecated, renamed: "successStatusCode")
+    public func desiredStatusCode(_ statusCodes: StatusCode...) -> APIRequest {
+        successStatusCodes = statusCodes
+        return self
+    }
+    
+    @discardableResult
+    public func successStatusCode(_ statusCodes: StatusCode...) -> APIRequest {
+        successStatusCodes = statusCodes
+        return self
+    }
+    
+    @discardableResult
+    public func successStatusCode(_ statusCodes: [StatusCode]) -> APIRequest {
+        successStatusCodes = statusCodes
         return self
     }
     

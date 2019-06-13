@@ -43,7 +43,7 @@ public class APIRequest<ResultType: Decodable> {
     var payload: PayloadProtocol?
     var query = QueryContainer()
     var headers: [String: String] = CodyFire.shared.globalHeaders
-    var desiredStatusCode: StatusCode = .ok
+    var successStatusCodes: [StatusCode] = [.ok]
     var successCallback: SuccessResponse?
     var errorCallback: ErrorResponse?
     var notAuthorizedCallback: NotAuthorizedResponse?
