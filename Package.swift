@@ -14,7 +14,7 @@ let package = Package(
         .package(url: "https://github.com/Alamofire/Alamofire.git", from: "4.0.0"),
         ],
     targets: [
-        .target(name: "CodyFire", dependencies: [], path: "CodyFire"),
+        .target(name: "CodyFire", dependencies: [], path: "CodyFire/Classes"),
 //        .testTarget(name: "SwifQLTests", dependencies: ["SwifQL", "SwifQLPure"]),
         ],
     swiftLanguageVersions: [.v4_2]
