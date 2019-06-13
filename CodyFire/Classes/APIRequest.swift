@@ -36,7 +36,7 @@ public class APIRequest<ResultType: Decodable> {
     
     public typealias SuccessResponse = (ResultType)->()
     var customServerURL: ServerURL?
-    var customErrors: [NetworkError] = []
+    var customErrors: Set<NetworkError> = []
     var endpoint: String = "/"
     var method: HTTPMethod = .get
     var payload: PayloadProtocol?

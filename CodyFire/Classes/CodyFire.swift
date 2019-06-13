@@ -26,6 +26,7 @@ open class CodyFire {
     
     /// Called on each succeeded response
     public var successResponseHandler: ((_ host: String, _ endpoint: String)->())?
+    public var errorResponseHandler: ((_ host: String, _ endpoint: String)->())?
     public var unauthorizedHandler: UnauthorizedHandler?
     public var reachability: NetworkHelperProtocol?
     
@@ -52,7 +53,7 @@ open class CodyFire {
     
     public var ws: WS { return WS.shared }
     
-    var customErrors: [NetworkError] = [
+    var customErrors: Set<NetworkError> = [
         NetworkError(code: .unauthorized, description: "You're not authorized"),
         NetworkError(code: .forbidden, description: "This action is prohibited"),
         NetworkError(code: .internalServerError, description: "Service temporary unavailable"),
@@ -81,9 +82,16 @@ open class CodyFire {
     ]
     
     public func setCustomError(_ error: NetworkError) {
-        if let index = customErrors.index(where: { $0.code.rawValue == error.code.rawValue }) {
-            customErrors.remove(at: index)
-            customErrors.append(error)
+        customErrors.update(with: error)
+    }
+    
+    public func setCustomError(codes: StatusCode..., description: String) {
+        setCustomError(codes: codes, description: description)
+    }
+    
+    public func setCustomError(codes: [StatusCode], description: String) {
+        for code in codes {
+            setCustomError(NetworkError(code: code, description: description))
         }
     }
     
