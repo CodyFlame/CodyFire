@@ -15,10 +15,19 @@ public final class NetworkHelper: NetworkHelperProtocol {
     let reachability: Reachability
     
     init(_ hostName: String) {
-        reachability = Reachability(hostName: hostName)
+        reachability = Reachability(hostname: hostName)!
+        do {
+            try reachability.startNotifier()
+        } catch {
+            print("Unable to start notifier")
+        }
+    }
+    
+    deinit {
+        reachability.stopNotifier()
     }
     
     public var isNetworkAvailable: Bool {
-        return reachability.currentReachabilityStatus().rawValue > 0
+        return reachability.connection != .none
     }
 }
