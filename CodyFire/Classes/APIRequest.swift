@@ -37,13 +37,13 @@ public class APIRequest<ResultType: Decodable> {
     
     public typealias SuccessResponse = (ResultType)->()
     var customServerURL: ServerURL?
-    var customErrors: [NetworkError] = []
+    var customErrors: Set<NetworkError> = []
     var endpoint: String = "/"
     var method: HTTPMethod = .get
     var payload: PayloadProtocol?
     var query = QueryContainer()
     var headers: [String: String] = CodyFire.shared.globalHeaders
-    var desiredStatusCode: StatusCode = .ok
+    var successStatusCodes: [StatusCode] = [.ok]
     var successCallback: SuccessResponse?
     var errorCallback: ErrorResponse?
     var notAuthorizedCallback: NotAuthorizedResponse?

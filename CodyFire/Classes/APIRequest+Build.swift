@@ -68,8 +68,21 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func desiredStatusCode(_ statusCode: StatusCode) -> APIRequest {
-        desiredStatusCode = statusCode
+    @available(*, deprecated, renamed: "successStatusCode")
+    public func desiredStatusCode(_ statusCodes: StatusCode...) -> APIRequest {
+        successStatusCodes = statusCodes
+        return self
+    }
+    
+    @discardableResult
+    public func successStatusCode(_ statusCodes: StatusCode...) -> APIRequest {
+        successStatusCodes = statusCodes
+        return self
+    }
+    
+    @discardableResult
+    public func successStatusCode(_ statusCodes: [StatusCode]) -> APIRequest {
+        successStatusCodes = statusCodes
         return self
     }
     
@@ -81,7 +94,7 @@ extension APIRequest {
     
     @discardableResult
     public func addCustomError(_ customError: NetworkError) -> APIRequest {
-        customErrors.append(customError)
+        customErrors.update(with:customError)
         return self
     }
     
@@ -89,6 +102,19 @@ extension APIRequest {
     @available(*, deprecated, renamed: "addCustomError")
     public func addKnownError(_ code: StatusCode, _ description: String) -> APIRequest {
         return addCustomError(code, description)
+    }
+    
+    @discardableResult
+    public func addCustomError(_ codes: StatusCode..., description: String) -> APIRequest {
+        return addCustomError(codes, description: description)
+    }
+    
+    @discardableResult
+    public func addCustomError(_ codes: [StatusCode], description: String) -> APIRequest {
+        for code in codes {
+            addCustomError(NetworkError(code: code, description: description))
+        }
+        return self
     }
     
     @discardableResult
@@ -104,7 +130,7 @@ extension APIRequest {
     
     @discardableResult
     public func addCustomErrors(_ errors: [NetworkError]) -> APIRequest {
-        customErrors.append(contentsOf: errors)
+        errors.forEach { customErrors.update(with: $0) }
         return self
     }
     

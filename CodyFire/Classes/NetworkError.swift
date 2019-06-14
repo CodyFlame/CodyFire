@@ -10,7 +10,7 @@ import Foundation
 @available(*, deprecated, renamed: "NetworkError")
 public typealias KnownNetworkError = NetworkError
 
-public struct NetworkError: Error, CustomStringConvertible {
+public struct NetworkError: Error, CustomStringConvertible, Hashable {
     public var code: StatusCode
     public var description: String
     public var raw: Data?
@@ -24,5 +24,9 @@ public struct NetworkError: Error, CustomStringConvertible {
     public init (code: StatusCode, description: String) {
         self.code = code
         self.description = description
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(code.rawValue)
     }
 }
