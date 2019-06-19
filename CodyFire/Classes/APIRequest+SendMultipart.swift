@@ -63,7 +63,7 @@ extension APIRequest {
             } catch {
                 log(.error, "🆘 preparing multipart codable object failed with error: \(error)")
             }
-        }, to: url, method: .post, headers: headers) { encodingResult in
+        }, to: url, method: method, headers: headers) { encodingResult in
             switch encodingResult {
             case .success(let upload, _, _):
                 upload.response { response in
