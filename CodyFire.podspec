@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CodyFire'
-  s.version          = '1.11.0'
+  s.version          = '1.11.1'
   s.summary          = '❤️ Powerful codable API requests builder and manager for iOS based on Alamofire'
 
 # This description is used to generate tags and improve search results.
