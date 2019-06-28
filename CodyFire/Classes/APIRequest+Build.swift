@@ -171,6 +171,13 @@ extension APIRequest {
     }
     
     @discardableResult
+    public func onSuccessData(_ callback: @escaping DataResponse) -> APIRequest {
+        dataCallback = callback
+        start()
+        return self
+    }
+    
+    @discardableResult
     @available(*, deprecated, renamed: "onError")
     public func onKnownError(_ callback: @escaping ErrorResponse) -> APIRequest {
         errorCallback = callback
