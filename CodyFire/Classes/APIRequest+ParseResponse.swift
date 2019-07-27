@@ -36,16 +36,16 @@ extension APIRequest {
                             self.successCallback?(data as! ResultType)
                             self.flattenSuccessHandler?()
                         }
-                    } else if ResultType.self is String.Type {
-                        if let string = String(data: data, encoding: .utf8) {
+                    } else if PrimitiveTypeDecoder.isSupported(ResultType.self) {
+                        if let value: ResultType = PrimitiveTypeDecoder.decode(data), let v = value as? ResultType {
                             delayedResponse(diff) {
                                 CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
-                                self.successCallback?(string as! ResultType)
+                                self.successCallback?(v)
                                 self.flattenSuccessHandler?()
                             }
                         } else {
                             errorRaised = true
-                            log(.error, "🆘 Unable to decode response as string")
+                            log(.error, "🆘 Unable to decode response as \(String(describing: ResultType.self))")
                         }
                     } else {
                         do {
