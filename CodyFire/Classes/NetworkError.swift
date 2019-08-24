@@ -10,7 +10,7 @@ import Foundation
 @available(*, deprecated, renamed: "NetworkError")
 public typealias KnownNetworkError = NetworkError
 
-public struct NetworkError: Error, CustomStringConvertible, Hashable {
+public struct NetworkError: Error, CustomStringConvertible, Hashable, Equatable {
     public var code: StatusCode
     public var description: String
     public var raw: Data?
@@ -27,6 +27,10 @@ public struct NetworkError: Error, CustomStringConvertible, Hashable {
     }
     
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(code.rawValue)
+        hasher.combine(code.raw.hashValue)
+    }
+    
+    public static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+        return lhs.code.raw == rhs.code.raw
     }
 }

@@ -8,6 +8,10 @@
 import Foundation
 
 extension CodyFire {
+    public static func configureEnvironments(dev: CodyFireEnvironment, testFlight: CodyFireEnvironment, appStore: CodyFireEnvironment) {
+        shared.configureEnvironments(dev: dev, testFlight: testFlight, appStore: appStore)
+    }
+    
     public func configureEnvironments(dev: CodyFireEnvironment, testFlight: CodyFireEnvironment, appStore: CodyFireEnvironment) {
         _devEnv = dev
         _testFlightEnv = testFlight
@@ -27,6 +31,11 @@ extension CodyFire {
             assert(false, "Unable to get env url for \(environmentMode) cause it's nil")
             return CodyFireEnvironment(apiURL: nil, wsURL: nil)
         }
+    }
+    
+    /// Auto apply env by reading environment variable from chosen project scheme
+    public static func setupEnvByProjectScheme() {
+        shared.setupEnvByProjectScheme()
     }
     
     /// Auto apply env by reading environment variable from chosen project scheme

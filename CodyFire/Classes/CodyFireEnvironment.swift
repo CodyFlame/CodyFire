@@ -24,6 +24,8 @@ public struct ServerURL {
     }
 }
 
+public typealias CFE = CodyFireEnvironment
+
 public struct CodyFireEnvironment {
     private var _apiURL: ServerURL?
     private var _wsURL: ServerURL?

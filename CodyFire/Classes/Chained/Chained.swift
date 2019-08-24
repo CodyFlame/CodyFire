@@ -71,7 +71,12 @@ public class Chained {
         networkUnavailableCallback()
     }
     
+    var requestAlreadyStarted = false
+    
     func handleRequestStarted() {
-        requestStartedCallback?()
+        if !requestAlreadyStarted {
+            requestAlreadyStarted = true
+            requestStartedCallback?()
+        }
     }
 }

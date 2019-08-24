@@ -9,6 +9,7 @@ import Foundation
 
 public class ChainedA<A: Codable, B: Codable>: Chained {
     public typealias SuccessResponse = (A, B) -> ()
+    public typealias SuccessResponseExtended = (ExtendedResponse<A>, ExtendedResponse<B>) -> ()
     public typealias Itself = ChainedA
     public typealias Left = APIRequest<A>
     public typealias Right = APIRequest<B>
@@ -17,6 +18,7 @@ public class ChainedA<A: Codable, B: Codable>: Chained {
     let right: Right
     
     var successHandler: SuccessResponse?
+    var successHandlerExtended: SuccessResponseExtended?
     
     init (_ left: Left, _ right: Right) {
         self.left = left
@@ -27,8 +29,7 @@ public class ChainedA<A: Codable, B: Codable>: Chained {
         return ChainedB(self, next)
     }
     
-    public func onSuccess(_ handler: @escaping SuccessResponse) {
-        successHandler = handler
+    private func configure() {
         if let _ = notAuthorizedCallback {
             left.onNotAuthorized(handleNotAuthorized)
             right.onNotAuthorized(handleNotAuthorized)
@@ -55,13 +56,25 @@ public class ChainedA<A: Codable, B: Codable>: Chained {
         }
         left.onRequestStarted(handleRequestStarted)
         right.onRequestStarted(handleRequestStarted)
+    }
+    
+    public func onSuccess(_ handler: @escaping SuccessResponse) {
+        successHandler = handler
+        configure()
+        execute()
+    }
+    
+    public func onSuccessExtended(_ handler: @escaping SuccessResponseExtended) {
+        successHandlerExtended = handler
+        configure()
         execute()
     }
     
     func execute() {
-        left.onError(handleError).onSuccess { left in
-            self.right.onError(self.handleError).onSuccess { right in
-                self.successHandler?(left, right)
+        left.onError(handleError).onSuccessExtended { a in
+            self.right.onError(self.handleError).onSuccessExtended { b in
+                self.successHandler?(a.body, b.body)
+                self.successHandlerExtended?(a, b)
             }
         }
     }

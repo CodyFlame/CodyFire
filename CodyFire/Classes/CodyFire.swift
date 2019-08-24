@@ -39,7 +39,24 @@ open class CodyFire {
     }
     
     public var fillHeaders: FillHeaders?
+    public static var fillHeaders: FillHeaders? {
+        get {
+            return shared.fillHeaders
+        }
+        set {
+            shared.fillHeaders = newValue
+        }
+    }
+    
     public var fillCodableHeaders: FillCodableHeaders?
+    public static var fillCodableHeaders: FillCodableHeaders? {
+        get {
+            return shared.fillCodableHeaders
+        }
+        set {
+            shared.fillCodableHeaders = newValue
+        }
+    }
     
     #if DEBUG
     public var logLevel: LogLevel = .debug
@@ -109,5 +126,35 @@ open class CodyFire {
     
     public func setCustomErrors(_ errors: (StatusCode, String)...) {
         errors.forEach { setCustomError(code: $0.0, description: $0.1) }
+    }
+    
+    // MARK: Static representation
+    
+    public static func setCustomError(_ error: NetworkError) {
+        shared.setCustomError(error)
+    }
+    
+    public static func setCustomError(codes: StatusCode..., description: String) {
+        shared.setCustomError(codes: codes, description: description)
+    }
+    
+    public static func setCustomError(codes: [StatusCode], description: String) {
+        shared.setCustomError(codes: codes, description: description)
+    }
+    
+    public static func setCustomError(code: StatusCode, description: String) {
+        shared.setCustomError(code: code, description: description)
+    }
+    
+    public static func setCustomErrors(_ errors: [NetworkError]) {
+        shared.setCustomErrors(errors)
+    }
+    
+    public static func setCustomErrors(_ errors: [(StatusCode, String)]) {
+        shared.setCustomErrors(errors)
+    }
+    
+    public static func setCustomErrors(_ errors: (StatusCode, String)...) {
+        shared.setCustomErrors(errors)
     }
 }

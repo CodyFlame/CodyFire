@@ -164,9 +164,16 @@ extension APIRequest {
     }
     
     @discardableResult
-    public func onSuccess(_ callback: @escaping SuccessResponse) -> APIRequest {
+    public func onSuccess(_ start: Bool = true, _ callback: @escaping SuccessResponse) -> APIRequest {
         successCallback = callback
-        start()
+        if start { self.start() }
+        return self
+    }
+    
+    @discardableResult
+    public func onSuccessExtended(_ start: Bool = true, _ callback: @escaping SuccessResponseExtended) -> APIRequest {
+        successCallbackExtended = callback
+        if start { self.start() }
         return self
     }
     

@@ -18,14 +18,21 @@ public class Flatten {
     var inProgress: [FlattenableInternal] = []
     
     var cancelOnError = true
-    public func avoidCancelOnError() -> Flatten {
+    var skipCancelExceptCodes: [StatusCode] = []
+    public func avoidCancelOnError(_ except: StatusCode...) -> Flatten {
         cancelOnError = false
+        skipCancelExceptCodes = except
+        return self
+    }
+    public func avoidCancelOnError(_ except: [StatusCode]) -> Flatten {
+        cancelOnError = false
+        skipCancelExceptCodes = except
         return self
     }
     
     public typealias ProgressHandler = (Double) -> Void
     var progressHandler: ProgressHandler?
-    public typealias ErrorHandler = (Error) -> Void
+    public typealias ErrorHandler = (NetworkError) -> Void
     var errorHandler: ErrorHandler?
     public typealias SuccessHandler = () -> ()
     var successHandler: SuccessHandler?
@@ -79,7 +86,7 @@ public class Flatten {
             }
             task.progressCallback = handleProgress
             task.errorCallback = { e in
-                guard self.cancelOnError else {
+                guard self.cancelOnError || self.skipCancelExceptCodes.contains(e.code) else {
                     self.inProgress.removeAll(where: { f -> Bool in
                         return f.uid == task.uid
                     })

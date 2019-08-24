@@ -10,6 +10,7 @@ import Foundation
 public class ChainedE<A: Codable, B: Codable, C: Codable, D: Codable, E: Codable, F: Codable>: Chained {
     public typealias Itself = ChainedE
     public typealias SuccessResponse = (A, B, C, D, E, F) -> ()
+    public typealias SuccessResponseExtended = (ExtendedResponse<A>, ExtendedResponse<B>, ExtendedResponse<C>, ExtendedResponse<D>, ExtendedResponse<E>, ExtendedResponse<F>) -> ()
     public typealias Left = ChainedD<A, B, C, D, E>
     public typealias Right = APIRequest<F>
     
@@ -17,6 +18,7 @@ public class ChainedE<A: Codable, B: Codable, C: Codable, D: Codable, E: Codable
     let right: Right
     
     var successHandler: SuccessResponse?
+    var successHandlerExtended: SuccessResponseExtended?
     
     init (_ left: Left, _ right: Right) {
         self.left = left
@@ -27,8 +29,7 @@ public class ChainedE<A: Codable, B: Codable, C: Codable, D: Codable, E: Codable
         return ChainedF(self, next)
     }
     
-    public func onSuccess(_ handler: @escaping SuccessResponse) {
-        successHandler = handler
+    private func configure() {
         if let _ = notAuthorizedCallback {
             left.onNotAuthorized(handleNotAuthorized)
             right.onNotAuthorized(handleNotAuthorized)
@@ -55,13 +56,25 @@ public class ChainedE<A: Codable, B: Codable, C: Codable, D: Codable, E: Codable
         }
         left.onRequestStarted(handleRequestStarted)
         right.onRequestStarted(handleRequestStarted)
+    }
+    
+    public func onSuccess(_ handler: @escaping SuccessResponse) {
+        successHandler = handler
+        configure()
+        execute()
+    }
+    
+    public func onSuccessExtended(_ handler: @escaping SuccessResponseExtended) {
+        successHandlerExtended = handler
+        configure()
         execute()
     }
     
     func execute() {
-        left.onError(handleError).onSuccess { a, b, c, d, e in
-            self.right.onError(self.handleError).onSuccess { f in
-                self.successHandler?(a, b, c, d, e, f)
+        left.onError(handleError).onSuccessExtended { a, b, c, d, e in
+            self.right.onError(self.handleError).onSuccessExtended { f in
+                self.successHandler?(a.body, b.body, c.body, d.body, e.body, f.body)
+                self.successHandlerExtended?(a, b, c, d, e, f)
             }
         }
     }

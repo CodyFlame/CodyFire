@@ -31,10 +31,18 @@ public typealias TimeoutResponse = ()->()
 public typealias NetworkUnavailableCallback = ()->()
 public typealias RequestStartedCallback = ()->()
 
+public struct ExtendedResponse<ResultType: Decodable> {
+    public let headers: [AnyHashable : Any]
+    public let statusCode: StatusCode
+    public let bodyData: Data
+    public let body: ResultType
+}
+
 public class APIRequest<ResultType: Decodable> {
     let uid = UUID()
     
     public typealias SuccessResponse = (ResultType)->()
+    public typealias SuccessResponseExtended = (ExtendedResponse<ResultType>)->()
     var customServerURL: ServerURL?
     var customErrors: Set<NetworkError> = []
     var endpoint: String = "/"
@@ -44,6 +52,7 @@ public class APIRequest<ResultType: Decodable> {
     var headers: [String: String] = CodyFire.shared.globalHeaders
     var successStatusCodes: [StatusCode] = [.ok]
     var successCallback: SuccessResponse?
+    var successCallbackExtended: SuccessResponseExtended?
     var errorCallback: ErrorResponse?
     var notAuthorizedCallback: NotAuthorizedResponse?
     var progressCallback: Progress?
@@ -63,7 +72,7 @@ public class APIRequest<ResultType: Decodable> {
     
     var dataRequest: DataRequest?
     
-    init(_ server: ServerURL? = nil, _ endpoint: [String], payload: PayloadProtocol? = nil) {
+    public init(_ server: ServerURL? = nil, _ endpoint: [String], payload: PayloadProtocol? = nil) {
         self.customServerURL = server
         self.endpoint = endpoint.joined(separator: "/")
         self.payload = payload
@@ -75,7 +84,7 @@ public class APIRequest<ResultType: Decodable> {
         self.payload = payload
     }
     
-    init(_ endpoint: [String], payload: PayloadProtocol? = nil) {
+    public init(_ endpoint: [String], payload: PayloadProtocol? = nil) {
         self.endpoint = endpoint.joined(separator: "/")
         self.payload = payload
     }

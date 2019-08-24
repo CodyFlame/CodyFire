@@ -18,6 +18,7 @@ extension APIRequest {
             log(.debug, "Response data: \(String(describing: answer.response)) on \(method.rawValue.uppercased()) to \(url)")
             let diff = additionalTimeout - answer.timeline.totalDuration
             if successStatusCodes.map({ $0.rawValue }).contains(response.statusCode) {
+                let statusCode = StatusCode.from(raw: response.statusCode)
                 let decoder = JSONDecoder()
                 decoder.dateDecodingStrategy = dateDecodingStrategy?.jsonDateDecodingStrategy
                     ?? CodyFire.shared.dateDecodingStrategy?.jsonDateDecodingStrategy
@@ -28,12 +29,20 @@ extension APIRequest {
                         delayedResponse(diff) {
                             CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                             self.successCallback?(Nothing() as! ResultType)
+                            self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
+                                                                                statusCode: statusCode,
+                                                                                bodyData: data,
+                                                                                body: Nothing() as! ResultType))
                             self.flattenSuccessHandler?()
                         }
                     } else if ResultType.self is Data.Type {
                         delayedResponse(diff) {
                             CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                             self.successCallback?(data as! ResultType)
+                            self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
+                                                                                statusCode: statusCode,
+                                                                                bodyData: data,
+                                                                                body: data as! ResultType))
                             self.flattenSuccessHandler?()
                         }
                     } else if PrimitiveTypeDecoder.isSupported(ResultType.self) {
@@ -41,6 +50,10 @@ extension APIRequest {
                             delayedResponse(diff) {
                                 CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                                 self.successCallback?(v)
+                                self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
+                                                                                    statusCode: statusCode,
+                                                                                    bodyData: data,
+                                                                                    body: v))
                                 self.flattenSuccessHandler?()
                             }
                         } else {
@@ -53,6 +66,10 @@ extension APIRequest {
                             delayedResponse(diff) {
                                 CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                                 self.successCallback?(decodedResult)
+                                self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
+                                                                                    statusCode: statusCode,
+                                                                                    bodyData: data,
+                                                                                    body: decodedResult))
                                 self.flattenSuccessHandler?()
                             }
                         } catch {
