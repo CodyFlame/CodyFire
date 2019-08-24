@@ -1,0 +1,11 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CodyFire",
+        "repositoryURL": "../"
+      }
+    ]
+  },
+  "version": 1
+}
