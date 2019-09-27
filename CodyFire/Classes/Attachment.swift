@@ -8,9 +8,9 @@
 import Foundation
 
 open class Attachment: Codable {
-    var data: Data
-    var fileName: String
-    var mimeType: String
+    public var data: Data
+    public var fileName: String
+    public var mimeType: String
     
     public init(data: Data, fileName: String, mimeType: String) {
         self.data = data
