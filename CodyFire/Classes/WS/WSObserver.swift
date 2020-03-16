@@ -14,7 +14,7 @@ open class WSObserver: WebSocketDelegate {
     }
     
     public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        wslog(.info, "disconnected, error: \(error)")
+        wslog(.info, "disconnected, error: \(String(describing: error))")
         if WS.shared.reconnect {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                 do {

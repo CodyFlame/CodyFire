@@ -55,7 +55,7 @@ struct PrimitiveTypeDecoder {
                 return bool as? ResultType
             } else if let int = Int(string) {
                 let number = NSNumber(value: int)
-                return Bool(number) as? ResultType
+                return Bool(truncating: number) as? ResultType
             }
             return nil
         case is UInt.Type:

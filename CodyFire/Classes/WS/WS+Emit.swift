@@ -43,6 +43,7 @@ extension WS {
         if let payload = payload as? CustomDateEncodingStrategy {
             dateEncodingStrategy = payload.dateEncodingStrategy
         }
+        jsonEncoder.dateEncodingStrategy = dateEncodingStrategy.jsonDateEncodingStrategy
         return try jsonEncoder.encode(payload)
     }
 }

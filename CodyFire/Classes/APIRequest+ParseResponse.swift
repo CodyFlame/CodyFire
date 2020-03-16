@@ -46,14 +46,14 @@ extension APIRequest {
                             self.flattenSuccessHandler?()
                         }
                     } else if PrimitiveTypeDecoder.isSupported(ResultType.self) {
-                        if let value: ResultType = PrimitiveTypeDecoder.decode(data), let v = value as? ResultType {
+                        if let value: ResultType = PrimitiveTypeDecoder.decode(data) {
                             delayedResponse(diff) {
                                 CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
-                                self.successCallback?(v)
+                                self.successCallback?(value)
                                 self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
                                                                                     statusCode: statusCode,
                                                                                     bodyData: data,
-                                                                                    body: v))
+                                                                                    body: value))
                                 self.flattenSuccessHandler?()
                             }
                         } else {

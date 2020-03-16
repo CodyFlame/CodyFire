@@ -38,7 +38,12 @@ public struct ExtendedResponse<ResultType: Decodable> {
     public let body: ResultType
 }
 
-public class APIRequest<ResultType: Decodable> {
+public protocol AnyAPIRequest {
+    var cancelled: Bool { get }
+    func cancel()
+}
+
+public class APIRequest<ResultType: Decodable>: AnyAPIRequest {
     let uid = UUID()
     
     public typealias SuccessResponse = (ResultType)->()
@@ -68,7 +73,7 @@ public class APIRequest<ResultType: Decodable> {
     
     var flattenSuccessHandler: FlattenSuccessResponse?
     
-    var cancelled = false
+    public var cancelled = false
     
     var dataRequest: DataRequest?
     

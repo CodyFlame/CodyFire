@@ -11,13 +11,14 @@ import Starscream
 open class WSBindController<EventPrototype: WSAnyEventModel>: WSObserver {
     public typealias Default = WSBindController<_WSDefaultEventModel>
     
+    var exchangeMode: WSExchangeMode = .both
     var handlers: [String: (WebSocketClient, Data) -> Void] = [:]
     
     public override init () {
         super.init()
     }
     
-    public func bind<Model: WSEventModel>(_ identifier: WSEventIdentifier<Model>, handler: ((WebSocketClient, Model) -> Void)? = nil) {
+    open func bind<Model: WSEventModel>(_ identifier: WSEventIdentifier<Model>, handler: ((WebSocketClient, Model) -> Void)? = nil) {
         handlers[Model.key] = { client, data in
             do {
                 let decoder = JSONDecoder()
@@ -32,12 +33,20 @@ open class WSBindController<EventPrototype: WSAnyEventModel>: WSObserver {
         }
     }
     
-    public override func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+    @discardableResult
+    public func exchangeMode(_ mode: WSExchangeMode) -> Self {
+        exchangeMode = mode
+        return self
+    }
+    
+    open override func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+        guard exchangeMode != .binary else { return }
         guard let data = text.data(using: .utf8) else { return }
         decodeAndCallHandler(socket: socket, data: data)
     }
     
-    public override func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+    open override func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+        guard exchangeMode != .text else { return }
         decodeAndCallHandler(socket: socket, data: data)
     }
     

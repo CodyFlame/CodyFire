@@ -34,10 +34,11 @@ public class WS {
             request.setValue(value, forHTTPHeaderField: key)
         }
         socket = WebSocket(request: request)
-        wslog(.info, "preparing to connect: \(request)")
+        wslog(.info, "preparing to connect: \(request) socket?.respondToPingWithPong: \(socket?.respondToPingWithPong)")
         socket?.delegate = delegate
         // TODO: delegate?.connecting() ?
         socket?.connect()
+//        socket?.
     }
     
     public func disconnect() {
