@@ -11,14 +11,12 @@
         <img src="https://img.shields.io/cocoapods/v/CodyFire.svg" alt="Cocoapod">
     </a>
 </p>
-
+<p align="center"><a href="https://discord.gg/q5wCPYv">SWIFT.STREAM COMMUNITY IN DISCORD</a></p>
 <br>
 
 This lib is about network requests with blackjack, roulette and craps!
 
 Using it you will be able to convert your massive API layer code into an awesome convenient controllers with easy and maintainable network requests!
-
-Based on Alamofire 4.7.3.
 
 Use Codable models for everything related to API requests:
 - json payload
