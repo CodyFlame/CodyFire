@@ -5,6 +5,7 @@
 //  Created by Mihael Isaev on 09.08.2018.
 //
 
+#if os(iOS) || os(tvOS)
 import Foundation
 import UIKit
 
@@ -19,3 +20,4 @@ extension UserDefaults {
         return uuid
     }
 }
+#endif
