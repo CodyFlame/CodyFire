@@ -222,6 +222,7 @@ public enum StatusCode {
         case ._unknown: return -1
         case ._undecodable: return -2
         case ._encodingProblem: return -3
+        case ._mockHandlerIsNotImplemented: return -4
         case ._requestCancelled: return -999
         case ._badURL: return -1000
         case ._timedOut: return -1001
@@ -343,6 +344,7 @@ public enum StatusCode {
         case -1: return ._unknown
         case -2: return ._undecodable
         case -3: return ._encodingProblem
+        case -4: return ._mockHandlerIsNotImplemented
         case -999: return ._requestCancelled
         case -1000: return ._badURL
         case -1001: return ._timedOut
