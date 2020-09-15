@@ -38,6 +38,11 @@ open class CodyFire {
         return reachability?.isNetworkAvailable ?? true
     }
     
+    public var responseTimeout: TimeInterval = 15
+    public var additionalTimeout: TimeInterval = 0
+    
+    public var isInMockMode = false
+    
     public var fillHeaders: FillHeaders?
     public static var fillHeaders: FillHeaders? {
         get {

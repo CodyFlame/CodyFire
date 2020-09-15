@@ -86,6 +86,7 @@ extension StatusCode {
         case ._unknown: return -1
         case ._undecodable: return -2
         case ._encodingProblem: return -3
+        case ._mockHandlerIsNotImplemented: return -4
         case ._requestCancelled: return -999
         case ._badURL: return -1000
         case ._timedOut: return -1001
