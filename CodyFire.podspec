@@ -27,6 +27,7 @@ Pod::Spec.new do |s|
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
+  s.macos.deployment_target = '10.15'
 
   s.source_files = 'CodyFire/Classes/**/*'
 
