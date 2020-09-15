@@ -121,6 +121,7 @@ public enum StatusCode {
     case _cannotDecodeRawData
     case _cannotDecodeContentData
     case _cannotParseResponse
+    case _mockHandlerIsNotImplemented
     
     //MARK: Custom
     case custom(Int)
