@@ -17,6 +17,12 @@ extension APIRequest {
             log(.info, "Response: \(response.statusCode) on \(method.rawValue.uppercased()) to \(url)")
             log(.debug, "Response data: \(String(describing: answer.response)) on \(method.rawValue.uppercased()) to \(url)")
             let diff = additionalTimeout - answer.timeline.totalDuration
+            if self.retryCondition.contains(StatusCode.from(raw: response.statusCode)) && retriesCounter < retryAttempts {
+                log(.info, "retry condition satisfied, starting the request again...")
+                retriesCounter += 1
+                self.start()
+                return
+            }
             if successStatusCodes.map({ $0.rawValue }).contains(response.statusCode) {
                 let statusCode = StatusCode.from(raw: response.statusCode)
                 let decoder = JSONDecoder()
@@ -106,12 +112,19 @@ extension APIRequest {
                 logError(statusCode: statusCode, error: answer.error, data: answer.data)
             }
         } else {
-            if let timeoutCallback = timeoutCallback, let err = answer.error as NSError?, err.code == NSURLErrorTimedOut {
+            guard let err = answer.error as NSError?, err.code == NSURLErrorTimedOut else { return }
+            if let timeoutCallback = timeoutCallback {
                 timeoutCallback()
             } else {
                 parseError(._timedOut, answer.error, answer.data, "Connection timeout")
             }
             logError(statusCode: ._timedOut, error: answer.error, data: answer.data)
+            if retriesCounter < retryAttempts && self.retryCondition.allSatisfy([StatusCode.timedOut, StatusCode.requestTimeout].contains) {
+                log(.info, "request timed out, trying again...")
+                retriesCounter += 1
+                self.start()
+                return
+            }
         }
     }
     
