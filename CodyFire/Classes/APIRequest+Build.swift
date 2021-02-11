@@ -240,4 +240,11 @@ extension APIRequest {
         }
         return self
     }
+    
+    @discardableResult
+    public func retry(on statusCodes: [StatusCode], attempts: Int = 3) -> Self {
+        retryCondition = statusCodes
+        retryAttempts = attempts
+        return self
+    }
 }

@@ -73,6 +73,9 @@ public class APIRequest<ResultType: Decodable>: AnyAPIRequest {
     var dateEncodingStrategy: DateCodingStrategy?
     var logError = true
     var useMock = CodyFire.shared.isInMockMode
+    var retryCondition: [StatusCode] = []
+    var retryAttempts = 0
+    var retriesCounter = 0
     
     var flattenSuccessHandler: FlattenSuccessResponse?
     
