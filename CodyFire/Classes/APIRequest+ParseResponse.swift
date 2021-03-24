@@ -112,7 +112,13 @@ extension APIRequest {
                 logError(statusCode: statusCode, error: answer.error, data: answer.data)
             }
         } else {
-            guard let err = answer.error as NSError?, err.code == NSURLErrorTimedOut else { return }
+            guard let err = answer.error as NSError?, err.code == NSURLErrorTimedOut else {
+                var errorMessageFromServer = "Something went wrong..."
+                let statusCode: StatusCode = ._cannotConnectToHost
+                parseError(statusCode, answer.error, answer.data, errorMessageFromServer)
+                logError(statusCode: statusCode, error: answer.error, data: answer.data)
+                return
+            }
             if let timeoutCallback = timeoutCallback {
                 timeoutCallback()
             } else {
