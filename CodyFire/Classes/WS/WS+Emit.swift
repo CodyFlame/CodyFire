@@ -46,4 +46,20 @@ extension WS {
         jsonEncoder.dateEncodingStrategy = dateEncodingStrategy.jsonDateEncodingStrategy
         return try jsonEncoder.encode(payload)
     }
+    
+    private struct EM: Encodable {
+        let key: String
+    }
+    
+    public func emit<Model: WSEventModel>(data event: WSEventIdentifier<Model>, completion: (() -> Void)? = nil) {
+        do {
+            let jsonEncoder = JSONEncoder()
+            var dateEncodingStrategy = CodyFire.shared.dateEncodingStrategy ?? DateCodingStrategy.default
+            jsonEncoder.dateEncodingStrategy = dateEncodingStrategy.jsonDateEncodingStrategy
+            let data = try jsonEncoder.encode(EM(key: event.uid))
+            emit(data: data, completion: completion)
+        } catch {
+            wslog(.error, String(describing: error))
+        }
+    }
 }
