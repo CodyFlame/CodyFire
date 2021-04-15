@@ -47,20 +47,32 @@ extension WS {
         return try jsonEncoder.encode(payload)
     }
     
-    private struct GM: Encodable {
-        let event: String
-    }
-    
-    public func emit<Model: WSEventModel>(event: WSEventIdentifier<Model>, completion: (() -> Void)? = nil) {
-        do {
-            let jsonEncoder = JSONEncoder()
-            let dateEncodingStrategy = CodyFire.shared.dateEncodingStrategy ?? DateCodingStrategy.default
-            jsonEncoder.dateEncodingStrategy = dateEncodingStrategy.jsonDateEncodingStrategy
-            let data = try jsonEncoder.encode(GM(event: event.uid))
-            let text = String(data: data, encoding: .utf8) ?? ""
-            emit(text: text, completion: completion)
-        } catch {
-            wslog(.error, String(describing: error))
-        }
-    }
+    private struct SimpleEvent: Encodable {
+		let event: String
+	}
+	
+	public func emit<Model: WSEventModel>(text event: WSEventIdentifier<Model>, completion: (() -> Void)? = nil) {
+		do {
+			let jsonEncoder = JSONEncoder()
+			let dateEncodingStrategy = CodyFire.shared.dateEncodingStrategy ?? DateCodingStrategy.default
+			jsonEncoder.dateEncodingStrategy = dateEncodingStrategy.jsonDateEncodingStrategy
+			let data = try jsonEncoder.encode(SimpleEvent(event: event.uid))
+			let text = String(data: data, encoding: .utf8) ?? ""
+			emit(text: text, completion: completion)
+		} catch {
+			wslog(.error, String(describing: error))
+		}
+	}
+	
+	public func emit<Model: WSEventModel>(data event: WSEventIdentifier<Model>, completion: (() -> Void)? = nil) {
+		do {
+			let jsonEncoder = JSONEncoder()
+			let dateEncodingStrategy = CodyFire.shared.dateEncodingStrategy ?? DateCodingStrategy.default
+			jsonEncoder.dateEncodingStrategy = dateEncodingStrategy.jsonDateEncodingStrategy
+			let data = try jsonEncoder.encode(SimpleEvent(event: event.uid))
+			emit(data: data, completion: completion)
+		} catch {
+			wslog(.error, String(describing: error))
+		}
+	}
 }
