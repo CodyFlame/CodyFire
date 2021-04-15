@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CodyFire'
-  s.version          = '1.15.2'
+  s.version          = '1.15.3'
   s.summary          = '❤️ Powerful codable API requests builder and manager for iOS based on Alamofire'
 
 # This description is used to generate tags and improve search results.
@@ -19,11 +19,11 @@ Pod::Spec.new do |s|
 
   s.description      = 'This is a powerful lib that provide you ability to send requests and receive responses with Codable protocol'
 
-  s.homepage         = 'https://github.com/MihaelIsaev/CodyFire'
+  s.homepage         = 'https://github.com/CodyFlame/CodyFire'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'MihaelIsaev' => 'isaev.mihael@gmail.com' }
-  s.source           = { :git => 'https://github.com/MihaelIsaev/CodyFire.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/CodyFlame/CodyFire.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '8.0'
