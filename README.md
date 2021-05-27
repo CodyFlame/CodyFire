@@ -96,7 +96,7 @@ CodyFire is available through [CocoaPods](https://cocoapods.org) and SPM.
 
 To install it, simply add the following line in your Podfile:
 ```ruby
-pod 'CodyFire', '~> 1.15.3'
+pod 'CodyFire', '~> 1.15.4'
 ```
 
 **Or you're looking for reactive code support? I have it! 🍺**
