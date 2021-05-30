@@ -20,6 +20,8 @@ public class WS {
     
     var reconnect = true
     
+    public var isConnected: Bool { socket?.isConnected == true }
+    
     public func connect() throws {
         if socket?.isConnected == true {
             return
