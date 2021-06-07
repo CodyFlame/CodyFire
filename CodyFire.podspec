@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name             = 'CodyFire'
-  s.version          = '1.15.4'
-  s.summary          = '❤️ Powerful codable API requests builder and manager for iOS based on Alamofire'
+  s.version          = '2.0.0'
+  s.summary          = '❤️ Powerful codable API requests builder and manager for any platform including webassembly'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
@@ -37,6 +37,4 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'Starscream', '~> 3.0.2'
-  s.dependency 'Alamofire', '~> 4.7.3'
 end

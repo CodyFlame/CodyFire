@@ -6,15 +6,14 @@
 //
 
 import Foundation
-import Starscream
 
-open class WSObserver: WebSocketDelegate {
-    public func websocketDidConnect(socket: WebSocketClient) {
+open class WSObserver {
+    open func onOpen(_ socket: WebSocketConnection) {
         wslog(.info, "connected")
     }
     
-    public func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        wslog(.info, "disconnected, error: \(String(describing: error))")
+    open func onClose(_ code: Int) {
+        wslog(.info, "disconnected, code: \(code)")
         if WS.shared.reconnect {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                 do {
@@ -26,7 +25,7 @@ open class WSObserver: WebSocketDelegate {
         }
     }
     
-    public func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {}
-    
-    public func websocketDidReceiveData(socket: WebSocketClient, data: Data) {}
+    open func onError(_ socket: WebSocketConnection, _ error: Error) {}
+    open func onText(_ socket: WebSocketConnection, _ text: String) {}
+    open func onBinary(_ socket: WebSocketConnection, _ data: Data) {}
 }

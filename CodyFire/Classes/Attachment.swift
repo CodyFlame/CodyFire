@@ -9,8 +9,7 @@ import Foundation
 
 open class Attachment: Codable {
     public var data: Data
-    public var fileName: String
-    public var mimeType: String
+    public var fileName, mimeType: String
     
     public init(data: Data, fileName: String, mimeType: String) {
         self.data = data
@@ -21,6 +20,6 @@ open class Attachment: Codable {
     public init(data: Data, fileName: String, mimeType: MimeType) {
         self.data = data
         self.fileName = fileName
-        self.mimeType = mimeType.rawValue
+        self.mimeType = mimeType.value
     }
 }

@@ -27,10 +27,10 @@ public struct NetworkError: Error, CustomStringConvertible, Hashable, Equatable 
     }
     
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(code.raw.hashValue)
+        hasher.combine(code.value.hashValue)
     }
     
     public static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
-        return lhs.code.raw == rhs.code.raw
+        return lhs.code.value == rhs.code.value
     }
 }

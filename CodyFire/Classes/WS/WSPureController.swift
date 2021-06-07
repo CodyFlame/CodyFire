@@ -6,7 +6,8 @@
 //
 
 import Foundation
-import Starscream
+
+public class WebSocketClient {} // TODO: it was from Starscream
 
 open class WSPureController: WSObserver {
     public override init () {}
@@ -51,22 +52,27 @@ open class WSPureController: WSObserver {
         return self
     }
     
-    open override func websocketDidConnect(socket: WebSocketClient) {
-        _openHandler?(socket)
-    }
-    
-    open override func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-        if let error = error {
-            _errorHandler?(socket, error)
-        }
-        _closeHandler?()
-    }
-    
-    open override func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        _textHandler?(socket, text)
-    }
-    
-    open override func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-        _binaryHandler?(socket, data)
-    }
+//    open override func websocketDidConnect(socket: WebSocketClient) {
+//        _openHandler?(socket)
+//    }
+//    
+//    open override func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
+//        if let error = error {
+//            _errorHandler?(socket, error)
+//        }
+//        _closeHandler?()
+//    }
+//    
+//    open override func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
+//        _textHandler?(socket, text)
+//    }
+//    
+//    open override func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
+//        _binaryHandler?(socket, data)
+//    }
+//    
+//    open override func onError(_ socket: WebSocketConnection, _ error: Error) {
+//        super.onError(socket, error)
+//        onError?(socket, error)
+//    }
 }

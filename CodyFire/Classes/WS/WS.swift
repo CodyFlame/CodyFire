@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Starscream
 
 private var _sharedInstance = WS()
 
@@ -15,39 +14,35 @@ public class WS {
         return _sharedInstance
     }
     
-    var socket: WebSocket?
+    var socket: WebSocketAdapter?
     public var delegate: WSObserver?
     
     var reconnect = true
     
-    public var isConnected: Bool { socket?.isConnected == true }
+    public var isConnected: Bool { false }//socket?.isConnected == true }
     
     public func connect() throws {
-        if socket?.isConnected == true {
-            return
-        }
-        disconnect()
-        socket = nil
-        reconnect = true
-        guard let url = URL(string: CodyFire.shared.wsURL) else { throw WSExpectationError(reason: "WS url is nil") }
-        var request = URLRequest(url: url)
-        request.timeoutInterval = 5
-        CodyFire.shared.globalHeaders.forEach { key, value in
-            request.setValue(value, forHTTPHeaderField: key)
-        }
-        socket = WebSocket(request: request)
-        wslog(.info, "preparing to connect: \(request) socket?.respondToPingWithPong: \(socket?.respondToPingWithPong)")
-        socket?.delegate = delegate
-        // TODO: delegate?.connecting() ?
-        socket?.connect()
-//        socket?.
+//        if socket?.state == .connected {
+//            return
+//        }
+//        disconnect()
+//        socket = nil
+//        reconnect = true
+//        wslog(.info, "preparing to connect: \(CodyFire.shared.wsURL)")
+//        socket?.onOpen { self.delegate?.onOpen($0) }
+//        socket?.onClose { self.delegate?.onClose($0) }
+//        socket?.onError { self.delegate?.onError($0, $1) }
+//        socket?.onText { self.delegate?.onText($0, $1) }
+//        socket?.onBinary { self.delegate?.onBinary($0, $1) }
+//        // TODO: delegate?.connecting() ?
+//        socket?.open(CodyFire.shared.wsURL, CodyFire.shared.globalHeaders, timeout: 5) // TODO: connectTimeout, reconnectTimeout
     }
     
     public func disconnect() {
-        reconnect = false
-        socket?.disconnect(forceTimeout: 0.1, closeCode: 1000)
-        if let socket = socket {
-            delegate?.websocketDidDisconnect(socket: socket, error: nil)
-        }
+//        reconnect = false
+//        socket?.close()//disconnect(forceTimeout: 0.1, closeCode: 1000)
+//        if let socket = socket {
+//            delegate?.websocketDidDisconnect(socket: socket, error: nil)
+//        }
     }
 }

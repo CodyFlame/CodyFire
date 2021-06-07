@@ -14,7 +14,7 @@ extension UserDefaults {
         if let uuid = UserDefaults.codyfire?.string(forKey: "uuid") {
             return uuid
         }
-        let uuid = UIDevice.current.identifierForVendor!.uuidString
+        let uuid = (UIDevice.current.identifierForVendor ?? UUID()).uuidString
         UserDefaults.codyfire?.setValue(uuid, forKey: "uuid")
         UserDefaults.codyfire?.synchronize()
         return uuid

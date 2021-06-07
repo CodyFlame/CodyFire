@@ -9,6 +9,6 @@ import Foundation
 
 extension UserDefaults {
     static var codyfire: UserDefaults? {
-        return UserDefaults(suiteName: "CodyFire")
+        UserDefaults(suiteName: "CodyFire")
     }
 }

@@ -43,4 +43,12 @@ public enum LogLevel: Int {
     
     ///Here, you're probably getting into "noisy" territory and furnishing more information than you'd want in normal production situations.
     case debug
+    
+    static var auto: LogLevel {
+        #if DEBUG
+        return .debug
+        #else
+        return .off
+        #endif
+    }
 }
