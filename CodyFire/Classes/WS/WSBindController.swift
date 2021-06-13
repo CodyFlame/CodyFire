@@ -13,23 +13,24 @@ open class WSBindController<EventPrototype: WSAnyEventModel>: WSObserver {
     var exchangeMode: WSExchangeMode = .both
     var handlers: [String: (WebSocketConnection, Data) -> Void] = [:]
     
-    public override init () {
-        super.init()
+    public override init (_ server: Server) {
+        super.init(server)
     }
     
     open func bind<Model: WSEventModel>(_ identifier: WSEventIdentifier<Model>, handler: ((WebSocketConnection, Model) -> Void)? = nil) {
-//        handlers[Model.key] = { client, data in
-//            do {
-//                let decoder = JSONDecoder()
-//                decoder.dateDecodingStrategy = CodyFire.shared.dateDecodingStrategy?.jsonDateDecodingStrategy
-//                                                                              ?? DateCodingStrategy.default.jsonDateDecodingStrategy
-//                let model = try decoder.decode(Model.self, from: data)
-//                handler?(client, model)
-//                NotificationCenter.default.post(forEvent: identifier, object: model)
-//            } catch {
-//                wslog(.error, "\(error)")
-//            }
-//        }
+        handlers[Model.key] = { client, data in
+            do {
+                let decoder = JSONDecoder()
+                decoder.dateDecodingStrategy = self.server.dateDecodingStrategy?.jsonDateDecodingStrategy
+                                                                ?? CodyFire.shared.dateDecodingStrategy?.jsonDateDecodingStrategy
+                                                                ?? DateCodingStrategy.default.jsonDateDecodingStrategy
+                let model = try decoder.decode(Model.self, from: data)
+                handler?(client, model)
+                NotificationCenter.default.post(forEvent: identifier, object: model)
+            } catch {
+                wslog(.error, "\(error)")
+            }
+        }
     }
     
     @discardableResult

@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension WS {
+extension WSInstance {
     public enum Status: String {
         case disconnected, connecting, connected
     }

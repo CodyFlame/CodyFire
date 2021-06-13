@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension WS {
+extension WSInstance {
     func notification(_ data: Data?) {
         if let data = data, let notification = try? JSONDecoder().decode(NotificationMessage.self, from: data) {
             NotificationCenter.default.post(name: NSNotification.Name("notification.type"), object: notification.data)

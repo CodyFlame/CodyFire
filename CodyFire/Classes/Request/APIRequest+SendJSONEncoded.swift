@@ -31,7 +31,7 @@ extension APIRequest {
             request.headers["Content-Type"] = "application/json"
         }
         
-        log(.debug, "headers: \(_params.headers)")
+        log(.debug, "headers: \(_params.headers) bodyLength: \(data.count)")
         
         request.body = .data(data)
         

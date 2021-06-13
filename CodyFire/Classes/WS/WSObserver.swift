@@ -8,16 +8,22 @@
 import Foundation
 
 open class WSObserver {
+    let server: Server
+    
+    public init (_ server: Server) {
+        self.server = server
+    }
+    
     open func onOpen(_ socket: WebSocketConnection) {
         wslog(.info, "connected")
     }
     
     open func onClose(_ code: Int) {
         wslog(.info, "disconnected, code: \(code)")
-        if WS.shared.reconnect {
+        if WS(server).reconnect {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                 do {
-                    try WS.shared.connect()
+                    try WS(self.server).connect()
                 } catch {
                     wslog(.error, "connecting error: \(error)")
                 }

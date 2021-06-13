@@ -35,7 +35,7 @@ class URLSessionHTTPAdapter: NSObject, HTTPAdapter, URLSessionDelegate, URLSessi
             request.addValue(value, forHTTPHeaderField: key)
         }
         request.allowsCellularAccess = req.allowsCellularAccess
-        if #available(iOS 13.0, *) {
+        if #available(OSX 10.15, iOS 13.0, *) {
             request.allowsExpensiveNetworkAccess = req.allowsExpensiveNetworkAccess
             request.allowsConstrainedNetworkAccess = req.allowsConstrainedNetworkAccess
         }
@@ -48,7 +48,18 @@ class URLSessionHTTPAdapter: NSObject, HTTPAdapter, URLSessionDelegate, URLSessi
         let task: URLSessionTask
         switch req.mode {
         case .api:
-            task = session.dataTask(with: request)
+            switch req.body {
+            case .file(let fileURL):
+                task = session.uploadTask(with: request, fromFile: fileURL)
+            case .data(let data):
+                request.httpBody = data
+                task = session.dataTask(with: request)
+            case .stream(let inputStream):
+                request.httpBodyStream = inputStream
+                task = session.dataTask(with: request)
+            case .none:
+                task = session.dataTask(with: request)
+            }
         case .upload:
             switch req.body {
             case .file(let fileURL):
@@ -90,9 +101,12 @@ class URLSessionHTTPAdapter: NSObject, HTTPAdapter, URLSessionDelegate, URLSessi
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        debugPrint("URLSession didCompleteWithError")
-        guard let base = tasks[task] else { return } // TODO:
-        guard let response = task.response as? HTTPURLResponse else { return } // TODO:
+        debugPrint("URLSession didCompleteWithError error: \(error)")
+        guard let base = tasks[task] else { debugPrint("URLSession bug 1"); return } // TODO:
+        guard let response = task.response as? HTTPURLResponse else {
+            base.callback(.failure(CodyFireError("No internet connection")))
+            return
+        } // TODO:
         var headers: [String: String] = [:]
         response.allHeaderFields.forEach { key, value in
             guard let value = value as? String else { return }
@@ -111,6 +125,7 @@ class URLSessionHTTPAdapter: NSObject, HTTPAdapter, URLSessionDelegate, URLSessi
         )
     }
     
+    @available(OSX 10.12, *)
     @available(iOS 10.0, *)
     func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
         debugPrint("URLSession task didFinishCollecting")// \(metrics)")
@@ -129,6 +144,7 @@ class URLSessionHTTPAdapter: NSObject, HTTPAdapter, URLSessionDelegate, URLSessi
 //        completionHandler(.performDefaultHandling, nil)
 //    }
     
+    @available(OSX 10.13, *)
     @available(iOS 11.0, *)
     func urlSession(_ session: URLSession, task: URLSessionTask, willBeginDelayedRequest request: URLRequest, completionHandler: @escaping (URLSession.DelayedRequestDisposition, URLRequest?) -> Void) {
         debugPrint("URLSession task willBeginDelayedRequest")
@@ -147,6 +163,7 @@ class URLSessionHTTPAdapter: NSObject, HTTPAdapter, URLSessionDelegate, URLSessi
         base.receivedData.append(data)
     }
     
+    @available(OSX 10.11, *)
     @available(iOS 9.0, *)
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didBecome streamTask: URLSessionStreamTask) {
         debugPrint("URLSession dataTask didBecome streamTask")
@@ -182,21 +199,25 @@ class URLSessionHTTPAdapter: NSObject, HTTPAdapter, URLSessionDelegate, URLSessi
     
     // MARK: - URLSessionStreamDelegate
     
+    @available(OSX 10.11, *)
     @available(iOS 9.0, *)
     func urlSession(_ session: URLSession, readClosedFor streamTask: URLSessionStreamTask) {
         debugPrint("URLSession streamTask readClosedFor")
     }
     
+    @available(OSX 10.11, *)
     @available(iOS 9.0, *)
     func urlSession(_ session: URLSession, writeClosedFor streamTask: URLSessionStreamTask) {
         debugPrint("URLSession streamTask writeClosedFor")
     }
     
+    @available(OSX 10.11, *)
     @available(iOS 9.0, *)
     func urlSession(_ session: URLSession, betterRouteDiscoveredFor streamTask: URLSessionStreamTask) {
         debugPrint("URLSession streamTask betterRouteDiscoveredFor")
     }
     
+    @available(OSX 10.11, *)
     @available(iOS 9.0, *)
     func urlSession(_ session: URLSession, streamTask: URLSessionStreamTask, didBecome inputStream: InputStream, outputStream: OutputStream) {
         debugPrint("URLSession streamTask didBecome inputStream outputStream")

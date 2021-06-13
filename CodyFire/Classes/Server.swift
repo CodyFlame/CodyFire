@@ -58,11 +58,11 @@ open class Server: _Serverable, _Headerable {
             _apiURL = ServerURL(base: baseURL)
         }
         if let wsPath = wsPath {
-            _wsURL = ServerURL(base: baseURL, path: wsPath)
+            _wsURL = ServerURL(base: baseURL.replacingOccurrences(of: "http", with: "ws").replacingOccurrences(of: "https", with: "wss"), path: wsPath)
         } else if let path = path {
-            _wsURL = ServerURL(base: baseURL, path: path)
+            _wsURL = ServerURL(base: baseURL.replacingOccurrences(of: "http", with: "ws").replacingOccurrences(of: "https", with: "wss"), path: path)
         } else {
-            _wsURL = ServerURL(base: baseURL)
+            _wsURL = ServerURL(base: baseURL.replacingOccurrences(of: "http", with: "ws").replacingOccurrences(of: "https", with: "wss"))
         }
     }
     

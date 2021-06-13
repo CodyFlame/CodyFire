@@ -7,14 +7,30 @@
 
 import Foundation
 
-private var _sharedInstance = WS()
+private var _instances: [String: WSInstance] = [:]
 
-public class WS {
-    public class var shared: WS {
-        return _sharedInstance
+public func WS(_ server: Server) -> WSInstance {
+    guard let instance = _instances[server.wsURL] else {
+        let instance = WSInstance(server)
+        _instances[server.wsURL] = instance
+        return instance
+    }
+    return instance
+}
+
+public class WSInstance {
+    let server: Server
+    let adapter: WebSocketAdapter
+    
+    fileprivate init (_ server: Server) {
+        self.server = server
+        guard let adapter = server._wsAdapter ?? CodyFire.shared._wsAdapter else {
+            fatalError("Websocket adapter should be set")
+        }
+        self.adapter = adapter
     }
     
-    var socket: WebSocketAdapter?
+    
     public var delegate: WSObserver?
     
     var reconnect = true
@@ -22,27 +38,24 @@ public class WS {
     public var isConnected: Bool { false }//socket?.isConnected == true }
     
     public func connect() throws {
-//        if socket?.state == .connected {
-//            return
-//        }
-//        disconnect()
-//        socket = nil
-//        reconnect = true
+        if adapter.state(server.wsURL) == .connected {
+            return
+        }
+        disconnect()
+        reconnect = true
 //        wslog(.info, "preparing to connect: \(CodyFire.shared.wsURL)")
-//        socket?.onOpen { self.delegate?.onOpen($0) }
-//        socket?.onClose { self.delegate?.onClose($0) }
-//        socket?.onError { self.delegate?.onError($0, $1) }
-//        socket?.onText { self.delegate?.onText($0, $1) }
-//        socket?.onBinary { self.delegate?.onBinary($0, $1) }
-//        // TODO: delegate?.connecting() ?
-//        socket?.open(CodyFire.shared.wsURL, CodyFire.shared.globalHeaders, timeout: 5) // TODO: connectTimeout, reconnectTimeout
+        adapter.onOpen(server.wsURL) { self.delegate?.onOpen($0) }
+        adapter.onClose(server.wsURL) { self.delegate?.onClose($0) }
+        adapter.onError(server.wsURL) { self.delegate?.onError($0, $1) }
+        adapter.onText(server.wsURL) { self.delegate?.onText($0, $1) }
+        adapter.onBinary(server.wsURL) { self.delegate?.onBinary($0, $1) }
+        // TODO: delegate?.connecting() ?
+        adapter.open(server.wsURL, server._headers, timeout: 5) // TODO: connectTimeout, reconnectTimeout
     }
     
     public func disconnect() {
-//        reconnect = false
-//        socket?.close()//disconnect(forceTimeout: 0.1, closeCode: 1000)
-//        if let socket = socket {
-//            delegate?.websocketDidDisconnect(socket: socket, error: nil)
-//        }
+        reconnect = false
+        adapter.close(server.wsURL)
+        delegate?.onClose(1001)
     }
 }

@@ -32,6 +32,11 @@ open class CodyFire: _Serverable {
     fileprivate init () {
         #if os(iOS) || os(watchOS) || os(tvOS) || os(macOS)
         _httpAdapter = URLSessionHTTPAdapter()
+        if #available(OSX 10.15, iOS 13.0, *) {
+        _wsAdapter = URLSessionWSAdapter()
+        } else {
+            // TODO: starscream
+        }
         #endif
     }
     

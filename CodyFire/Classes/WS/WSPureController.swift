@@ -7,24 +7,24 @@
 
 import Foundation
 
-public class WebSocketClient {} // TODO: it was from Starscream
-
 open class WSPureController: WSObserver {
-    public override init () {}
+    public override init (_ server: Server) {
+        super.init(server)
+    }
     
-    public typealias OnOpenHandler = (WebSocketClient) -> Void
+    public typealias OnOpenHandler = (WebSocketConnection) -> Void
     private var _openHandler: OnOpenHandler?
     
     public typealias OnCloseHandler = () -> Void
     private var _closeHandler: OnCloseHandler?
     
-    public typealias OnTextHandler = (WebSocketClient, String) -> Void
+    public typealias OnTextHandler = (WebSocketConnection, String) -> Void
     private var _textHandler: OnTextHandler?
     
-    public typealias OnBinaryHandler = (WebSocketClient, Data) -> Void
+    public typealias OnBinaryHandler = (WebSocketConnection, Data) -> Void
     private var _binaryHandler: OnBinaryHandler?
     
-    public typealias OnErrorHandler = (WebSocketClient, Error) -> Void
+    public typealias OnErrorHandler = (WebSocketConnection, Error) -> Void
     private var _errorHandler: OnErrorHandler?
     
     public func onOpen(_ handler: @escaping OnOpenHandler) -> Self {
@@ -51,28 +51,4 @@ open class WSPureController: WSObserver {
         _errorHandler = handler
         return self
     }
-    
-//    open override func websocketDidConnect(socket: WebSocketClient) {
-//        _openHandler?(socket)
-//    }
-//    
-//    open override func websocketDidDisconnect(socket: WebSocketClient, error: Error?) {
-//        if let error = error {
-//            _errorHandler?(socket, error)
-//        }
-//        _closeHandler?()
-//    }
-//    
-//    open override func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-//        _textHandler?(socket, text)
-//    }
-//    
-//    open override func websocketDidReceiveData(socket: WebSocketClient, data: Data) {
-//        _binaryHandler?(socket, data)
-//    }
-//    
-//    open override func onError(_ socket: WebSocketConnection, _ error: Error) {
-//        super.onError(socket, error)
-//        onError?(socket, error)
-//    }
 }

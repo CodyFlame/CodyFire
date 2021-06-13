@@ -23,6 +23,6 @@ extension NotificationCenter {
 
 extension WSEventIdentifier {
     fileprivate var notification: NSNotification.Name {
-        return NSNotification.Name(rawValue: "ws.event." + self.uid)
+        NSNotification.Name(rawValue: "ws.event." + self.uid)
     }
 }
