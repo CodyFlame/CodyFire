@@ -66,8 +66,8 @@ class URLSessionWSAdapter: NSObject, WebSocketAdapter, URLSessionWebSocketDelega
                     case .data(let data):
                         self._binaryHandlers[url]?(connection, data)
                     }
+                    receive()
                 }
-                receive()
             }
         }
         receive()
