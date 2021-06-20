@@ -123,6 +123,13 @@ extension APIRequest {
     }
     
     @discardableResult
+    public func onSuccess(_ start: Bool = true, _ callback: @escaping () -> Void) -> APIRequest {
+        successCallback = { _ in callback() }
+        if start { self.start() }
+        return self
+    }
+    
+    @discardableResult
     public func onSuccess(_ start: Bool = true, _ callback: @escaping SuccessResponse) -> APIRequest {
         successCallback = callback
         if start { self.start() }
