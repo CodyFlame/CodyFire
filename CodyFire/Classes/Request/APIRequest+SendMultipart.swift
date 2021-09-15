@@ -23,7 +23,7 @@ extension APIRequest {
 
         var multipart = Data()
         
-        let boundary = "Boundary-\(UUID().uuidString)"
+        let boundary = UUID().uuidString.replacingOccurrences(of: "-", with: "").lowercased()
         
         let dictionary: [String: Any]
         do {
@@ -37,8 +37,8 @@ extension APIRequest {
             switch value {
             case let v as [Attachment]: self.add(v, as: key + "[]", into: &multipart, using: boundary)
             case let v as Attachment: self.add([v], as: key, into: &multipart, using: boundary)
-            case let v as [Data]: self.add(v, as: key + "[]", into: &multipart, using: boundary)
-            case let v as Data: self.add([v], as: key, into: &multipart, using: boundary)
+            case let v as [Data]: self.add(files: v, as: key + "[]", into: &multipart, using: boundary)
+            case let v as Data: self.add(files: [v], as: key, into: &multipart, using: boundary)
             case let v as [Date]: self.add(v, as: key + "[]", into: &multipart, using: boundary, dateCodingStrategy: dateEncodingStrategy)
             case let v as Date: self.add([v], as: key, into: &multipart, using: boundary, dateCodingStrategy: dateEncodingStrategy)
             case let v as [String]: self.add(v, as: key + "[]", into: &multipart, using: boundary)
@@ -85,9 +85,11 @@ extension APIRequest {
         if !request.headers.contains(where: { $0.key.lowercased() == "content-type" }) {
             _params.headers["Content-Type"] = "multipart/form-data; boundary=\(boundary)"
         }
+        _params.headers["Content-Length"] = "\(multipart.count)"
         
         log(.debug, "headers: \(_params.headers)")
         
+        request.headers = _params.headers
         request.body = .data(multipart)
         
         adapter.request(request, nil) { result in
@@ -102,20 +104,23 @@ extension APIRequest {
         }
     }
     
-    private func convertFormField(named name: String, value: String, using boundary: String) -> String {
-        var fieldString = "--\(boundary)\r\n"
-        fieldString += "Content-Disposition: form-data; name=\"\(name)\"\r\n"
-        fieldString += "\r\n"
-        fieldString += "\(value)\r\n"
-
-        return fieldString
+    private func convertFormField(named name: String, value: String, using boundary: String) -> Data {
+        var data = Data()
+        
+        data.appendString("--\(boundary)\r\n")
+        data.appendString("Content-Disposition: form-data; name=\"\(name)\";\r\n")
+        data.appendString("\r\n")
+        data.appendString(value)
+        data.appendString("\r\n")
+        
+        return data
     }
     
     private func convertFileData(fieldName: String, fileName: String, mimeType: String, fileData: Data, using boundary: String) -> Data {
         var data = Data()
 
         data.appendString("--\(boundary)\r\n")
-        data.appendString("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n")
+        data.appendString("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\";\r\n")
         data.appendString("Content-Type: \(mimeType)\r\n\r\n")
         data.append(fileData)
         data.appendString("\r\n")
@@ -131,18 +136,24 @@ extension APIRequest {
         }
     }
     
-    private func add(_ v: [Data], as key: String, into multipart: inout Data, using boundary: String) {
-        v.forEach {
+    private func add(files: [Data], as key: String, into multipart: inout Data, using boundary: String) {
+        files.forEach {
             multipart.append(convertFileData(fieldName: key, fileName: key, mimeType: "application/octet-stream", fileData: $0, using: boundary))
         }
     }
     
+    private func add(strings: [String], as key: String, into multipart: inout Data, using boundary: String) {
+        strings.forEach {
+            multipart.append(convertFormField(named: key, value: $0, using: boundary))
+        }
+    }
+    
     private func add(_ v: [Date], as key: String, into multipart: inout Data, using boundary: String, dateCodingStrategy: DateCodingStrategy) {
-        v.compactMap { dateCodingStrategy.convert($0).data(using: .utf8) }.forEach { add([$0], as: key, into: &multipart, using: boundary) }
+        v.map { dateCodingStrategy.convert($0) }.forEach { add(strings: [$0], as: key, into: &multipart, using: boundary) }
     }
     
     private func add(_ v: [String], as key: String, into multipart: inout Data, using boundary: String) {
-        v.compactMap { $0.data(using: .utf8) }.forEach { add([$0], as: key, into: &multipart, using: boundary) }
+        v.forEach { add(strings: [$0], as: key, into: &multipart, using: boundary) }
     }
     
     private func add(_ v: [UUID], as key: String, into multipart: inout Data, using boundary: String) {
