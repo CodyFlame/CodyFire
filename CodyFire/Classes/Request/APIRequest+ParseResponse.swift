@@ -31,20 +31,20 @@ extension APIRequest {
                     delayedResponse(diff) {
 //                        CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                         self.successCallback?(Nothing() as! ResultType)
-//                        self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
-//                                                                            statusCode: response.statusCode,
-//                                                                            bodyData: data,
-//                                                                            body: Nothing() as! ResultType))
+                        self.successCallbackExtended?(.init(headers: response.headers.mapValues { [$0] },
+                                                                            statusCode: response.statusCode,
+                                                                            bodyData: data,
+                                                                            body: Nothing() as! ResultType))
 //                        self.flattenSuccessHandler?()
                     }
                 } else if ResultType.self is Data.Type {
                     delayedResponse(diff) {
 //                        CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                         self.successCallback?(data as! ResultType)
-//                        self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
-//                                                                            statusCode: response.statusCode,
-//                                                                            bodyData: data,
-//                                                                            body: data as! ResultType))
+                        self.successCallbackExtended?(.init(headers: response.headers.mapValues { [$0] },
+                                                                            statusCode: response.statusCode,
+                                                                            bodyData: data,
+                                                                            body: data as! ResultType))
 //                        self.flattenSuccessHandler?()
                     }
                 } else if PrimitiveTypeDecoder.isSupported(ResultType.self) {
@@ -52,10 +52,10 @@ extension APIRequest {
                         delayedResponse(diff) {
 //                            CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                             self.successCallback?(value)
-//                            self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
-//                                                                                statusCode: response.statusCode,
-//                                                                                bodyData: data,
-//                                                                                body: value))
+                            self.successCallbackExtended?(.init(headers: response.headers.mapValues { [$0] },
+                                                                                statusCode: response.statusCode,
+                                                                                bodyData: data,
+                                                                                body: value))
 //                            self.flattenSuccessHandler?()
                         }
                     } else {
@@ -68,10 +68,10 @@ extension APIRequest {
                         delayedResponse(diff) {
 //                            CodyFire.shared.successResponseHandler?(self.host, self.endpoint)
                             self.successCallback?(decodedResult)
-//                            self.successCallbackExtended?(.init(headers: answer.response?.allHeaderFields ?? [:],
-//                                                                                statusCode: response.statusCode,
-//                                                                                bodyData: data,
-//                                                                                body: decodedResult))
+                            self.successCallbackExtended?(.init(headers: response.headers.mapValues { [$0] },
+                                                                                statusCode: response.statusCode,
+                                                                                bodyData: data,
+                                                                                body: decodedResult))
 //                            self.flattenSuccessHandler?()
                         }
                     } catch {
