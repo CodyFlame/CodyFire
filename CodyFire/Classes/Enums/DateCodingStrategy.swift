@@ -12,7 +12,7 @@ public enum DateCodingStrategy {
     case millisecondsSince1970
     case formatted(DateFormatter)
     
-    static var `default`: DateCodingStrategy {
+    public static var `default`: DateCodingStrategy {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
         formatter.timeZone = TimeZone(secondsFromGMT: 0)
