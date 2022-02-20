@@ -58,6 +58,16 @@ open class CodyFire: _Serverable {
         return self
     }
     
+    @discardableResult
+    public func server(apiURL: ServerURL? = nil, wsURL: ServerURL? = nil) -> Self {
+        server(.init(apiURL: apiURL, wsURL: wsURL))
+    }
+
+    @discardableResult
+    public func server(baseURL: String, path: String? = nil, wsPath: String? = nil) -> Self {
+        server(.init(baseURL: baseURL, path: path, wsPath: wsPath))
+    }
+    
     public var server: Server? { _globalServer }
 //
 //    var _devEnv: CodyFireEnvironment?
