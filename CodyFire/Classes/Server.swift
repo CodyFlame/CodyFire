@@ -99,13 +99,37 @@ open class Server: _Serverable, _Headerable {
     }
     
     public var responseTimeout: TimeInterval = 15
+    public func responseTimeout(_ handler: @escaping () -> TimeInterval) -> Self {
+        responseTimeout = handler()
+        return self
+    }
     public var additionalTimeout: TimeInterval = 0
+    public func additionalTimeout(_ handler: @escaping () -> TimeInterval) -> Self {
+        additionalTimeout = handler()
+        return self
+    }
 
 //    public var isInMockMode = false
 
     public var fillHeaders: FillHeaders?
+    public func fillHeaders(_ handler: @escaping () -> FillHeaders?) -> Self {
+        fillHeaders = handler()
+        return self
+    }
     public var fillCodableHeaders: FillCodableHeaders?
+    public func fillCodableHeaders(_ handler: @escaping () -> FillCodableHeaders?) -> Self {
+        fillCodableHeaders = handler()
+        return self
+    }
 
     public var dateDecodingStrategy: DateCodingStrategy?
+    public func dateDecodingStrategy(_ handler: @escaping () -> DateCodingStrategy?) -> Self {
+        dateDecodingStrategy = handler()
+        return self
+    }
     public var dateEncodingStrategy: DateCodingStrategy?
+    public func dateEncodingStrategy(_ handler: @escaping () -> DateCodingStrategy?) -> Self {
+        dateEncodingStrategy = handler()
+        return self
+    }
 }
