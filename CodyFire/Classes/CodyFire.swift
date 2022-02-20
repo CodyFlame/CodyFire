@@ -17,12 +17,32 @@ open class CodyFire: _Serverable {
     var _globalServer: Server?
     
     public var logLevel: LogLevel = .auto
+    @discardableResult
+    public func logLevel(_ level: LogLevel) -> Self {
+        logLevel = level
+        return self
+    }
     
     public var logHandler: LogHandler?
+    @discardableResult
+    public func logHandler(_ handler: @escaping LogHandler) -> Self {
+        logHandler = handler
+        return self
+    }
     
     public var environmentMode: EnvironmentMode = .auto
+    @discardableResult
+    public func environmentMode(_ mode: EnvironmentMode) -> Self {
+        environmentMode = mode
+        return self
+    }
     
     public var isOnline: Bool = false
+    @discardableResult
+    public func isOnline(_ value: Bool) -> Self {
+        isOnline = value
+        return self
+    }
     var _onlineListeners: [(Bool) -> Void] = []
     
     var _httpAdapter: HTTPAdapter?
