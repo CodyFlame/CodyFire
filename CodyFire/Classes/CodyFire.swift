@@ -41,13 +41,24 @@ open class CodyFire: _Serverable {
     }
     
     public var dateDecodingStrategy: DateCodingStrategy?
+    public func dateDecodingStrategy(_ handler: @escaping () -> DateCodingStrategy) -> Self {
+        dateDecodingStrategy = handler()
+        return self
+    }
+    
     public var dateEncodingStrategy: DateCodingStrategy?
+    public func dateEncodingStrategy(_ handler: @escaping () -> DateCodingStrategy) -> Self {
+        dateEncodingStrategy = handler()
+        return self
+    }
     
     @discardableResult
     public func server(_ server: Server) -> Self {
         _globalServer = server
         return self
     }
+    
+    public var server: Server? { _globalServer }
 //
 //    var _devEnv: CodyFireEnvironment?
 //    var _appStoreEnv: CodyFireEnvironment?
