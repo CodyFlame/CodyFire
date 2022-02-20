@@ -112,13 +112,13 @@ open class Server: _Serverable, _Headerable {
 //    public var isInMockMode = false
 
     public var fillHeaders: FillHeaders?
-    public func fillHeaders(_ handler: @escaping () -> FillHeaders?) -> Self {
-        fillHeaders = handler()
+    public func fillHeaders(_ handler: @escaping FillHeaders) -> Self {
+        fillHeaders = handler
         return self
     }
     public var fillCodableHeaders: FillCodableHeaders?
-    public func fillCodableHeaders(_ handler: @escaping () -> FillCodableHeaders?) -> Self {
-        fillCodableHeaders = handler()
+    public func fillCodableHeaders(_ handler: @escaping FillCodableHeaders) -> Self {
+        fillCodableHeaders = handler
         return self
     }
 
