@@ -87,7 +87,7 @@ extension APIRequest {
                 logError(statusCode: ._undecodable, error: response.error, data: response.body)
             }
         } else if [.unauthorized].contains(response.statusCode) {
-//            CodyFire.shared.unauthorizedHandler?()
+            CodyFire.shared.unauthorizedHandler?()
             if let notAuthorizedCallback = _params.notAuthorizedCallback {
                 notAuthorizedCallback()
             } else {

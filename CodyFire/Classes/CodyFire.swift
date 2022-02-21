@@ -96,7 +96,12 @@ open class CodyFire: _Serverable {
 //    /// Called on each succeeded response
 //    public var successResponseHandler: ((_ host: String, _ endpoint: String)->())?
 //    public var errorResponseHandler: ((_ host: String, _ endpoint: String)->())?
-//    public var unauthorizedHandler: UnauthorizedHandler?
+    public var unauthorizedHandler: UnauthorizedHandler?
+    @discardableResult
+    public func unauthorizedHandler(_ handler: @escaping UnauthorizedHandler) -> Self {
+        unauthorizedHandler = handler
+        return self
+    }
 //    public var reachability: NetworkHelperProtocol?
 //
 //    public func useDefaultReachability() {
