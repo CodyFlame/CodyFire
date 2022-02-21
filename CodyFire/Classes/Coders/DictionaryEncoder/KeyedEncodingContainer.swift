@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol DictKeyedEncodingContainerDelegate: class {
+protocol DictKeyedEncodingContainerDelegate: AnyObject {
     func dictKeyedEncodingContainerCompleted(_ dictionary: [String: Any], forKey key: CodingKey?)
 }
 

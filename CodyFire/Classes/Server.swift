@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol Serverable: class {
+public protocol Serverable: AnyObject {
     var logLevel: LogLevel { get set }
     var logHandler: LogHandler? { get set }
     
