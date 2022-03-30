@@ -47,6 +47,7 @@ class URLSessionWSAdapter: NSObject, WebSocketAdapter, URLSessionWebSocketDelega
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: .main)
         guard let _url = URL(string: url) else {
             assert(false, "websocket url is invalide: \(url)")
+            return
         }
         var request = URLRequest(url: _url)
         headers.forEach { key, value in
